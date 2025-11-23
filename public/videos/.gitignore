@@ -1,0 +1,9 @@
+# Ignore all video files by default (can be large)
+*.mp4
+*.webm
+*.mov
+*.avi
+
+# But keep the README
+!README.md
+!.gitkeep
