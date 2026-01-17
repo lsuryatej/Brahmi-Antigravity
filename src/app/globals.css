@@ -127,7 +127,7 @@
     background-repeat: no-repeat;
   }
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
+  /* Hidden scrollbar for Chrome, Safari and Opera */
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
