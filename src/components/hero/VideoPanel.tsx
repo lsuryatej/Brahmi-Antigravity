@@ -103,7 +103,7 @@ export const VideoPanel = () => {
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full flex items-center justify-center bg-background overflow-hidden"
+            className="relative h-screen w-full flex items-center justify-center overflow-hidden"
         >
             <div className="w-[90%] md:w-[80%] aspect-video rounded-2xl overflow-hidden shadow-2xl">
                 <video

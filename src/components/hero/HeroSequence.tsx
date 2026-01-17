@@ -156,12 +156,12 @@ export const HeroSequence = () => {
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-background"
+            className="relative h-screen w-full overflow-hidden flex items-center justify-center"
         >
             {/* Layer 1: Base Gradient Overlay */}
             <div
                 ref={layer1Ref}
-                className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background/90 pointer-events-none"
+                className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none"
             />
 
             {/* Layer 2: Soft Ambient Glow */}

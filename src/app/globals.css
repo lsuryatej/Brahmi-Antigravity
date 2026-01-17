@@ -118,7 +118,13 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: #f7f2e4;
+    background-image: url('/images/plain-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */

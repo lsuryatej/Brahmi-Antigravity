@@ -3,9 +3,9 @@ import { FadeIn } from "@/lib/motion/primitives";
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative py-24 px-4 md:px-8 bg-gradient-to-b from-background via-background/95 to-background">
+            <section className="relative py-24 px-4 md:px-8 bg-gradient-to-b from-transparent via-transparent to-transparent">
                 <div className="max-w-4xl mx-auto text-center">
                     <FadeIn>
                         <h1 className="text-4xl md:text-6xl font-bold font-sans mb-6">
