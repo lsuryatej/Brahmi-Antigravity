@@ -13,8 +13,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { FadeIn } from "@/lib/motion/primitives";
+import { sendContactEmail } from "@/app/actions/contact";
 
 interface FormData {
     name: string;
@@ -44,6 +45,7 @@ export const ContactForm = () => {
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -90,6 +92,7 @@ export const ContactForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setSubmitError(null);
 
         if (!validateForm()) {
             return;
@@ -97,24 +100,32 @@ export const ContactForm = () => {
 
         setIsSubmitting(true);
 
-        // Simulate submission delay
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        try {
+            const result = await sendContactEmail(formData);
 
-        console.log("Form submitted:", formData);
-        setIsSubmitted(true);
-        setIsSubmitting(false);
+            if (result.success) {
+                console.log("Form submitted successfully");
+                setIsSubmitted(true);
 
-        // Reset form after 3 seconds
-        setTimeout(() => {
-            setFormData({
-                name: "",
-                email: "",
-                phone: "",
-                subject: "",
-                message: "",
-            });
-            setIsSubmitted(false);
-        }, 3000);
+                // Reset form after 5 seconds
+                setTimeout(() => {
+                    setFormData({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        subject: "",
+                        message: "",
+                    });
+                    setIsSubmitted(false);
+                }, 5000);
+            } else {
+                setSubmitError(result.error || "Failed to send message. Please try again.");
+            }
+        } catch (error) {
+            setSubmitError("An unexpected error occurred. Please try again later.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (
@@ -249,6 +260,18 @@ export const ContactForm = () => {
                         <p className="text-sm text-destructive">{errors.message}</p>
                     )}
                 </div>
+
+                {/* Error Message */}
+                {submitError && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-3 text-destructive"
+                    >
+                        <AlertCircle className="h-5 w-5 shrink-0" />
+                        <p className="text-sm font-medium">{submitError}</p>
+                    </motion.div>
+                )}
 
                 {/* Submit Button */}
                 <Button
