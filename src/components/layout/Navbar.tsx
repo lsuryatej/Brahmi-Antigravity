@@ -2,13 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-const navItems = [
+interface NavItem {
+    name: string;
+    href: string;
+    submenu?: { name: string; href: string }[];
+}
+
+const navItems: NavItem[] = [
     { name: "Home", href: "/" },
-    { name: "Catalogue", href: "/catalogue" },
+    {
+        name: "Catalogue",
+        href: "/catalogue",
+        submenu: [
+            { name: "Sutr", href: "/catalogue/sutr" }
+        ]
+    },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
 ];
@@ -16,6 +29,8 @@ const navItems = [
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [cartCount] = useState(0); // Will be connected to cart context later
 
     useEffect(() => {
         const handleScroll = () => {
@@ -40,14 +55,59 @@ export const Navbar = () => {
                 {!isScrolled ? (
                     <div className="hidden md:flex gap-8 items-center">
                         {navItems.map((item) => (
-                            <a
+                            <div
                                 key={item.name}
-                                href={item.href}
-                                className="text-sm font-mono uppercase tracking-widest hover:text-accent transition-colors"
+                                className="relative"
+                                onMouseEnter={() => item.submenu && setActiveDropdown(item.name)}
+                                onMouseLeave={() => setActiveDropdown(null)}
                             >
-                                {item.name}
-                            </a>
+                                <Link
+                                    href={item.href}
+                                    className="text-sm font-mono uppercase tracking-widest hover:text-accent transition-colors"
+                                >
+                                    {item.name}
+                                </Link>
+
+                                {/* Dropdown Menu */}
+                                {item.submenu && (
+                                    <AnimatePresence>
+                                        {activeDropdown === item.name && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute top-full left-0 mt-2 w-48 bg-background/90 backdrop-blur-xl border border-border rounded-xl shadow-xl overflow-hidden"
+                                            >
+                                                {item.submenu.map((subItem) => (
+                                                    <Link
+                                                        key={subItem.name}
+                                                        href={subItem.href}
+                                                        className="block px-4 py-3 text-sm font-mono hover:bg-accent hover:text-accent-foreground transition-colors"
+                                                    >
+                                                        {subItem.name}
+                                                    </Link>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                )}
+                            </div>
                         ))}
+
+                        {/* Cart Icon */}
+                        <button className="relative group">
+                            <ShoppingBag className="h-5 w-5 hover:text-accent transition-colors" />
+                            {cartCount > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-[10px] font-mono font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                                >
+                                    {cartCount}
+                                </motion.span>
+                            )}
+                        </button>
                     </div>
                 ) : (
                     <div
@@ -73,14 +133,38 @@ export const Navbar = () => {
                                     className="absolute top-full right-0 mt-2 w-48 bg-background/90 backdrop-blur-xl border border-border rounded-xl shadow-xl overflow-hidden p-2 flex flex-col gap-1"
                                 >
                                     {navItems.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            className="block px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-                                        >
-                                            {item.name}
-                                        </a>
+                                        <div key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                className="block px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                            {item.submenu && (
+                                                <div className="ml-4 space-y-1">
+                                                    {item.submenu.map((subItem) => (
+                                                        <Link
+                                                            key={subItem.name}
+                                                            href={subItem.href}
+                                                            className="block px-4 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
+                                                        >
+                                                            {subItem.name}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
                                     ))}
+                                    <div className="h-px bg-border my-1" />
+                                    <button className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+                                        <ShoppingBag className="h-4 w-4" />
+                                        Cart
+                                        {cartCount > 0 && (
+                                            <span className="ml-auto bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                                {cartCount}
+                                            </span>
+                                        )}
+                                    </button>
                                 </motion.div>
                             )}
                         </AnimatePresence>
