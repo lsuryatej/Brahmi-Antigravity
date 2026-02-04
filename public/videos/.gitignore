@@ -4,6 +4,7 @@
 *.mov
 *.avi
 
-# But keep the README
+# But keep the README and hero video
 !README.md
 !.gitkeep
+!hero-video.mp4
