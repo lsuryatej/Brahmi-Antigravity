@@ -215,7 +215,7 @@ export const HeroSequence = () => {
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 1.5, ease: EASE.ENTRANCE }}
-                    className="relative w-full max-w-[128rem] aspect-[3/1]"
+                    className="relative w-[80%] md:w-[600px] lg:w-[800px] aspect-[3/1]"
                 >
                     <img
                         src="/images/logo.svg"
