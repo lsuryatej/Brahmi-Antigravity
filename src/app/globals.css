@@ -117,7 +117,6 @@
     @apply border-border outline-ring/50;
   }
 
-
   body {
     @apply text-foreground;
     background-color: #f7f2e4;
