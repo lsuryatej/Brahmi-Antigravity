@@ -183,7 +183,7 @@ export const HeroSequence = () => {
             >
                 <div
                     ref={videoWrapRef}
-                    className="w-[90%] md:w-[80%] aspect-video rounded-2xl overflow-hidden shadow-2xl"
+                    className="w-[70%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[28%] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
                 >
                     <video
                         ref={videoRef}
@@ -192,7 +192,7 @@ export const HeroSequence = () => {
                         preload="auto"
                         loop
                         className="w-full h-full object-cover"
-                        src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                        src="/videos/hero-video.mp4"
                     />
                 </div>
             </div>
