@@ -8,23 +8,23 @@ export default function AboutPage() {
     const values = [
         {
             icon: Heart,
-            title: "Passion",
-            description: "Dedicated to preserving traditional craftsmanship",
+            title: "Sustainability",
+            description: "Committed to eco friendly practices by using natural fabrics, natural dyes and reducing wastage of resources at the root level",
         },
         {
             icon: Users,
             title: "Community",
-            description: "Supporting artisans and local communities",
+            description: "Supporting artisans and local clusters of traditional parts of India",
         },
         {
             icon: Sparkles,
-            title: "Quality",
-            description: "Every piece tells a story of excellence",
+            title: "Handmade",
+            description: "Supporting and collaborating with artisans who work with handicrafts while promoting traditional Indian techniques of textile development",
         },
         {
             icon: Globe,
-            title: "Sustainability",
-            description: "Committed to eco-friendly practices",
+            title: "Made in India",
+            description: "Proudly designed and made in India",
         },
     ];
 

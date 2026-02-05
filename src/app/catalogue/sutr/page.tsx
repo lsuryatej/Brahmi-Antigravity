@@ -1,6 +1,6 @@
 "use client";
 
-import { mockProducts } from "@/lib/mockData/products";
+import { sutrProducts } from "@/lib/mockData/products";
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn, StaggerChildren } from "@/lib/motion/primitives";
@@ -20,11 +20,11 @@ export default function SutrCollectionPage() {
                             className="text-center mb-16"
                         >
                             <h1 className="text-5xl md:text-7xl font-bold font-sans mb-8">
-                                Sutr Collection
+                                Sutr
                             </h1>
                             <div className="max-w-4xl mx-auto space-y-4 text-lg md:text-xl font-mono text-muted-foreground leading-relaxed">
                                 <p>
-                                    The Sutr collection embodies the timeless art of handwoven textiles,
+                                    Sutr embodies the timeless art of handwoven textiles,
                                     where every thread tells a story of tradition and craftsmanship. Our
                                     carefully curated selection features garments created by skilled artisans
                                     who have inherited techniques passed down through generations.
@@ -42,7 +42,7 @@ export default function SutrCollectionPage() {
 
                     {/* Product Grid */}
                     <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
-                        {mockProducts.map((product, index) => (
+                        {sutrProducts.map((product, index) => (
                             <FadeIn key={product.id} delay={index * 0.1}>
                                 <Link href={`/catalogue/sutr/${product.handle}`}>
                                     <motion.div
