@@ -3,100 +3,79 @@
 import { useState } from "react";
 import { Product } from "@/lib/mockData/products";
 import { Button } from "@/components/ui/button";
-import { ProductDetailsButtons } from "./ProductDetailsModal";
-import { Minus, Plus } from "lucide-react";
+import { Info } from "lucide-react";
+import Link from "next/link";
 
 interface ProductInfoProps {
     product: Product;
 }
 
+interface InfoPill {
+    label: string;
+    content: string | React.ReactNode;
+}
+
 export const ProductInfo = ({ product }: ProductInfoProps) => {
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
-    const [quantity, setQuantity] = useState(1);
+    const [hoveredPill, setHoveredPill] = useState<string | null>(null);
 
-    const handleQuantityChange = (delta: number) => {
-        setQuantity((prev) => Math.max(1, Math.min(10, prev + delta)));
-    };
-
-    const modalSections = [
+    const infoPills: InfoPill[] = [
         {
-            title: "Product Specifications",
+            label: "Description",
+            content: product.description
+        },
+        {
+            label: "Details",
             content: (
-                <div className="space-y-4 font-mono text-sm">
+                <div className="space-y-3">
                     <div>
-                        <h4 className="font-bold mb-2">Material</h4>
-                        <p className="text-muted-foreground">{product.specifications.material}</p>
+                        <p className="font-semibold mb-1">Material</p>
+                        <p className="text-muted-foreground">{product.details.material}</p>
                     </div>
                     <div>
-                        <h4 className="font-bold mb-2">Fit</h4>
-                        <p className="text-muted-foreground">{product.specifications.fit}</p>
+                        <p className="font-semibold mb-1">Fit</p>
+                        <p className="text-muted-foreground">{product.details.fit}</p>
                     </div>
                     <div>
-                        <h4 className="font-bold mb-2">Category</h4>
+                        <p className="font-semibold mb-1">Category</p>
                         <p className="text-muted-foreground capitalize">{product.category}</p>
                     </div>
                 </div>
-            ),
+            )
         },
         {
-            title: "Wash & Care",
-            content: (
-                <div className="space-y-4 font-mono text-sm">
-                    <p className="text-muted-foreground">{product.specifications.care}</p>
-                    <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                        <li>Do not bleach</li>
-                        <li>Iron on low to medium heat</li>
-                        <li>Do not tumble dry on high heat</li>
-                        <li>Store in a cool, dry place</li>
-                    </ul>
-                </div>
-            ),
+            label: "Product Care",
+            content: product.care
         },
         {
-            title: "Shipping & Returns",
-            content: (
-                <div className="space-y-4 font-mono text-sm">
-                    <div>
-                        <h4 className="font-bold mb-2">Shipping</h4>
-                        <p className="text-muted-foreground">
-                            Free shipping on orders above ₹2,000. Standard delivery takes 5-7 business days.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold mb-2">Returns</h4>
-                        <p className="text-muted-foreground">
-                            30-day return policy. Items must be unworn, unwashed, and with tags attached.
-                            Original packaging required.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold mb-2">Exchange</h4>
-                        <p className="text-muted-foreground">
-                            Free size exchanges available within 15 days of delivery.
-                        </p>
-                    </div>
-                </div>
-            ),
-        },
+            label: "Shipping",
+            content: product.shipping
+        }
     ];
 
     return (
-        <div className="space-y-8">
-            {/* Title & Price */}
-            <div>
-                <h1 className="text-3xl md:text-4xl font-bold font-sans mb-4">{product.title}</h1>
-                <p className="text-3xl font-bold font-mono">₹{product.price.toLocaleString()}</p>
-            </div>
+        <div className="flex flex-col h-full">
+            {/* Product Title */}
+            <h1 className="text-4xl md:text-5xl font-bold font-sans mb-2">
+                {product.title}
+            </h1>
 
-            {/* Description */}
-            <div>
-                <h3 className="text-lg font-semibold mb-2 font-sans">Description</h3>
-                <p className="text-muted-foreground font-mono leading-relaxed">{product.description}</p>
-            </div>
+            {/* Price */}
+            <p className="text-3xl md:text-4xl font-bold font-mono mb-8">
+                ₹{product.price.toLocaleString()}
+            </p>
 
             {/* Size Selector */}
-            <div>
-                <h3 className="text-lg font-semibold mb-3 font-sans">Select Size</h3>
+            <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold font-sans">Size</h3>
+                    <Link
+                        href="/size-chart"
+                        className="text-sm font-mono text-muted-foreground hover:text-accent transition-colors underline underline-offset-2"
+                    >
+                        Size Chart
+                    </Link>
+                </div>
                 <div className="flex flex-wrap gap-3">
                     {product.variants.map((variant) => (
                         <button
@@ -104,12 +83,12 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                             onClick={() => variant.inStock && setSelectedSize(variant.size)}
                             disabled={!variant.inStock}
                             className={`
-                                px-6 py-3 rounded-lg border-2 font-mono font-semibold transition-all
+                                min-w-[4rem] px-5 py-3 rounded-lg border-2 font-mono font-semibold transition-all
                                 ${selectedSize === variant.size
-                                    ? "border-accent bg-accent text-accent-foreground"
+                                    ? "border-accent bg-accent text-accent-foreground shadow-md"
                                     : variant.inStock
-                                        ? "border-border hover:border-accent"
-                                        : "border-border opacity-40 cursor-not-allowed line-through"
+                                        ? "border-border hover:border-accent hover:bg-accent/5"
+                                        : "border-border opacity-30 cursor-not-allowed line-through"
                                 }
                             `}
                         >
@@ -119,51 +98,45 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                 </div>
             </div>
 
-            {/* Quantity Selector */}
-            <div>
-                <h3 className="text-lg font-semibold mb-3 font-sans">Quantity</h3>
-                <div className="flex items-center gap-4">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleQuantityChange(-1)}
-                        disabled={quantity <= 1}
-                    >
-                        <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="w-12 text-center font-mono text-lg font-semibold">{quantity}</span>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleQuantityChange(1)}
-                        disabled={quantity >= 10}
-                    >
-                        <Plus className="h-4 w-4" />
-                    </Button>
-                </div>
-            </div>
-
             {/* Add to Cart Button */}
             <Button
                 size="lg"
                 disabled={!selectedSize}
-                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans"
+                className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
             >
                 {selectedSize ? "Add to Cart" : "Select a Size"}
             </Button>
 
-            {/* Return Policy Quick Info */}
-            <div className="p-4 rounded-lg bg-muted/50 border border-border">
-                <p className="text-sm font-mono text-muted-foreground">
-                    <span className="font-semibold text-foreground">Free Returns:</span> 30-day return policy.
-                    Unworn items with tags attached.
-                </p>
-            </div>
+            {/* Info Pills with Hover Overlays */}
+            <div className="space-y-4 relative">
+                {infoPills.map((pill) => (
+                    <div
+                        key={pill.label}
+                        className="relative"
+                        onMouseEnter={() => setHoveredPill(pill.label)}
+                        onMouseLeave={() => setHoveredPill(null)}
+                    >
+                        {/* Pill Button */}
+                        <button
+                            className="w-full px-5 py-3 rounded-full border-2 border-border bg-background hover:bg-accent/5 hover:border-accent transition-all flex items-center justify-between group"
+                        >
+                            <span className="font-sans font-semibold">{pill.label}</span>
+                            <Info className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
+                        </button>
 
-            {/* Detail Buttons */}
-            <div>
-                <h3 className="text-lg font-semibold mb-3 font-sans">More Information</h3>
-                <ProductDetailsButtons sections={modalSections} />
+                        {/* Hover Overlay Panel */}
+                        {hoveredPill === pill.label && (
+                            <div className="absolute bottom-full left-0 right-0 mb-3 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                                <div className="bg-background/95 backdrop-blur-xl border-2 border-border rounded-2xl p-6 shadow-2xl">
+                                    <h4 className="font-sans font-bold text-lg mb-3">{pill.label}</h4>
+                                    <div className="font-mono text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                                        {pill.content}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );
