@@ -3,29 +3,25 @@
 import { useState } from "react";
 import { Product } from "@/lib/mockData/products";
 import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
 import Link from "next/link";
+import { ShopifyBuyButton } from "./ShopifyBuyButton";
+import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
+import { Accordion } from "@/components/ui/accordion";
 
 interface ProductInfoProps {
     product: Product;
 }
 
-interface InfoPill {
-    label: string;
-    content: string | React.ReactNode;
-}
-
 export const ProductInfo = ({ product }: ProductInfoProps) => {
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
-    const [hoveredPill, setHoveredPill] = useState<string | null>(null);
 
-    const infoPills: InfoPill[] = [
+    const accordionItems = [
         {
-            label: "Description",
+            title: "Description",
             content: product.description
         },
         {
-            label: "Details",
+            title: "Details",
             content: (
                 <div className="space-y-3">
                     <div>
@@ -44,11 +40,11 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
             )
         },
         {
-            label: "Product Care",
+            title: "Product Care",
             content: product.care
         },
         {
-            label: "Shipping",
+            title: "Shipping",
             content: product.shipping
         }
     ];
@@ -98,46 +94,36 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                 </div>
             </div>
 
-            {/* Add to Cart Button */}
-            <Button
-                size="lg"
-                disabled={!selectedSize}
-                className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
-            >
-                {selectedSize ? "Add to Cart" : "Select a Size"}
-            </Button>
+            {/* Add to Cart / Select a Size Button */}
+            {!selectedSize ? (
+                // Show disabled "Select a Size" prompt when no size picked
+                <Button
+                    size="lg"
+                    disabled
+                    className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg transition-all opacity-70 cursor-not-allowed"
+                >
+                    Select a Size
+                </Button>
+            ) : hasShopifyIntegration(product.id) ? (
+                // Shopify Buy Button for products with Shopify integration
+                <div className="mb-8">
+                    <ShopifyBuyButton
+                        productId={getShopifyProductId(product.id)!}
+                        selectedSize={selectedSize}
+                    />
+                </div>
+            ) : (
+                // Default Add to Cart for other products
+                <Button
+                    size="lg"
+                    className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                >
+                    Add to Cart
+                </Button>
+            )}
 
-            {/* Info Pills with Hover Overlays */}
-            <div className="space-y-4 relative">
-                {infoPills.map((pill) => (
-                    <div
-                        key={pill.label}
-                        className="relative"
-                        onMouseEnter={() => setHoveredPill(pill.label)}
-                        onMouseLeave={() => setHoveredPill(null)}
-                    >
-                        {/* Pill Button */}
-                        <button
-                            className="w-full px-5 py-3 rounded-full border-2 border-border bg-background hover:bg-accent/5 hover:border-accent transition-all flex items-center justify-between group"
-                        >
-                            <span className="font-sans font-semibold">{pill.label}</span>
-                            <Info className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
-                        </button>
-
-                        {/* Hover Overlay Panel */}
-                        {hoveredPill === pill.label && (
-                            <div className="absolute bottom-full left-0 right-0 mb-3 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                                <div className="bg-background/95 backdrop-blur-xl border-2 border-border rounded-2xl p-6 shadow-2xl">
-                                    <h4 className="font-sans font-bold text-lg mb-3">{pill.label}</h4>
-                                    <div className="font-mono text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                                        {pill.content}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+            {/* Product Information Accordion */}
+            <Accordion items={accordionItems} allowMultiple={false} />
         </div>
     );
 };

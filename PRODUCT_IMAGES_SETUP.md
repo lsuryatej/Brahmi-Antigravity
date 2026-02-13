@@ -153,21 +153,21 @@ All products available in: S, M, L, XL, XXL
 
 ### Collection Page
 ```
-http://localhost:3000/catalogue/sutr
+http://localhost:3000/collections/sutr
 ```
 
 ### Individual Product Pages
-- `/catalogue/sutr/kanthi-jacket`
-- `/catalogue/sutr/kanthi-skirt`
-- `/catalogue/sutr/nilaaya-dress`
-- `/catalogue/sutr/charkha-vest`
-- `/catalogue/sutr/charkha-pants`
-- `/catalogue/sutr/dhaara-skirt`
-- `/catalogue/sutr/avanti-top`
-- `/catalogue/sutr/eka-rekha-shirt`
-- `/catalogue/sutr/eka-rekha-pants`
-- `/catalogue/sutr/neel-dhaara-shirt`  
-- `/catalogue/sutr/kaldhaara-pants`
+- `/collections/sutr/kanthi-jacket`
+- `/collections/sutr/kanthi-skirt`
+- `/collections/sutr/nilaaya-dress`
+- `/collections/sutr/charkha-vest`
+- `/collections/sutr/charkha-pants`
+- `/collections/sutr/dhaara-skirt`
+- `/collections/sutr/avanti-top`
+- `/collections/sutr/eka-rekha-shirt`
+- `/collections/sutr/eka-rekha-pants`
+- `/collections/sutr/neel-dhaara-shirt`  
+- `/collections/sutr/kaldhaara-pants`
 
 ## ✨ Features Implemented
 

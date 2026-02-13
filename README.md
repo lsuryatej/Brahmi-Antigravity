@@ -40,7 +40,7 @@ src/
 ├── app/                    # Next.js app router pages
 │   ├── (routes)/
 │   │   ├── about/         # About page
-│   │   ├── catalogue/     # Catalogue page
+│   │   ├── collections/   # Collections pages (Sutr)
 │   │   └── contact/       # Contact page
 │   ├── layout.tsx         # Root layout with navbar & footer
 │   ├── page.tsx           # Homepage
@@ -113,7 +113,7 @@ Fully validated contact form with:
 
 - `/` - Landing page with hero, video, and collections
 - `/about` - About page with mission and values
-- `/catalogue` - Product catalogue (coming soon)
+- `/collections/sutr` - Sutr collection products
 - `/contact` - Contact form
 
 ## 📝 License

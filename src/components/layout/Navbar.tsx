@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -16,10 +16,10 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/" },
     {
-        name: "Catalogue",
-        href: "/catalogue",
+        name: "Collections",
+        href: "#",
         submenu: [
-            { name: "Sutr", href: "/catalogue/sutr" }
+            { name: "Sutr", href: "/collections/sutr" }
         ]
     },
     { name: "About", href: "/about" },
@@ -29,23 +29,85 @@ const navItems: NavItem[] = [
 export const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [cartCount] = useState(0); // Will be connected to cart context later
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const desktopMenuRef = useRef<HTMLDivElement>(null);
 
+    // Handle scroll behavior
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 100);
+
+            // Close mobile menu on scroll
+            if (isMobileMenuOpen) {
+                setIsMobileMenuOpen(false);
+            }
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [isMobileMenuOpen]);
+
+    // Handle click outside for mobile menu
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                isMobileMenuOpen &&
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target as Node)
+            ) {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside as any);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside as any);
+        };
+    }, [isMobileMenuOpen]);
+
+    // Close menu when link is clicked
+    const handleLinkClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
+    // Open the Shopify cart by dispatching a proper click event on the SDK's toggle button
+    const openShopifyCart = () => {
+        // Defer to next tick to escape React's synthetic event batch processing
+        setTimeout(() => {
+            const toggleFrame = document.querySelector('.shopify-buy-frame--toggle iframe') as HTMLIFrameElement;
+            if (toggleFrame) {
+                try {
+                    const toggleDoc = toggleFrame.contentDocument || toggleFrame.contentWindow?.document;
+                    if (toggleDoc) {
+                        const toggleBtn = toggleDoc.querySelector('.shopify-buy__cart-toggle') as HTMLElement;
+                        if (toggleBtn && toggleFrame.contentWindow) {
+                            // Must use MouseEvent constructor with view for Shopify SDK to handle it
+                            const event = new MouseEvent('click', {
+                                bubbles: true,
+                                cancelable: true,
+                                view: toggleFrame.contentWindow,
+                            });
+                            toggleBtn.dispatchEvent(event);
+                        }
+                    }
+                } catch {
+                    // Cross-origin iframe, silently fail
+                }
+            }
+        }, 0);
+    };
 
     return (
         <>
             <motion.nav
                 className={cn(
-                    "fixed top-0 right-0 z-50 flex items-center justify-end p-6 transition-all duration-500",
+                    "fixed top-0 right-0 z-50 flex items-center justify-end p-6 transition-all duration-500 pointer-events-none",
                     isScrolled ? "w-auto" : "w-full"
                 )}
                 initial={{ opacity: 0, y: -20 }}
@@ -53,7 +115,7 @@ export const Navbar = () => {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
                 {!isScrolled ? (
-                    <div className="hidden md:flex gap-8 items-center">
+                    <div className="hidden md:flex gap-8 items-center pointer-events-auto">
                         {navItems.map((item) => (
                             <div
                                 key={item.name}
@@ -96,7 +158,7 @@ export const Navbar = () => {
                         ))}
 
                         {/* Cart Icon */}
-                        <button className="relative group">
+                        <button className="relative group" onClick={openShopifyCart}>
                             <ShoppingBag className="h-5 w-5 hover:text-accent transition-colors" />
                             {cartCount > 0 && (
                                 <motion.span
@@ -111,7 +173,8 @@ export const Navbar = () => {
                     </div>
                 ) : (
                     <div
-                        className="relative"
+                        ref={desktopMenuRef}
+                        className="relative hidden md:block pointer-events-auto"
                         onMouseEnter={() => setIsMenuOpen(true)}
                         onMouseLeave={() => setIsMenuOpen(false)}
                     >
@@ -156,7 +219,7 @@ export const Navbar = () => {
                                         </div>
                                     ))}
                                     <div className="h-px bg-border my-1" />
-                                    <button className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+                                    <button onClick={openShopifyCart} className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
                                         <ShoppingBag className="h-4 w-4" />
                                         Cart
                                         {cartCount > 0 && (
@@ -172,9 +235,71 @@ export const Navbar = () => {
                 )}
             </motion.nav>
 
-            {/* Mobile Menu Button (Always visible on mobile when not scrolled, or handled by the same logic) */}
-            <div className="md:hidden fixed top-4 right-4 z-50">
-                {/* Mobile logic can be refined, for now using the same structure */}
+            {/* Mobile Menu Button (Always visible on mobile) */}
+            <div className="md:hidden fixed top-4 right-4 z-50 pointer-events-auto" ref={mobileMenuRef}>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="rounded-full bg-background/80 backdrop-blur-md border-border shadow-sm"
+                >
+                    {isMobileMenuOpen ? (
+                        <X className="h-5 w-5" />
+                    ) : (
+                        <Menu className="h-5 w-5" />
+                    )}
+                </Button>
+
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full right-0 mt-2 w-48 bg-background/90 backdrop-blur-xl border border-border rounded-xl shadow-xl overflow-hidden p-2 flex flex-col gap-1"
+                        >
+                            {navItems.map((item) => (
+                                <div key={item.name}>
+                                    <Link
+                                        href={item.href}
+                                        onClick={handleLinkClick}
+                                        className="block px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                    {item.submenu && (
+                                        <div className="ml-4 space-y-1">
+                                            {item.submenu.map((subItem) => (
+                                                <Link
+                                                    key={subItem.name}
+                                                    href={subItem.href}
+                                                    onClick={handleLinkClick}
+                                                    className="block px-4 py-2 text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
+                                                >
+                                                    {subItem.name}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                            <div className="h-px bg-border my-1" />
+                            <button
+                                onClick={() => { handleLinkClick(); openShopifyCart(); }}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
+                            >
+                                <ShoppingBag className="h-4 w-4" />
+                                Cart
+                                {cartCount > 0 && (
+                                    <span className="ml-auto bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </>
     );
