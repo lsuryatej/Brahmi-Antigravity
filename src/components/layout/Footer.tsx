@@ -57,8 +57,8 @@ export function Footer() {
                             <Link href="/" className="block transition-colors hover:text-white/90 text-accent-foreground/80">
                                 Home
                             </Link>
-                            <Link href="/catalogue" className="block transition-colors hover:text-white/90 text-accent-foreground/80">
-                                Catalogue
+                            <Link href="/collections/sutr" className="block transition-colors hover:text-white/90 text-accent-foreground/80">
+                                Collections
                             </Link>
                             <Link href="/about" className="block transition-colors hover:text-white/90 text-accent-foreground/80">
                                 About

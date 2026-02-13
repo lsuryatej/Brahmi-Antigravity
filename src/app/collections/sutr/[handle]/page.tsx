@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProductByHandle } from "@/lib/mockData/products";
-import { ProductImageGallery } from "@/components/catalogue/ProductImageGallery";
-import { ProductInfo } from "@/components/catalogue/ProductInfo";
+import { ProductImageGallery } from "@/components/collections/ProductImageGallery";
+import { ProductInfo } from "@/components/collections/ProductInfo";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
@@ -24,7 +24,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="max-w-7xl mx-auto">
                 {/* Back Button */}
                 <Link
-                    href="/catalogue/sutr"
+                    href="/collections/sutr"
                     className="inline-flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors mb-8 cursor-pointer hover:underline underline-offset-4"
                 >
                     <ChevronLeft className="h-4 w-4" />

@@ -28,7 +28,7 @@ export const CollectionsCarousel = React.forwardRef<
     (
         {
             collections,
-            title = "Our Collections",
+            title = "Our Products",
             subtitle,
             className,
             ...props

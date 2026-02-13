@@ -44,7 +44,7 @@ export default function SutrCollectionPage() {
                     <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
                         {sutrProducts.map((product, index) => (
                             <FadeIn key={product.id} delay={index * 0.1}>
-                                <Link href={`/catalogue/sutr/${product.handle}`}>
+                                <Link href={`/collections/sutr/${product.handle}`}>
                                     <motion.div
                                         whileHover={{ y: -8 }}
                                         transition={{ type: "spring", stiffness: 300 }}
