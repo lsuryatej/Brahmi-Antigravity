@@ -52,19 +52,19 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
     return (
         <div className="flex flex-col h-full">
             {/* Product Title */}
-            <h1 className="text-4xl md:text-5xl font-bold font-sans mb-2">
+            <h1 className="text-2xl md:text-5xl font-bold font-sans mb-2">
                 {product.title}
             </h1>
 
             {/* Price */}
-            <p className="text-3xl md:text-4xl font-bold font-mono mb-8">
+            <p className="text-xl md:text-4xl font-bold font-mono mb-6 md:mb-8">
                 ₹{product.price.toLocaleString()}
             </p>
 
             {/* Size Selector */}
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold font-sans">Size</h3>
+                    <h3 className="text-base md:text-lg font-semibold font-sans">Size</h3>
                     <Link
                         href="/size-chart"
                         className="text-sm font-mono text-muted-foreground hover:text-accent transition-colors underline underline-offset-2"
@@ -79,7 +79,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                             onClick={() => variant.inStock && setSelectedSize(variant.size)}
                             disabled={!variant.inStock}
                             className={`
-                                min-w-[4rem] px-5 py-3 rounded-lg border-2 font-mono font-semibold transition-all
+                                min-w-[3rem] md:min-w-[4rem] px-3 py-2 md:px-5 md:py-3 rounded-lg border-2 font-mono text-sm md:text-base font-semibold transition-all
                                 ${selectedSize === variant.size
                                     ? "border-accent bg-accent text-accent-foreground shadow-md"
                                     : variant.inStock
@@ -100,7 +100,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                 <Button
                     size="lg"
                     disabled
-                    className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg transition-all opacity-70 cursor-not-allowed"
+                    className="w-full mb-6 md:mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-base md:text-lg font-sans py-4 md:py-6 rounded-xl shadow-lg transition-all opacity-70 cursor-not-allowed"
                 >
                     Select a Size
                 </Button>
@@ -116,7 +116,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                 // Default Add to Cart for other products
                 <Button
                     size="lg"
-                    className="w-full mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-lg font-sans py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    className="w-full mb-6 md:mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-base md:text-lg font-sans py-4 md:py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
                 >
                     Add to Cart
                 </Button>
