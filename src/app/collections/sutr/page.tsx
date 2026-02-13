@@ -71,9 +71,7 @@ export default function SutrCollectionPage() {
                                             <h3 className="text-base md:text-xl font-sans font-semibold group-hover:text-accent transition-colors">
                                                 {product.title}
                                             </h3>
-                                            <p className="text-xs md:text-sm font-mono text-muted-foreground line-clamp-2 hidden md:block">
-                                                {product.description}
-                                            </p>
+
                                             <div className="flex items-center justify-between pt-2">
                                                 <span className="text-base md:text-lg font-bold font-mono">
                                                     ₹{product.price.toLocaleString()}
