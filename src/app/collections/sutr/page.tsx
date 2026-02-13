@@ -10,19 +10,19 @@ export default function SutrCollectionPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section with Description */}
-            <section className="relative py-24 px-4 md:px-8">
+            <section className="relative py-12 md:py-24 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto">
                     <FadeIn>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
-                            className="text-center mb-16"
+                            className="text-center mb-8 md:mb-16"
                         >
-                            <h1 className="text-5xl md:text-7xl font-bold font-sans mb-8">
+                            <h1 className="text-3xl md:text-7xl font-bold font-sans mb-4 md:mb-8">
                                 Sutr
                             </h1>
-                            <div className="max-w-4xl mx-auto space-y-4 text-lg md:text-xl font-mono text-muted-foreground leading-relaxed">
+                            <div className="max-w-4xl mx-auto space-y-3 md:space-y-4 text-sm md:text-xl font-mono text-muted-foreground leading-relaxed">
                                 <p>
                                     Sutr embodies the timeless art of handwoven textiles,
                                     where every thread tells a story of tradition and craftsmanship. Our
@@ -41,7 +41,7 @@ export default function SutrCollectionPage() {
                     </FadeIn>
 
                     {/* Product Grid */}
-                    <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
+                    <StaggerChildren className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mt-10 md:mt-20">
                         {sutrProducts.map((product, index) => (
                             <FadeIn key={product.id} delay={index * 0.1}>
                                 <Link href={`/collections/sutr/${product.handle}`}>
@@ -51,7 +51,7 @@ export default function SutrCollectionPage() {
                                         className="group cursor-pointer"
                                     >
                                         {/* Product Image */}
-                                        <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-muted mb-4">
+                                        <div className="relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl bg-muted mb-2 md:mb-4">
                                             <Image
                                                 src={product.images[0]}
                                                 alt={product.title}
@@ -60,25 +60,25 @@ export default function SutrCollectionPage() {
                                             />
                                             {/* Category Badge */}
                                             <div className="absolute top-4 left-4">
-                                                <span className="px-3 py-1 bg-background/80 backdrop-blur-sm rounded-full text-xs font-mono uppercase tracking-wider">
+                                                <span className="px-2 py-0.5 md:px-3 md:py-1 bg-background/80 backdrop-blur-sm rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider">
                                                     {product.category}
                                                 </span>
                                             </div>
                                         </div>
 
                                         {/* Product Info */}
-                                        <div className="space-y-2">
-                                            <h3 className="text-xl font-sans font-semibold group-hover:text-accent transition-colors">
+                                        <div className="space-y-1 md:space-y-2">
+                                            <h3 className="text-base md:text-xl font-sans font-semibold group-hover:text-accent transition-colors">
                                                 {product.title}
                                             </h3>
-                                            <p className="text-sm font-mono text-muted-foreground line-clamp-2">
+                                            <p className="text-xs md:text-sm font-mono text-muted-foreground line-clamp-2 hidden md:block">
                                                 {product.description}
                                             </p>
                                             <div className="flex items-center justify-between pt-2">
-                                                <span className="text-lg font-bold font-mono">
+                                                <span className="text-base md:text-lg font-bold font-mono">
                                                     ₹{product.price.toLocaleString()}
                                                 </span>
-                                                <span className="text-sm font-mono text-muted-foreground group-hover:text-accent transition-colors">
+                                                <span className="text-xs md:text-sm font-mono text-muted-foreground group-hover:text-accent transition-colors hidden md:inline">
                                                     View Details →
                                                 </span>
                                             </div>
