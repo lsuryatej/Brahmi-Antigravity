@@ -17,10 +17,6 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
 
     const accordionItems = [
         {
-            title: "Description",
-            content: product.description
-        },
-        {
             title: "Details",
             content: (
                 <div className="space-y-3">
@@ -57,9 +53,16 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
             </h1>
 
             {/* Price */}
-            <p className="text-xl md:text-4xl font-bold font-mono mb-6 md:mb-8">
+            <p className="text-xl md:text-4xl font-bold font-mono mb-4 md:mb-6">
                 ₹{product.price.toLocaleString()}
             </p>
+
+            {/* Product Description */}
+            <div className="mb-6 md:mb-8">
+                <p className="text-sm md:text-base font-mono text-muted-foreground leading-relaxed">
+                    {product.description}
+                </p>
+            </div>
 
             {/* Size Selector */}
             <div className="mb-6">

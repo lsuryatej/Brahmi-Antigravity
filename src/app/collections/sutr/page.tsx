@@ -24,17 +24,16 @@ export default function SutrCollectionPage() {
                             </h1>
                             <div className="max-w-4xl mx-auto space-y-3 md:space-y-4 text-sm md:text-xl font-mono text-muted-foreground leading-relaxed">
                                 <p>
-                                    Sutr embodies the timeless art of handwoven textiles,
-                                    where every thread tells a story of tradition and craftsmanship. Our
-                                    carefully curated selection features garments created by skilled artisans
-                                    who have inherited techniques passed down through generations.
+                                    Sutr, our first capsule collection, is a quiet beginning, one that honours the thread as both material and metaphor. Sutr means thread: the most essential element of cloth, and the invisible force that binds memory, craft, and continuity. Much like Brahmi, our brand name inspired by one of India&apos;s oldest scripts, Sutr speaks of origins, of marks, lines, and stories that move forward while staying rooted.
                                 </p>
                                 <p>
-                                    From naturally dyed fabrics to intricate weaving patterns, each piece
-                                    celebrates the rich heritage of Indian textiles while embracing contemporary
-                                    design. We believe in slow fashion—clothing that honors both the maker and
-                                    the wearer, crafted with mindfulness and an unwavering commitment to quality.
-                                    Discover garments that transcend trends and become cherished wardrobe staples.
+                                    At the heart of the collection lies kantha hand embroidery, meticulously embroidered by artisans in Gujarat. Kantha is a storytelling stitch, formed by a single running stitch that moves rhythmically forward, guided entirely by the hand and eye. The needle travels in gentle, continuous motions, creating ripples on fabric that feel almost alive. Our motifs draw from the charkha, a recurring symbol in traditional kantha, representing life&apos;s cycles, quiet labour, and unwavering consistency.
+                                </p>
+                                <p>
+                                    The motifs flow freely across the garments, echoing kantha&apos;s organic movement, never rigid, always evolving. The colour palette mirrors this philosophy: earth-led tones of clay, rust, indigo, sand, muted blues, and sun-warmed neutrals, inspired by soil, sky, and timeworn landscapes. Just as kantha motifs are born from nature and everyday life, the colours of Sutr remain grounded, tactile, and honest.
+                                </p>
+                                <p>
+                                    Sutr is not just worn, it is carried forward, one stitch at a time.
                                 </p>
                             </div>
                         </motion.div>

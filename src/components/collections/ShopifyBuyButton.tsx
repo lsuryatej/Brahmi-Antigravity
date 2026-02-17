@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SHOPIFY_CONFIG } from "@/lib/shopify/productMapping";
 
 interface ShopifyBuyButtonProps {
@@ -26,6 +26,51 @@ export const ShopifyBuyButton = ({ productId, selectedSize }: ShopifyBuyButtonPr
     const buyButtonContainerRef = useRef<HTMLDivElement>(null);
     const shopifyComponentRef = useRef<any>(null);
     const isInitialized = useRef(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const confirmationTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Watch for cart becoming active (item added) via MutationObserver
+    useEffect(() => {
+        let observer: MutationObserver | null = null;
+
+        const startObserving = () => {
+            const cartFrame = document.querySelector('.shopify-buy-frame--cart');
+            if (!cartFrame) {
+                // Cart frame may not exist yet; retry shortly
+                setTimeout(startObserving, 1000);
+                return;
+            }
+
+            observer = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const target = mutation.target as HTMLElement;
+                        if (target.classList.contains('is-active')) {
+                            // Cart just opened — item was added
+                            if (confirmationTimerRef.current) {
+                                clearTimeout(confirmationTimerRef.current);
+                            }
+                            setShowConfirmation(true);
+                            confirmationTimerRef.current = setTimeout(() => {
+                                setShowConfirmation(false);
+                            }, 2000);
+                        }
+                    }
+                }
+            });
+
+            observer.observe(cartFrame, { attributes: true, attributeFilter: ['class'] });
+        };
+
+        // Start observing after a short delay to let the SDK initialize
+        const initTimer = setTimeout(startObserving, 2000);
+
+        return () => {
+            clearTimeout(initTimer);
+            if (observer) observer.disconnect();
+            if (confirmationTimerRef.current) clearTimeout(confirmationTimerRef.current);
+        };
+    }, []);
 
     // Initialize the Shopify Buy Button once
     useEffect(() => {
@@ -179,5 +224,78 @@ export const ShopifyBuyButton = ({ productId, selectedSize }: ShopifyBuyButtonPr
         loadShopifyScript();
     }, [productId]);
 
-    return <div ref={buyButtonContainerRef} className="w-full" />;
+    // Sync selected size to Shopify SDK's variant selector
+    useEffect(() => {
+        if (!selectedSize || !shopifyComponentRef.current) return;
+
+        try {
+            const component = shopifyComponentRef.current;
+            // The SDK stores the product model with variants
+            const product = component?.model;
+            if (!product?.variants) return;
+
+            // Find the variant that matches the selected size
+            const matchingVariant = product.variants.find((v: any) => {
+                // Shopify variants have an optionValues array or selectedOptions
+                const optionTitle = v.title || "";
+                const optionValues = v.optionValues?.map((ov: any) => ov.value || ov.name) || [];
+
+                return (
+                    optionTitle.toLowerCase() === selectedSize.toLowerCase() ||
+                    optionValues.some((val: string) =>
+                        val.toLowerCase() === selectedSize.toLowerCase()
+                    )
+                );
+            });
+
+            if (matchingVariant) {
+                // Use the SDK's internal method to select this variant
+                component.selectedVariant = matchingVariant;
+                component.updateConfig({
+                    product: {
+                        variantId: matchingVariant.id,
+                    },
+                });
+            }
+        } catch {
+            // Silently fail if SDK structure doesn't match
+        }
+    }, [selectedSize]);
+
+    return (
+        <div className="relative w-full">
+            <div ref={buyButtonContainerRef} className="w-full" />
+
+            {/* "Added ✓" confirmation overlay */}
+            <div
+                className={`
+                    absolute inset-0 flex items-center justify-center
+                    bg-[#2d7d46] rounded-xl
+                    transition-all duration-300 ease-out pointer-events-none
+                    ${showConfirmation
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-95"
+                    }
+                `}
+                aria-live="polite"
+            >
+                <span className="text-white text-lg font-sans font-semibold flex items-center gap-2">
+                    <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2.5}
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                        />
+                    </svg>
+                    Added to Cart
+                </span>
+            </div>
+        </div>
+    );
 };

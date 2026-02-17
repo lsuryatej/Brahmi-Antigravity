@@ -19,7 +19,7 @@ export const SHOPIFY_PRODUCT_MAPPING: Record<string, string> = {
     "3": "8312235983042",  // Nilaaya Dress
 
     // Skirts
-    "2": "PLACEHOLDER_KANTHI_SKIRT",  // Kanthi Skirt
+    "2": "8318672961730",  // Kanthi Skirt
     "6": "8312236146882",  // Dhaara Skirt
 
     // Pants

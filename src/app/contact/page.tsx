@@ -33,21 +33,21 @@ export default function ContactPage() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                             <div>
                                 <h3 className="font-semibold mb-2 font-sans">Email</h3>
-                                <p className="text-muted-foreground font-mono text-sm">
-                                    hello@brahmi.com
-                                </p>
+                                <a href="mailto:admin@wearbrahmi.com" className="text-muted-foreground hover:text-foreground font-mono text-sm transition-colors underline">
+                                    admin@wearbrahmi.com
+                                </a>
                             </div>
                             <div>
-                                <h3 className="font-semibold mb-2 font-sans">Phone</h3>
-                                <p className="text-muted-foreground font-mono text-sm">
-                                    +91 84497 13927
-                                </p>
+                                <h3 className="font-semibold mb-2 font-sans">Instagram</h3>
+                                <a href="https://www.instagram.com/wearbrahmi?igsh=ZHdvaDQ5bDBiaWR4" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground font-mono text-sm transition-colors underline">
+                                    @wearbrahmi
+                                </a>
                             </div>
                             <div>
-                                <h3 className="font-semibold mb-2 font-sans">Location</h3>
-                                <p className="text-muted-foreground font-mono text-sm">
-                                    Shreya
-                                </p>
+                                <h3 className="font-semibold mb-2 font-sans">LinkedIn</h3>
+                                <a href="https://www.linkedin.com/company/wearbrahmi/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground font-mono text-sm transition-colors underline">
+                                    wearbrahmi
+                                </a>
                             </div>
                         </div>
                     </FadeIn>
