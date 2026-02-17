@@ -93,32 +93,46 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Team Section (Placeholder) */}
+            {/* About the Founders */}
             <section className="py-24 px-4 md:px-8 mb-24 bg-muted/20">
-                <div className="max-w-4xl mx-auto text-center">
+                <div className="max-w-5xl mx-auto">
                     <FadeIn delay={0.4}>
-                        <h2 className="text-3xl md:text-4xl font-bold mb-6 font-sans">
-                            Meet the Team
-                        </h2>
-                        <p className="text-lg font-mono text-muted-foreground mb-12 max-w-2xl mx-auto">
-                            A collective of passionate individuals dedicated to preserving and
-                            promoting cultural artistry.
-                        </p>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6 }}
-                            className="inline-block"
-                        >
-                            <div className="w-full max-w-md mx-auto p-12 rounded-2xl border-2 border-dashed border-border bg-background/50">
-                                <div className="text-5xl mb-4">👥</div>
-                                <p className="font-mono text-muted-foreground">
-                                    Coming Soon
-                                </p>
-                            </div>
-                        </motion.div>
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans">
+                                About the Founders
+                            </h2>
+                        </div>
                     </FadeIn>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        {/* Pavni */}
+                        <FadeIn delay={0.5}>
+                            <motion.div
+                                whileHover={{ scale: 1.02, y: -4 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                                className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
+                            >
+                                <h3 className="text-2xl font-bold mb-4 font-sans">Pavni</h3>
+                                <p className="text-muted-foreground font-mono leading-relaxed">
+                                    Pavni is a textile design graduate from NIFT with a deep sensitivity towards textiles and the cultures they belong to. Her approach to design is rooted in learning from artisans, understanding their processes, materials, and stories at the source. At Brahmi, she focuses on working collaboratively with craft communities, allowing traditional techniques to guide contemporary expression while keeping the craft and its makers at the forefront.
+                                </p>
+                            </motion.div>
+                        </FadeIn>
+
+                        {/* Shreya */}
+                        <FadeIn delay={0.6}>
+                            <motion.div
+                                whileHover={{ scale: 1.02, y: -4 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                                className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
+                            >
+                                <h3 className="text-2xl font-bold mb-4 font-sans">Shreya</h3>
+                                <p className="text-muted-foreground font-mono leading-relaxed">
+                                    Shreya is a textile design graduate from NIFT with a strong sensitivity towards form, balance, and detail. Her approach is rooted in understanding proportion, construction, and the relationship between material and silhouette. At Brahmi, she focuses on translating traditional craft techniques into refined, contemporary garments; shaping the brand&apos;s design language while ensuring every piece feels intentional and considered.
+                                </p>
+                            </motion.div>
+                        </FadeIn>
+                    </div>
                 </div>
             </section>
         </div>
