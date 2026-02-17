@@ -6,6 +6,7 @@ import { Menu, X, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface NavItem {
     name: string;
@@ -34,6 +35,7 @@ export const Navbar = () => {
     const [cartCount] = useState(0); // Will be connected to cart context later
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
 
     // Handle scroll behavior
     useEffect(() => {
@@ -158,7 +160,7 @@ export const Navbar = () => {
                         ))}
 
                         {/* Cart Icon */}
-                        <button className="relative group" onClick={openShopifyCart}>
+                        <button className="relative group" onClick={() => router.push('/cart')}>
                             <ShoppingBag className="h-5 w-5 hover:text-accent transition-colors" />
                             {cartCount > 0 && (
                                 <motion.span
@@ -219,7 +221,7 @@ export const Navbar = () => {
                                         </div>
                                     ))}
                                     <div className="h-px bg-border my-1" />
-                                    <button onClick={openShopifyCart} className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+                                    <button onClick={() => router.push('/cart')} className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
                                         <ShoppingBag className="h-4 w-4" />
                                         Cart
                                         {cartCount > 0 && (
@@ -286,7 +288,7 @@ export const Navbar = () => {
                             ))}
                             <div className="h-px bg-border my-1" />
                             <button
-                                onClick={() => { handleLinkClick(); openShopifyCart(); }}
+                                onClick={() => { handleLinkClick(); router.push('/cart'); }}
                                 className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
                             >
                                 <ShoppingBag className="h-4 w-4" />

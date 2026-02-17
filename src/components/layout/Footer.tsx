@@ -12,7 +12,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { AtSign, Instagram, Linkedin, Moon, Send, Sun, Twitter as TwitterX } from "lucide-react"
+import { Instagram, Linkedin, Mail, Moon, Send, Sun } from "lucide-react"
 
 export function Footer() {
     const [isDarkMode, setIsDarkMode] = React.useState(false)
@@ -71,10 +71,7 @@ export function Footer() {
                     <div>
                         <h3 className="mb-4 text-lg font-semibold font-sans">Contact Us</h3>
                         <address className="space-y-2 text-sm not-italic font-mono text-accent-foreground/80">
-                            <p>Shreya</p>
-                            <p>Ahmedabad, GJ</p>
-                            <p>Phone: +91 84497 13927</p>
-                            <p>Email: hello@brahmi.com</p>
+                            <p>Email: <a href="mailto:admin@wearbrahmi.com" className="hover:text-white/90 transition-colors underline">admin@wearbrahmi.com</a></p>
                         </address>
                     </div>
                     <div className="relative">
@@ -83,36 +80,27 @@ export function Footer() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
-                                            <AtSign className="h-4 w-4" />
-                                            <span className="sr-only">Threads</span>
-                                        </Button>
+                                        <a href="mailto:admin@wearbrahmi.com" target="_blank" rel="noopener noreferrer">
+                                            <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
+                                                <Mail className="h-4 w-4" />
+                                                <span className="sr-only">Email</span>
+                                            </Button>
+                                        </a>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Follow us on Threads</p>
+                                        <p>Email us</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
-                                            <TwitterX className="h-4 w-4" />
-                                            <span className="sr-only">X (Twitter)</span>
-                                        </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Follow us on X</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
-                                            <Instagram className="h-4 w-4" />
-                                            <span className="sr-only">Instagram</span>
-                                        </Button>
+                                        <a href="https://www.instagram.com/wearbrahmi?igsh=ZHdvaDQ5bDBiaWR4" target="_blank" rel="noopener noreferrer">
+                                            <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
+                                                <Instagram className="h-4 w-4" />
+                                                <span className="sr-only">Instagram</span>
+                                            </Button>
+                                        </a>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Follow us on Instagram</p>
@@ -122,10 +110,12 @@ export function Footer() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
-                                            <Linkedin className="h-4 w-4" />
-                                            <span className="sr-only">LinkedIn</span>
-                                        </Button>
+                                        <a href="https://www.linkedin.com/company/wearbrahmi/" target="_blank" rel="noopener noreferrer">
+                                            <Button variant="outline" size="icon" className="rounded-full border-accent-foreground/20 bg-transparent hover:bg-accent-foreground/10 hover:text-accent-foreground text-accent-foreground">
+                                                <Linkedin className="h-4 w-4" />
+                                                <span className="sr-only">LinkedIn</span>
+                                            </Button>
+                                        </a>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Connect with us on LinkedIn</p>
