@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 // Define the type for a single collection item
 export interface Collection {
@@ -11,6 +12,7 @@ export interface Collection {
     description?: string;
     image: string;
     isNew?: boolean;
+    href?: string;
 }
 
 // Define the props for the main component
@@ -188,12 +190,8 @@ export const CollectionsCarousel = React.forwardRef<
                             msOverflowStyle: "none",
                         }}
                     >
-                        {collections.map((collection) => (
-                            <div
-                                key={collection.id}
-                                className="flex-shrink-0 w-[280px] sm:w-[340px] md:w-[380px] snap-start"
-                            >
-                                {/* Collection Card */}
+                        {collections.map((collection) => {
+                            const CardContent = (
                                 <div className="group cursor-pointer">
                                     <div className="relative overflow-hidden rounded-2xl bg-card border border-border mb-4 transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:-translate-y-2 group-hover:border-accent">
                                         <img
@@ -225,8 +223,23 @@ export const CollectionsCarousel = React.forwardRef<
                                         )}
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+
+                            return (
+                                <div
+                                    key={collection.id}
+                                    className="flex-shrink-0 w-[280px] sm:w-[340px] md:w-[380px] snap-start"
+                                >
+                                    {collection.href ? (
+                                        <Link href={collection.href}>
+                                            {CardContent}
+                                        </Link>
+                                    ) : (
+                                        CardContent
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {/* Mobile scroll indicator */}
