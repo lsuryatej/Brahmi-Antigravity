@@ -156,7 +156,7 @@ export const HeroSequence = () => {
     return (
         <section
             ref={containerRef}
-            className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+            className="relative h-screen w-full overflow-clip flex items-center justify-center border-0"
         >
             {/* Layer 1: Base Gradient Overlay */}
             <div
@@ -209,7 +209,7 @@ export const HeroSequence = () => {
             />
 
             {/* Content (Logo) - Stays pinned with subtle zoom */}
-            <div className="relative z-50 flex flex-col items-center justify-center p-4">
+            <div className="relative z-[15] flex flex-col items-center justify-center p-4">
                 <motion.div
                     ref={logoRef}
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}

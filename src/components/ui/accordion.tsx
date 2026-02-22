@@ -67,7 +67,7 @@ export const Accordion = ({ items, allowMultiple = false }: AccordionProps) => {
     };
 
     return (
-        <div className="border-2 border-border rounded-xl overflow-hidden bg-background">
+        <div className="rounded-xl overflow-hidden bg-background">
             {items.map((item, index) => (
                 <AccordionItem
                     key={index}
