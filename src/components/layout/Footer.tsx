@@ -13,8 +13,9 @@ import { Instagram, Linkedin, Mail } from "lucide-react"
 
 export function Footer() {
     return (
-        <footer className="relative bg-[#f8f6f0] text-foreground transition-colors duration-300" style={{ borderTop: '1px solid #63180c' }}>
-            <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
+        <footer className="relative bg-[#f8f6f0] text-foreground transition-colors duration-300">
+            <div className="container mx-auto px-4 pt-8 pb-12 md:px-6 lg:px-8">
+                <div className="border-t mb-12" />
                 <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
                     <div>
                         <h3 className="mb-4 text-lg font-semibold font-sans">Quick Links</h3>
@@ -91,7 +92,7 @@ export function Footer() {
 
                     </div>
                 </div>
-                <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row font-mono text-muted-foreground" style={{ borderColor: '#63180c' }}>
+                <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row font-mono text-muted-foreground">
                     <p className="text-sm">
                         © 2025 Brahmi. All rights reserved.
                     </p>
