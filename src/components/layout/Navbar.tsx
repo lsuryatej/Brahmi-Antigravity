@@ -79,32 +79,6 @@ export const Navbar = () => {
         setIsMobileMenuOpen(false);
     };
 
-    // Open the Shopify cart by dispatching a proper click event on the SDK's toggle button
-    const openShopifyCart = () => {
-        // Defer to next tick to escape React's synthetic event batch processing
-        setTimeout(() => {
-            const toggleFrame = document.querySelector('.shopify-buy-frame--toggle iframe') as HTMLIFrameElement;
-            if (toggleFrame) {
-                try {
-                    const toggleDoc = toggleFrame.contentDocument || toggleFrame.contentWindow?.document;
-                    if (toggleDoc) {
-                        const toggleBtn = toggleDoc.querySelector('.shopify-buy__cart-toggle') as HTMLElement;
-                        if (toggleBtn && toggleFrame.contentWindow) {
-                            // Must use MouseEvent constructor with view for Shopify SDK to handle it
-                            const event = new MouseEvent('click', {
-                                bubbles: true,
-                                cancelable: true,
-                                view: toggleFrame.contentWindow,
-                            });
-                            toggleBtn.dispatchEvent(event);
-                        }
-                    }
-                } catch {
-                    // Cross-origin iframe, silently fail
-                }
-            }
-        }, 0);
-    };
 
     return (
         <>

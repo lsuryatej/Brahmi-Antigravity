@@ -9,36 +9,24 @@ interface CartContextType {
     addToCart: (variantId: string, quantity?: number) => Promise<boolean>;
 }
 
-const CartContext = createContext<CartContextType>({
-    cartCount: 0,
-    refreshCart: async () => { },
-    addToCart: async () => false,
-});
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const useCart = () => useContext(CartContext);
+export const useCart = (): CartContextType => {
+    const ctx = useContext(CartContext);
+    if (!ctx) throw new Error("useCart must be used within a CartProvider");
+    return ctx;
+};
 
 // localStorage key for the cart ID
 const CART_STORAGE_KEY = `${SHOPIFY_CONFIG.storefrontAccessToken}.${SHOPIFY_CONFIG.domain}.checkoutId`;
 
-// Find the cart ID from localStorage (checks both old SDK keys and our own key)
+/** Returns only the Cart GID saved by this app — never touches legacy SDK keys */
 function findCartId(): string | null {
     try {
-        // First check our own key
-        const ownId = localStorage.getItem(CART_STORAGE_KEY);
-        if (ownId) return ownId;
-
-        // Fall back to searching for any key containing "checkoutId" (SDK compatibility)
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.includes("checkoutId")) {
-                const value = localStorage.getItem(key);
-                if (value) return value;
-            }
-        }
+        return localStorage.getItem(CART_STORAGE_KEY);
     } catch {
-        // localStorage not available
+        return null;
     }
-    return null;
 }
 
 function saveCartId(cartId: string) {
@@ -48,6 +36,13 @@ function saveCartId(cartId: string) {
         // localStorage not available
     }
 }
+
+const SHOPIFY_GQL_URL = `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`;
+
+const SHOPIFY_HEADERS = {
+    "Content-Type": "application/json",
+    "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
+};
 
 // Fetch total quantity from Shopify Cart API
 async function fetchCartCount(cartId: string): Promise<number> {
@@ -60,25 +55,15 @@ async function fetchCartCount(cartId: string): Promise<number> {
     `;
 
     try {
-        const response = await fetch(
-            `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
-                },
-                body: JSON.stringify({
-                    query,
-                    variables: { id: cartId },
-                }),
-            }
-        );
+        const response = await fetch(SHOPIFY_GQL_URL, {
+            method: "POST",
+            headers: SHOPIFY_HEADERS,
+            body: JSON.stringify({ query, variables: { id: cartId } }),
+        });
 
         const data = await response.json();
         const cart = data?.data?.cart;
         if (!cart) return 0;
-
         return cart.totalQuantity || 0;
     } catch {
         return 0;
@@ -101,24 +86,14 @@ async function createCart(variantId: string, quantity: number): Promise<string |
     `;
 
     try {
-        const response = await fetch(
-            `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
-                },
-                body: JSON.stringify({
-                    query: mutation,
-                    variables: {
-                        input: {
-                            lines: [{ merchandiseId: variantId, quantity }],
-                        },
-                    },
-                }),
-            }
-        );
+        const response = await fetch(SHOPIFY_GQL_URL, {
+            method: "POST",
+            headers: SHOPIFY_HEADERS,
+            body: JSON.stringify({
+                query: mutation,
+                variables: { input: { lines: [{ merchandiseId: variantId, quantity }] } },
+            }),
+        });
 
         const data = await response.json();
         const cartId = data?.data?.cartCreate?.cart?.id;
@@ -150,23 +125,14 @@ async function addLineToCart(cartId: string, variantId: string, quantity: number
     `;
 
     try {
-        const response = await fetch(
-            `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
-                },
-                body: JSON.stringify({
-                    query: mutation,
-                    variables: {
-                        cartId,
-                        lines: [{ merchandiseId: variantId, quantity }],
-                    },
-                }),
-            }
-        );
+        const response = await fetch(SHOPIFY_GQL_URL, {
+            method: "POST",
+            headers: SHOPIFY_HEADERS,
+            body: JSON.stringify({
+                query: mutation,
+                variables: { cartId, lines: [{ merchandiseId: variantId, quantity }] },
+            }),
+        });
 
         const data = await response.json();
         const errors = data?.data?.cartLinesAdd?.userErrors;
@@ -200,6 +166,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         let success = false;
         if (existingCartId) {
             success = await addLineToCart(existingCartId, variantId, quantity);
+            // If the stored cartId is stale/invalid, create a new cart
+            if (!success) {
+                const newCartId = await createCart(variantId, quantity);
+                success = !!newCartId;
+            }
         } else {
             const newCartId = await createCart(variantId, quantity);
             success = !!newCartId;

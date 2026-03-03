@@ -12,6 +12,8 @@ import {
 import { Instagram, Linkedin, Mail } from "lucide-react"
 
 export function Footer() {
+    const currentYear = new Date().getFullYear();
+
     return (
         <footer className="relative bg-[#f8f6f0] text-foreground transition-colors duration-300">
             <div className="container mx-auto px-4 pt-8 pb-12 md:px-6 lg:px-8">
@@ -46,12 +48,12 @@ export function Footer() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <a href="mailto:admin@wearbrahmi.com" target="_blank" rel="noopener noreferrer">
-                                            <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground">
+                                        <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground" asChild>
+                                            <a href="mailto:admin@wearbrahmi.com" target="_blank" rel="noopener noreferrer">
                                                 <Mail className="h-4 w-4" />
                                                 <span className="sr-only">Email</span>
-                                            </Button>
-                                        </a>
+                                            </a>
+                                        </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Email us</p>
@@ -61,12 +63,12 @@ export function Footer() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <a href="https://www.instagram.com/wearbrahmi?igsh=ZHdvaDQ5bDBiaWR4" target="_blank" rel="noopener noreferrer">
-                                            <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground">
+                                        <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground" asChild>
+                                            <a href="https://www.instagram.com/wearbrahmi?igsh=ZHdvaDQ5bDBiaWR4" target="_blank" rel="noopener noreferrer">
                                                 <Instagram className="h-4 w-4" />
                                                 <span className="sr-only">Instagram</span>
-                                            </Button>
-                                        </a>
+                                            </a>
+                                        </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Follow us on Instagram</p>
@@ -76,12 +78,12 @@ export function Footer() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <a href="https://www.linkedin.com/company/wearbrahmi/" target="_blank" rel="noopener noreferrer">
-                                            <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground">
+                                        <Button variant="outline" size="icon" className="rounded-full border-border bg-transparent hover:bg-accent/10 hover:text-accent text-foreground" asChild>
+                                            <a href="https://www.linkedin.com/company/wearbrahmi/" target="_blank" rel="noopener noreferrer">
                                                 <Linkedin className="h-4 w-4" />
                                                 <span className="sr-only">LinkedIn</span>
-                                            </Button>
-                                        </a>
+                                            </a>
+                                        </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>Connect with us on LinkedIn</p>
@@ -94,18 +96,18 @@ export function Footer() {
                 </div>
                 <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row font-mono text-muted-foreground">
                     <p className="text-sm">
-                        © 2025 Brahmi. All rights reserved.
+                        © {currentYear} Brahmi. All rights reserved.
                     </p>
                     <nav className="flex gap-4 text-sm">
-                        <a href="#" className="transition-colors hover:text-accent">
+                        <Link href="/privacy" className="transition-colors hover:text-accent">
                             Privacy Policy
-                        </a>
-                        <a href="#" className="transition-colors hover:text-accent">
+                        </Link>
+                        <Link href="/terms" className="transition-colors hover:text-accent">
                             Terms of Service
-                        </a>
-                        <a href="#" className="transition-colors hover:text-accent">
+                        </Link>
+                        <Link href="/cookies" className="transition-colors hover:text-accent">
                             Cookie Settings
-                        </a>
+                        </Link>
                     </nav>
                 </div>
             </div>

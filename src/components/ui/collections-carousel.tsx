@@ -192,7 +192,7 @@ export const CollectionsCarousel = React.forwardRef<
                     >
                         {collections.map((collection) => {
                             const CardContent = (
-                                <div className="group cursor-pointer">
+                                <div className={cn("group", collection.href && "cursor-pointer")}>
                                     <div className="relative overflow-hidden rounded-2xl bg-card border border-border mb-4 transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:-translate-y-2 group-hover:border-accent">
                                         <img
                                             src={collection.image}

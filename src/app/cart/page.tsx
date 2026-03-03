@@ -27,8 +27,8 @@ interface CartData {
     lineItemCount: number;
 }
 
-// Find the checkout ID stored by the Shopify Buy Button SDK in localStorage
-function findCheckoutId(): string | null {
+// Find the cart ID stored in localStorage (Cart API GID)
+function findCartId(): string | null {
     try {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
@@ -87,7 +87,7 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
 
     try {
         const response = await fetch(
-            `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
             {
                 method: "POST",
                 headers: {
@@ -143,7 +143,7 @@ export default function CartPage() {
     const { refreshCart } = useCart();
 
     const loadCart = useCallback(async () => {
-        const checkoutId = findCheckoutId();
+        const checkoutId = findCartId();
         if (!checkoutId) {
             setCart(null);
             setLoading(false);
@@ -161,10 +161,16 @@ export default function CartPage() {
         loadCart();
     }, [loadCart]);
 
-    // Update quantity via Cart API
+    // Update quantity via Cart API (or remove when qty reaches 0)
     const updateQuantity = async (lineItemId: string, currentQty: number, action: "increment" | "decrement") => {
         if (!cart?.id) return;
         const newQty = action === "increment" ? currentQty + 1 : Math.max(0, currentQty - 1);
+
+        if (newQty === 0) {
+            // Remove the line instead of sending qty=0
+            await removeItem(lineItemId);
+            return;
+        }
 
         const mutation = `
             mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
@@ -176,8 +182,8 @@ export default function CartPage() {
         `;
 
         try {
-            await fetch(
-                `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            const response = await fetch(
+                `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
                 {
                     method: "POST",
                     headers: {
@@ -193,7 +199,12 @@ export default function CartPage() {
                     }),
                 }
             );
-            // Re-fetch cart data
+            const data = await response.json();
+            const errors = data?.data?.cartLinesUpdate?.userErrors;
+            if (errors?.length > 0) {
+                console.error("Update quantity errors:", errors);
+                return;
+            }
             await loadCart();
         } catch (err) {
             console.error("Failed to update quantity:", err);
@@ -214,8 +225,8 @@ export default function CartPage() {
         `;
 
         try {
-            await fetch(
-                `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            const response = await fetch(
+                `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
                 {
                     method: "POST",
                     headers: {
@@ -231,6 +242,12 @@ export default function CartPage() {
                     }),
                 }
             );
+            const data = await response.json();
+            const errors = data?.data?.cartLinesRemove?.userErrors;
+            if (errors?.length > 0) {
+                console.error("Remove item errors:", errors);
+                return;
+            }
             await loadCart();
         } catch (err) {
             console.error("Failed to remove item:", err);
@@ -247,8 +264,7 @@ export default function CartPage() {
     if (loading) {
         return (
             <div
-                className="min-h-screen flex items-center justify-center"
-                style={{ backgroundColor: "#f8f6f0" }}
+                className="min-h-screen flex items-center justify-center bg-background"
             >
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -266,8 +282,7 @@ export default function CartPage() {
 
     return (
         <div
-            className="min-h-screen"
-            style={{ backgroundColor: "#f8f6f0" }}
+            className="min-h-screen bg-background"
         >
             <div className="max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20">
                 {/* Back Link */}

@@ -127,11 +127,23 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             };
 
             window.addEventListener("scroll", handleScroll, { passive: true });
-            return () => window.removeEventListener("scroll", handleScroll);
+            return () => {
+                if (scrollTimeoutRef.current) {
+                    clearTimeout(scrollTimeoutRef.current);
+                    scrollTimeoutRef.current = null;
+                }
+                window.removeEventListener("scroll", handleScroll);
+            };
         }, []);
 
         // Unified animation loop: lerp toward scroll target OR auto-rotate
         useEffect(() => {
+            if (items.length === 0) {
+                if (animationFrameRef.current)
+                    cancelAnimationFrame(animationFrameRef.current);
+                return;
+            }
+
             const lerpFactor = 0.08;
 
             const animate = () => {
@@ -150,9 +162,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 if (animationFrameRef.current)
                     cancelAnimationFrame(animationFrameRef.current);
             };
-        }, [isScrolling, autoRotateSpeed]);
+        }, [isScrolling, autoRotateSpeed, items.length]);
 
-        const anglePerItem = 360 / items.length;
+        const anglePerItem = items.length > 0 ? 360 / items.length : 0;
         const { radius, cardWidth, cardHeight, containerHeight, perspective } = dimensions;
 
         return (

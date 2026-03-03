@@ -87,6 +87,7 @@
 
   body {
     @apply text-foreground;
+
     background-color: #f8f6f0;
     letter-spacing: -0.025em;
   }
