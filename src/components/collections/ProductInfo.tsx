@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Product } from "@/lib/mockData/products";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ShopifyBuyButton } from "./ShopifyBuyButton";
+import { AddToCartButton } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
 
@@ -110,8 +110,8 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
             ) : hasShopifyIntegration(product.id) ? (
                 // Shopify Buy Button for products with Shopify integration
                 <div className="mb-8">
-                    <ShopifyBuyButton
-                        productId={getShopifyProductId(product.id)!}
+                    <AddToCartButton
+                        shopifyProductId={getShopifyProductId(product.id)!}
                         selectedSize={selectedSize}
                     />
                 </div>

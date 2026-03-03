@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/lib/motion/lenis";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/lib/CartContext";
 
 const hostGrotesk = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -31,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${hostGrotesk.variable} ${spaceMono.variable} antialiased font-sans`}
       >
-        <SmoothScroll>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </SmoothScroll>
+        <CartProvider>
+          <SmoothScroll>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </CartProvider>
       </body>
     </html>
   );

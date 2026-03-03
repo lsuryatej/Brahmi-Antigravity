@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/CartContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,7 +33,7 @@ export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-    const [cartCount] = useState(0); // Will be connected to cart context later
+    const { cartCount } = useCart();
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -65,11 +66,11 @@ export const Navbar = () => {
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("touchstart", handleClickOutside as any);
+        document.addEventListener("touchstart", handleClickOutside as EventListener);
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("touchstart", handleClickOutside as any);
+            document.removeEventListener("touchstart", handleClickOutside as EventListener);
         };
     }, [isMobileMenuOpen]);
 
@@ -78,32 +79,6 @@ export const Navbar = () => {
         setIsMobileMenuOpen(false);
     };
 
-    // Open the Shopify cart by dispatching a proper click event on the SDK's toggle button
-    const openShopifyCart = () => {
-        // Defer to next tick to escape React's synthetic event batch processing
-        setTimeout(() => {
-            const toggleFrame = document.querySelector('.shopify-buy-frame--toggle iframe') as HTMLIFrameElement;
-            if (toggleFrame) {
-                try {
-                    const toggleDoc = toggleFrame.contentDocument || toggleFrame.contentWindow?.document;
-                    if (toggleDoc) {
-                        const toggleBtn = toggleDoc.querySelector('.shopify-buy__cart-toggle') as HTMLElement;
-                        if (toggleBtn && toggleFrame.contentWindow) {
-                            // Must use MouseEvent constructor with view for Shopify SDK to handle it
-                            const event = new MouseEvent('click', {
-                                bubbles: true,
-                                cancelable: true,
-                                view: toggleFrame.contentWindow,
-                            });
-                            toggleBtn.dispatchEvent(event);
-                        }
-                    }
-                } catch {
-                    // Cross-origin iframe, silently fail
-                }
-            }
-        }, 0);
-    };
 
     return (
         <>

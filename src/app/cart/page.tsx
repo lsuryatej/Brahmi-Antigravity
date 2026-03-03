@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Minus, Plus, Trash2, ArrowLeft, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SHOPIFY_CONFIG } from "@/lib/shopify/productMapping";
+import { useCart } from "@/lib/CartContext";
 
 interface CartLineItem {
     id: string;
@@ -26,8 +27,8 @@ interface CartData {
     lineItemCount: number;
 }
 
-// Find the checkout ID stored by the Shopify Buy Button SDK in localStorage
-function findCheckoutId(): string | null {
+// Find the cart ID stored in localStorage (Cart API GID)
+function findCartId(): string | null {
     try {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
@@ -42,25 +43,27 @@ function findCheckoutId(): string | null {
     return null;
 }
 
-// Fetch checkout data directly from Shopify Storefront API via GraphQL
-async function fetchCheckout(checkoutId: string): Promise<CartData | null> {
+// Fetch cart data directly from Shopify Storefront API via Cart API
+async function fetchCart(cartId: string): Promise<CartData | null> {
     const query = `
-        query getCheckout($id: ID!) {
-            node(id: $id) {
-                ... on Checkout {
-                    id
-                    webUrl
-                    subtotalPrice {
+        query getCart($id: ID!) {
+            cart(id: $id) {
+                id
+                checkoutUrl
+                totalQuantity
+                cost {
+                    subtotalAmount {
                         amount
                         currencyCode
                     }
-                    lineItems(first: 50) {
-                        edges {
-                            node {
-                                id
-                                title
-                                quantity
-                                variant {
+                }
+                lines(first: 50) {
+                    edges {
+                        node {
+                            id
+                            quantity
+                            merchandise {
+                                ... on ProductVariant {
                                     id
                                     title
                                     price {
@@ -69,6 +72,9 @@ async function fetchCheckout(checkoutId: string): Promise<CartData | null> {
                                     }
                                     image {
                                         url
+                                    }
+                                    product {
+                                        title
                                     }
                                 }
                             }
@@ -81,7 +87,7 @@ async function fetchCheckout(checkoutId: string): Promise<CartData | null> {
 
     try {
         const response = await fetch(
-            `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
             {
                 method: "POST",
                 headers: {
@@ -90,42 +96,42 @@ async function fetchCheckout(checkoutId: string): Promise<CartData | null> {
                 },
                 body: JSON.stringify({
                     query,
-                    variables: { id: checkoutId },
+                    variables: { id: cartId },
                 }),
             }
         );
 
         const data = await response.json();
-        const checkout = data?.data?.node;
+        const cart = data?.data?.cart;
 
-        if (!checkout) return null;
+        if (!cart) return null;
 
-        const lineItems: CartLineItem[] = checkout.lineItems.edges.map(
-            (edge: any) => {
-                const item = edge.node;
-                const variant = item.variant;
+        const lineItems: CartLineItem[] = cart.lines.edges.map(
+            (edge: { node: { id: string; quantity: number; merchandise: { id: string; title: string; price: { amount: string; currencyCode: string }; image?: { url: string }; product: { title: string } } } }) => {
+                const line = edge.node;
+                const merchandise = line.merchandise;
                 return {
-                    id: item.id,
-                    title: item.title,
-                    variantTitle: variant?.title || "",
-                    quantity: item.quantity,
-                    price: `₹${parseFloat(variant?.price?.amount || "0").toLocaleString("en-IN")}`,
-                    currencyCode: variant?.price?.currencyCode || "INR",
-                    imageUrl: variant?.image?.url || "",
-                    variantId: variant?.id || "",
+                    id: line.id,
+                    title: merchandise?.product?.title || "",
+                    variantTitle: merchandise?.title || "",
+                    quantity: line.quantity,
+                    price: `₹${parseFloat(merchandise?.price?.amount || "0").toLocaleString("en-IN")}`,
+                    currencyCode: merchandise?.price?.currencyCode || "INR",
+                    imageUrl: merchandise?.image?.url || "",
+                    variantId: merchandise?.id || "",
                 };
             }
         );
 
         return {
-            id: checkout.id,
+            id: cart.id,
             lineItems,
-            subtotal: `₹${parseFloat(checkout.subtotalPrice.amount).toLocaleString("en-IN")}`,
-            checkoutUrl: checkout.webUrl,
-            lineItemCount: lineItems.reduce((sum, item) => sum + item.quantity, 0),
+            subtotal: `₹${parseFloat(cart.cost.subtotalAmount.amount).toLocaleString("en-IN")}`,
+            checkoutUrl: cart.checkoutUrl,
+            lineItemCount: cart.totalQuantity || lineItems.reduce((sum, item) => sum + item.quantity, 0),
         };
     } catch (err) {
-        console.error("Failed to fetch checkout:", err);
+        console.error("Failed to fetch cart:", err);
         return null;
     }
 }
@@ -133,42 +139,51 @@ async function fetchCheckout(checkoutId: string): Promise<CartData | null> {
 export default function CartPage() {
     const [cart, setCart] = useState<CartData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const { refreshCart } = useCart();
 
     const loadCart = useCallback(async () => {
-        const checkoutId = findCheckoutId();
+        const checkoutId = findCartId();
         if (!checkoutId) {
             setCart(null);
             setLoading(false);
             return;
         }
 
-        const cartData = await fetchCheckout(checkoutId);
+        const cartData = await fetchCart(checkoutId);
         setCart(cartData);
         setLoading(false);
-    }, []);
+        // Sync navbar cart badge
+        refreshCart();
+    }, [refreshCart]);
 
     useEffect(() => {
-        loadCart();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void loadCart();
     }, [loadCart]);
 
-    // Update quantity via Storefront API
+    // Update quantity via Cart API (or remove when qty reaches 0)
     const updateQuantity = async (lineItemId: string, currentQty: number, action: "increment" | "decrement") => {
         if (!cart?.id) return;
         const newQty = action === "increment" ? currentQty + 1 : Math.max(0, currentQty - 1);
 
+        if (newQty === 0) {
+            // Remove the line instead of sending qty=0
+            await removeItem(lineItemId);
+            return;
+        }
+
         const mutation = `
-            mutation checkoutLineItemsUpdate($checkoutId: ID!, $lineItems: [CheckoutLineItemUpdateInput!]!) {
-                checkoutLineItemsUpdate(checkoutId: $checkoutId, lineItems: $lineItems) {
-                    checkout { id }
-                    checkoutUserErrors { message }
+            mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+                cartLinesUpdate(cartId: $cartId, lines: $lines) {
+                    cart { id }
+                    userErrors { message }
                 }
             }
         `;
 
         try {
-            await fetch(
-                `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            const response = await fetch(
+                `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
                 {
                     method: "POST",
                     headers: {
@@ -178,35 +193,40 @@ export default function CartPage() {
                     body: JSON.stringify({
                         query: mutation,
                         variables: {
-                            checkoutId: cart.id,
-                            lineItems: [{ id: lineItemId, quantity: newQty }],
+                            cartId: cart.id,
+                            lines: [{ id: lineItemId, quantity: newQty }],
                         },
                     }),
                 }
             );
-            // Re-fetch cart data
+            const data = await response.json();
+            const errors = data?.data?.cartLinesUpdate?.userErrors;
+            if (errors?.length > 0) {
+                console.error("Update quantity errors:", errors);
+                return;
+            }
             await loadCart();
         } catch (err) {
             console.error("Failed to update quantity:", err);
         }
     };
 
-    // Remove item via Storefront API
+    // Remove item via Cart API
     const removeItem = async (lineItemId: string) => {
         if (!cart?.id) return;
 
         const mutation = `
-            mutation checkoutLineItemsRemove($checkoutId: ID!, $lineItemIds: [ID!]!) {
-                checkoutLineItemsRemove(checkoutId: $checkoutId, lineItemIds: $lineItemIds) {
-                    checkout { id }
-                    checkoutUserErrors { message }
+            mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+                cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+                    cart { id }
+                    userErrors { message }
                 }
             }
         `;
 
         try {
-            await fetch(
-                `https://${SHOPIFY_CONFIG.domain}/api/2024-01/graphql.json`,
+            const response = await fetch(
+                `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
                 {
                     method: "POST",
                     headers: {
@@ -216,12 +236,18 @@ export default function CartPage() {
                     body: JSON.stringify({
                         query: mutation,
                         variables: {
-                            checkoutId: cart.id,
-                            lineItemIds: [lineItemId],
+                            cartId: cart.id,
+                            lineIds: [lineItemId],
                         },
                     }),
                 }
             );
+            const data = await response.json();
+            const errors = data?.data?.cartLinesRemove?.userErrors;
+            if (errors?.length > 0) {
+                console.error("Remove item errors:", errors);
+                return;
+            }
             await loadCart();
         } catch (err) {
             console.error("Failed to remove item:", err);
@@ -238,13 +264,7 @@ export default function CartPage() {
     if (loading) {
         return (
             <div
-                className="min-h-screen flex items-center justify-center"
-                style={{
-                    backgroundImage: "url('/images/plain-bg.png')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundAttachment: "fixed",
-                }}
+                className="min-h-screen flex items-center justify-center bg-background"
             >
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -262,13 +282,7 @@ export default function CartPage() {
 
     return (
         <div
-            className="min-h-screen"
-            style={{
-                backgroundImage: "url('/images/plain-bg.png')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundAttachment: "fixed",
-            }}
+            className="min-h-screen bg-background"
         >
             <div className="max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20">
                 {/* Back Link */}
@@ -431,12 +445,7 @@ export default function CartPage() {
                                         </span>
                                         <span className="font-semibold">{cart.subtotal}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm font-mono">
-                                        <span className="text-muted-foreground">Shipping</span>
-                                        <span className="text-muted-foreground italic">
-                                            Calculated at checkout
-                                        </span>
-                                    </div>
+
                                     <div className="h-px bg-border my-2" />
                                     <div className="flex justify-between font-mono">
                                         <span className="font-semibold">Total</span>

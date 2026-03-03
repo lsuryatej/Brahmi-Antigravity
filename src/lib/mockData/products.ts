@@ -37,8 +37,8 @@ export const sutrProducts: Product[] = [
             "/images/products/sutr/kanthi-jacket/image-3.jpg"
         ],
         variants: [
-            { id: "1-s", size: "S", inStock: true },
-            { id: "1-m", size: "M", inStock: true },
+            { id: "1-s", size: "S", inStock: false },
+            { id: "1-m", size: "M", inStock: false },
             { id: "1-l", size: "L", inStock: true },
             { id: "1-xl", size: "XL", inStock: true },
             { id: "1-xxl", size: "XXL", inStock: false }

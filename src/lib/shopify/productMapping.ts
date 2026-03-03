@@ -49,4 +49,5 @@ export const SHOPIFY_CONFIG = {
     domain: "wxbq05-r4.myshopify.com",
     storefrontAccessToken: "227a23bcbd1d0e223e51cc2de5fa104d",
     moneyFormat: "Rs.%20%7B%7Bamount%7D%7D",
+    apiVersion: "2026-01",
 };
