@@ -55,7 +55,7 @@ async function fetchProductVariants(productId: string): Promise<ShopifyVariant[]
         );
 
         const data = await response.json();
-        return data?.data?.product?.variants?.edges?.map((e: any) => e.node) || [];
+        return data?.data?.product?.variants?.edges?.map((e: { node: ShopifyVariant }) => e.node) || [];
     } catch (err) {
         console.error("ShopifyBuyButton: Failed to fetch variants", err);
         return [];
@@ -74,8 +74,9 @@ export const AddToCartButton = ({ shopifyProductId, selectedSize }: AddToCartBut
 
     // Fetch variants on mount
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoadingVariants(true);
-        fetchProductVariants(shopifyProductId)
+        void fetchProductVariants(shopifyProductId)
             .then((v) => {
                 setVariants(v);
                 setLoadingVariants(false);

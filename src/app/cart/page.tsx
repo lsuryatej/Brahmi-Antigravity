@@ -107,7 +107,7 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
         if (!cart) return null;
 
         const lineItems: CartLineItem[] = cart.lines.edges.map(
-            (edge: any) => {
+            (edge: { node: { id: string; quantity: number; merchandise: { id: string; title: string; price: { amount: string; currencyCode: string }; image?: { url: string }; product: { title: string } } } }) => {
                 const line = edge.node;
                 const merchandise = line.merchandise;
                 return {
@@ -139,7 +139,6 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
 export default function CartPage() {
     const [cart, setCart] = useState<CartData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const { refreshCart } = useCart();
 
     const loadCart = useCallback(async () => {
@@ -158,7 +157,8 @@ export default function CartPage() {
     }, [refreshCart]);
 
     useEffect(() => {
-        loadCart();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void loadCart();
     }, [loadCart]);
 
     // Update quantity via Cart API (or remove when qty reaches 0)
@@ -445,12 +445,7 @@ export default function CartPage() {
                                         </span>
                                         <span className="font-semibold">{cart.subtotal}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm font-mono">
-                                        <span className="text-muted-foreground">Shipping</span>
-                                        <span className="text-muted-foreground italic">
-                                            Calculated at checkout
-                                        </span>
-                                    </div>
+
                                     <div className="h-px bg-border my-2" />
                                     <div className="flex justify-between font-mono">
                                         <span className="font-semibold">Total</span>

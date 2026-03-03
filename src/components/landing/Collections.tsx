@@ -3,13 +3,14 @@
 import { sutrProducts } from "@/lib/mockData/products";
 import { CircularGallery } from "@/components/ui/circular-gallery";
 
-const galleryItems = sutrProducts
-    .filter((product) => product.images?.[0])
-    .map((product) => ({
-        title: product.title,
-        image: product.images[0],
-        href: `/collections/sutr/${product.handle}`,
-    }));
+/** Placeholder shown when a product has no images configured */
+const FALLBACK_IMAGE = "/images/placeholder.jpg";
+
+const galleryItems = sutrProducts.map((product) => ({
+    title: product.title,
+    image: product.images?.[0] ?? FALLBACK_IMAGE,
+    href: `/collections/sutr/${product.handle}`,
+}));
 
 export const Collections = () => {
     return (

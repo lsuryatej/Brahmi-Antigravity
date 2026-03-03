@@ -68,7 +68,7 @@ export const HeroSequence = () => {
     useEffect(() => {
         if (prefersReducedMotion || typeof window === "undefined") return;
 
-        let gsapContext: any;
+        let gsapContext: { revert: () => void } | null = null;
 
         const initGSAP = async () => {
             const { gsap } = await import("gsap");
