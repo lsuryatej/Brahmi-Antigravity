@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -15,60 +15,75 @@ interface CircularGalleryProps extends React.HTMLAttributes<HTMLDivElement> {
     autoRotateSpeed?: number;
 }
 
-// Responsive dimensions based on known device widths:
-// iPhone SE/Mini: 375px, iPhone Pro: 393px, iPhone Pro Max: 430px
-// iPad Mini: 744px, iPad Air: 820px, iPad Pro 11": 834px, iPad Pro 12.9": 1024px
-// MacBook Air 13": 1440px, MacBook Pro 14": 1512px, MacBook Pro 16": 1728px
+// Responsive dimensions using viewport-proportional values.
+// Instead of fixed pixel breakpoints, we compute dimensions as a fraction
+// of the actual viewport width (vw), so the carousel scales naturally on
+// any screen — from iPhone SE (375px) to 4K desktops.
+//
+// The 3D magnification at the front card is: perspective / (perspective - radius).
+// We keep perspective ≈ 10× radius so magnification stays ≈ 1.11× (subtle).
 function getResponsiveDimensions(width: number) {
-    // The 3D magnification factor is: perspective / (perspective - radius)
-    // To minimize distortion on small screens, keep perspective >> radius
+    // Base multipliers that change by breakpoint
+    let radiusMult: number;
+    let cardWMult: number;
+    let cardHMult: number;
+    let containerHMult: number;
+    let perspMult: number;
+    let padBottom: number;
+
     if (width < 480) {
-        // Phones (iPhone SE 375px → iPhone Pro Max 430px)
-        return {
-            radius: 140,
-            cardWidth: 90,
-            cardHeight: 120,
-            containerHeight: 300,
-            perspective: 1200, // high ratio → minimal magnification
-        };
+        // Phones — iPhone SE (375) → iPhone Pro Max (440)
+        radiusMult = 0.42;   
+        cardWMult = 0.20;    
+        cardHMult = 0.35;    
+        containerHMult = 0.70; 
+        perspMult = 4.5;     
+        padBottom = 16;
     } else if (width < 768) {
-        // Large phones / small tablets
-        return {
-            radius: 220,
-            cardWidth: 130,
-            cardHeight: 175,
-            containerHeight: 420,
-            perspective: 1400,
-        };
+        // Large phones / small tablets / landscape phones
+        radiusMult = 0.35;
+        cardWMult = 0.25;
+        cardHMult = 0.35;
+        containerHMult = 0.70;
+        perspMult = 3.5;
+        padBottom = 16;
     } else if (width < 1024) {
-        // iPad / tablets (744px → 834px)
-        return {
-            radius: 350,
-            cardWidth: 175,
-            cardHeight: 240,
-            containerHeight: 550,
-            perspective: 1600,
-        };
+        // iPad mini (744) → iPad Pro 11" (834)
+        radiusMult = 0.35;
+        cardWMult = 0.17;
+        cardHMult = 0.23;
+        containerHMult = 0.52;
+        perspMult = 2.4;
+        padBottom = 24;
     } else if (width < 1440) {
-        // Small laptops / iPad Pro 12.9"
-        return {
-            radius: 480,
-            cardWidth: 220,
-            cardHeight: 300,
-            containerHeight: 680,
-            perspective: 1800,
-        };
+        // iPad Pro 13" (1024) / small laptops
+        radiusMult = 0.33;
+        cardWMult = 0.155;
+        cardHMult = 0.21;
+        containerHMult = 0.47;
+        perspMult = 2.0;
+        padBottom = 32;
     } else {
         // MacBook Pro / large desktops (1440px+)
-        return {
-            radius: 600,
-            cardWidth: 280,
-            cardHeight: 380,
-            containerHeight: 800,
-            perspective: 2000,
-        };
+        radiusMult = 0.35;
+        cardWMult = 0.17;
+        cardHMult = 0.23;
+        containerHMult = 0.50;
+        perspMult = 1.6;
+        padBottom = 40;
     }
+
+    return {
+        // Enforce minimum sizes to ensure mobile usability
+        radius: Math.max(150, Math.round(width * radiusMult)),
+        cardWidth: Math.max(80, Math.round(width * cardWMult)),
+        cardHeight: Math.max(160, Math.round(width * cardHMult)),
+        containerHeight: Math.max(300, Math.round(width * containerHMult)),
+        perspective: Math.max(1000, Math.round(width * perspMult)),
+        paddingBottom: padBottom,
+    };
 }
+
 
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     (
@@ -82,14 +97,19 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     ) => {
         const [rotation, setRotation] = useState(0);
         const [isScrolling, setIsScrolling] = useState(false);
+        const [isTouching, setIsTouching] = useState(false);
         const [dimensions, setDimensions] = useState(
-            getResponsiveDimensions(typeof window !== "undefined" ? window.innerWidth : 1440)
+            getResponsiveDimensions(1440)
         );
         const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
         const animationFrameRef = useRef<number | null>(null);
         const sectionRef = useRef<HTMLDivElement>(null);
         const targetRotationRef = useRef(0);
         const currentRotationRef = useRef(0);
+
+        // Touch gesture refs
+        const touchStartXRef = useRef(0);
+        const touchStartRotationRef = useRef(0);
 
         // Update dimensions on resize
         useEffect(() => {
@@ -104,7 +124,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         // Scroll-driven rotation — sets a target, not the actual value
         useEffect(() => {
             const handleScroll = () => {
-                if (!sectionRef.current) return;
+                if (!sectionRef.current || isTouching) return;
 
                 setIsScrolling(true);
                 if (scrollTimeoutRef.current)
@@ -134,6 +154,29 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 }
                 window.removeEventListener("scroll", handleScroll);
             };
+        }, [isTouching]);
+
+        // Touch/swipe support for mobile — allows swiping left/right to rotate
+        const handleTouchStart = useCallback((e: React.TouchEvent) => {
+            if (e.touches.length !== 1) return;
+            setIsTouching(true);
+            touchStartXRef.current = e.touches[0].clientX;
+            touchStartRotationRef.current = currentRotationRef.current;
+        }, []);
+
+        const handleTouchMove = useCallback((e: React.TouchEvent) => {
+            if (!isTouching || e.touches.length !== 1) return;
+            const deltaX = e.touches[0].clientX - touchStartXRef.current;
+            // Map horizontal swipe distance to degrees of rotation
+            // Negative because swiping left should rotate "forward"
+            const sensitivity = 0.4; // degrees per CSS pixel of swipe
+            const newRotation = touchStartRotationRef.current - deltaX * sensitivity;
+            targetRotationRef.current = newRotation;
+            currentRotationRef.current = newRotation;
+        }, [isTouching]);
+
+        const handleTouchEnd = useCallback(() => {
+            setIsTouching(false);
         }, []);
 
         // Unified animation loop: lerp toward scroll target OR auto-rotate
@@ -147,7 +190,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             const lerpFactor = 0.08;
 
             const animate = () => {
-                if (isScrolling) {
+                if (isTouching) {
+                    // During touch, rotation is set directly in handleTouchMove
+                } else if (isScrolling) {
                     const diff = targetRotationRef.current - currentRotationRef.current;
                     currentRotationRef.current += diff * lerpFactor;
                 } else {
@@ -162,10 +207,10 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 if (animationFrameRef.current)
                     cancelAnimationFrame(animationFrameRef.current);
             };
-        }, [isScrolling, autoRotateSpeed, items.length]);
+        }, [isScrolling, isTouching, autoRotateSpeed, items.length]);
 
         const anglePerItem = items.length > 0 ? 360 / items.length : 0;
-        const { radius, cardWidth, cardHeight, containerHeight, perspective } = dimensions;
+        const { radius, cardWidth, cardHeight, containerHeight, perspective, paddingBottom } = dimensions;
 
         return (
             <div
@@ -181,8 +226,12 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                 style={{
                     perspective: `${perspective}px`,
                     height: `${containerHeight}px`,
-                    paddingBottom: "40px",
+                    paddingBottom: `${paddingBottom}px`,
                 }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
                 {...props}
             >
                 <div
@@ -233,7 +282,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
                                     <div className="absolute bottom-0 left-0 w-full p-2 sm:p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                                        <h3 className="text-xs sm:text-sm md:text-lg font-bold font-sans">
+                                        <h3 className="text-[7px] sm:text-xs md:text-sm lg:text-lg font-bold font-sans leading-tight">
                                             {item.title}
                                         </h3>
                                     </div>

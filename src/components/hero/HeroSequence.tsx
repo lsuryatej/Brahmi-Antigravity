@@ -97,12 +97,12 @@ export const HeroSequence = () => {
                     0
                 );
 
-                // Video scrub upward from off-screen
+                // Video scrub upward from off-screen (Solid opacity from start)
                 mainTimeline.fromTo(
                     videoContainerRef.current,
                     {
                         yPercent: 100,
-                        opacity: 0,
+                        opacity: 1,
                     },
                     {
                         yPercent: 0,
