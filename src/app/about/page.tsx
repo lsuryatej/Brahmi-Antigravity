@@ -55,17 +55,17 @@ export default function AboutPage() {
                 <div className="max-w-4xl mx-auto">
                     <FadeIn delay={0.2}>
                         <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans">
-                                About the Brand
+                            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans uppercase">
+                                ABOUT THE BRAND
                             </h2>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-6">
-                                Brahmi is named after one of India&apos;s earliest writing systems — the Brahmi script, the foundation from which many Indian scripts evolved. As a script, Brahmi represents origin, structure, and the beginning of recorded thought. As a brand, it becomes our philosophy.
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
+                                Brahmi takes its name from one of India’s earliest scripts—the origin point of many written traditions—symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
                             </p>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-6">
-                                At Brahmi, we draw inspiration from Indian crafts at their very root level — hand embroidery, weaving, block printing, and age-old textile traditions that have shaped our cultural identity for centuries. We work closely with artisan communities and craft clusters across India, honouring the rawness, skill, and integrity of their work. These traditional techniques are then reinterpreted through contemporary silhouettes, making craft relevant, wearable, and accessible for everyday life.
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
+                                We work at the grassroots level of Indian craft, collaborating with artisan communities across the country and engaging deeply with techniques such as hand embroidery, weaving, and block printing. Our focus is on honouring the integrity and skill embedded in these traditions, while reimagining them through contemporary silhouettes that feel relevant and wearable today.
                             </p>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                                Our vision is to preserve and promote Indian handicrafts while allowing them to evolve with time. Our mission is to take these crafts beyond borders — creating garments that tell stories, spark curiosity, and give Indian craftsmanship the global recognition it deserves.
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                                Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders—creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
                             </p>
                         </div>
                     </FadeIn>
