@@ -7,14 +7,14 @@ import { Heart, Users, Sparkles, Globe } from "lucide-react";
 export default function AboutPage() {
     const values = [
         {
+            icon: Users,
+            title: "Community",
+            description: "supporting artisans and local clusters of traditional parts of India",
+        },
+        {
             icon: Heart,
             title: "Sustainability",
             description: "Committed to eco friendly practices by using natural fabrics, natural dyes and reducing wastage of resources at the root level",
-        },
-        {
-            icon: Users,
-            title: "Community",
-            description: "Supporting artisans and local clusters of traditional parts of India",
         },
         {
             icon: Sparkles,
@@ -59,14 +59,22 @@ export default function AboutPage() {
                                 ABOUT THE BRAND
                             </h2>
                             <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
-                                Brahmi takes its name from one of India’s earliest scripts—the origin point of many written traditions—symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
+                                Brahmi takes its name from one of India’s earliest scripts, the origin point of many written traditions, symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
                             </p>
                             <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
                                 We work at the grassroots level of Indian craft, collaborating with artisan communities across the country and engaging deeply with techniques such as hand embroidery, weaving, and block printing. Our focus is on honouring the integrity and skill embedded in these traditions, while reimagining them through contemporary silhouettes that feel relevant and wearable today.
                             </p>
                             <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-                                Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders—creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
+                                Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders, creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
                             </p>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={0.3}>
+                        <div className="text-center mt-20 -mb-12">
+                            <h2 className="text-2xl md:text-4xl font-bold font-sans uppercase">
+                                THE FOUR POINTS
+                            </h2>
                         </div>
                     </FadeIn>
 
@@ -94,12 +102,12 @@ export default function AboutPage() {
             </section>
 
             {/* About the Founders */}
-            <section className="py-24 px-4 md:px-8 mb-24 bg-muted/20">
+            <section className="py-24 px-4 md:px-8 bg-muted/20">
                 <div className="max-w-5xl mx-auto">
                     <FadeIn delay={0.4}>
                         <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans">
-                                About the Founders
+                            <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans uppercase">
+                                ABOUT THE FOUNDERS
                             </h2>
                         </div>
                     </FadeIn>
@@ -112,9 +120,9 @@ export default function AboutPage() {
                                 transition={{ type: "spring", stiffness: 300 }}
                                 className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
                             >
-                                <h3 className="text-2xl font-bold mb-4 font-sans">Pavni</h3>
+                                <h3 className="text-2xl font-bold mb-4 font-sans">PAVNI</h3>
                                 <p className="text-muted-foreground font-mono leading-relaxed">
-                                    Pavni is a textile design graduate from NIFT with a deep sensitivity towards textiles and the cultures they belong to. Her approach to design is rooted in learning from artisans, understanding their processes, materials, and stories at the source. At Brahmi, she focuses on working collaboratively with craft communities, allowing traditional techniques to guide contemporary expression while keeping the craft and its makers at the forefront.
+                                    Pavni, a textile design graduate from NIFT, approaches design with a deep respect for textiles and the cultures they emerge from. She believes in learning directly from artisans, immersing herself in their processes, materials, and stories. At Brahmi, she works closely with craft communities, ensuring that traditional techniques shape contemporary design while keeping the craft and its makers at the heart of every piece.
                                 </p>
                             </motion.div>
                         </FadeIn>
@@ -126,13 +134,37 @@ export default function AboutPage() {
                                 transition={{ type: "spring", stiffness: 300 }}
                                 className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
                             >
-                                <h3 className="text-2xl font-bold mb-4 font-sans">Shreya</h3>
+                                <h3 className="text-2xl font-bold mb-4 font-sans">SHREYA</h3>
                                 <p className="text-muted-foreground font-mono leading-relaxed">
-                                    Shreya is a textile design graduate from NIFT with a strong sensitivity towards form, balance, and detail. Her approach is rooted in understanding proportion, construction, and the relationship between material and silhouette. At Brahmi, she focuses on translating traditional craft techniques into refined, contemporary garments; shaping the brand&apos;s design language while ensuring every piece feels intentional and considered.
+                                    Shreya, also a textile design graduate from NIFT, brings a sharp sensitivity to form, proportion, and detail. Her design process is grounded in construction and the dialogue between material and silhouette. At Brahmi, she translates traditional craft practices into refined, contemporary garments, defining the brand’s aesthetic while ensuring each piece feels thoughtful, wearable, and enduring.
                                 </p>
                             </motion.div>
                         </FadeIn>
                     </div>
+                </div>
+            </section>
+
+            {/* Founders Note */}
+            <section className="py-24 px-4 md:px-8 mb-24">
+                <div className="max-w-4xl mx-auto">
+                    <FadeIn delay={0.7}>
+                        <div className="p-12 rounded-3xl border border-accent/20 bg-accent/5 backdrop-blur-sm relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-10">
+                                <Sparkles className="w-24 h-24 text-accent" />
+                            </div>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-8 font-sans uppercase tracking-wider text-accent">
+                                FOUNDERS NOTE
+                            </h2>
+                            <div className="space-y-6">
+                                <p className="text-xl md:text-2xl font-mono leading-relaxed italic">
+                                    &ldquo;Hi there! This is Pavni&hellip; and this is Shreya.&rdquo;
+                                </p>
+                                <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed">
+                                    We&rsquo;re batchmates from NIFT Shillong, turned co-founders. From late-night college projects to building Brahmi, we&rsquo;ve brought our individual strengths together. One of us works closely with craft and artisans, the other shapes form, detail, and design language. Different interests, one shared vision. Held together by threads, trust and too many fabric swatches.
+                                </p>
+                            </div>
+                        </div>
+                    </FadeIn>
                 </div>
             </section>
         </div>
