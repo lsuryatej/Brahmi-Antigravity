@@ -32,7 +32,7 @@ const AccordionItem = ({ title, content, isOpen, onToggle }: AccordionItemProps)
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
-                <div className="px-5 py-4 font-mono text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                <div className="px-5 py-4 font-mono text-sm text-muted-foreground whitespace-pre-line">
                     {content}
                 </div>
             </div>

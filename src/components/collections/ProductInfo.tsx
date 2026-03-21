@@ -28,6 +28,18 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                         <p className="font-semibold mb-1">Fit</p>
                         <p className="text-muted-foreground">{product.details.fit}</p>
                     </div>
+                    {product.details.color && (
+                        <div>
+                            <p className="font-semibold mb-1">Color/Dye</p>
+                            <p className="text-muted-foreground">{product.details.color}</p>
+                        </div>
+                    )}
+                    {product.details.technique && (
+                        <div>
+                            <p className="font-semibold mb-1">Technique</p>
+                            <p className="text-muted-foreground">{product.details.technique}</p>
+                        </div>
+                    )}
                     <div>
                         <p className="font-semibold mb-1">Category</p>
                         <p className="text-muted-foreground capitalize">{product.category}</p>
@@ -41,7 +53,11 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
         },
         {
             title: "Shipping",
-            content: product.shipping
+            content: (
+                <div className="whitespace-pre-line text-muted-foreground">
+                    {product.shipping}
+                </div>
+            )
         }
     ];
 
@@ -59,9 +75,22 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
 
             {/* Product Description */}
             <div className="mb-6 md:mb-8">
-                <p className="text-sm md:text-base font-mono text-muted-foreground leading-relaxed">
-                    {product.description}
-                </p>
+                <div className="text-sm md:text-base font-mono text-muted-foreground whitespace-pre-line">
+                    {(() => {
+                        const parts = product.description.split(/\n\n(?=(?:Note|Notes|NOTE|NOTES))/i);
+                        if (parts.length > 1) {
+                            return (
+                                <>
+                                    {parts[0]}
+                                    <div className="mt-4 text-[0.45rem] md:text-[0.5rem] uppercase opacity-70 tracking-tight leading-normal">
+                                        {parts.slice(1).join("\n\n")}
+                                    </div>
+                                </>
+                            );
+                        }
+                        return product.description;
+                    })()}
+                </div>
             </div>
 
             {/* Size Selector */}

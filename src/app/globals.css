@@ -89,7 +89,8 @@
     @apply text-foreground;
 
     background-color: #f8f6f0;
-    letter-spacing: -0.025em;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
   }
 
   /* Hidden scrollbar for Chrome, Safari and Opera */
