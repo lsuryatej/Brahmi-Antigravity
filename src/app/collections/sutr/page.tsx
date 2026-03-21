@@ -22,7 +22,7 @@ export default function SutrCollectionPage() {
                             <h1 className="text-3xl md:text-7xl font-bold font-sans mb-4 md:mb-8 uppercase">
                                 ABOUT THE COLLECTION
                             </h1>
-                            <div className="max-w-4xl mx-auto space-y-4 md:space-y-6 text-sm md:text-xl font-mono text-muted-foreground leading-relaxed">
+                            <div className="max-w-4xl mx-auto space-y-4 md:space-y-6 text-sm md:text-xl font-mono text-muted-foreground">
                                 <p>
                                     Sutr, our first capsule, is a study in beginnings. Meaning &ldquo;thread,&rdquo; it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
                                 </p>

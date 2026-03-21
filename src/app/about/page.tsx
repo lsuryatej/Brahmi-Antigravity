@@ -7,9 +7,9 @@ import { Heart, Users, Sparkles, Globe } from "lucide-react";
 export default function AboutPage() {
     const values = [
         {
-            icon: Users,
-            title: "Community",
-            description: "supporting artisans and local clusters of traditional parts of India",
+            icon: Sparkles,
+            title: "Handmade",
+            description: "Supporting and collaborating with artisans who work with handicrafts while promoting traditional Indian techniques of textile development",
         },
         {
             icon: Heart,
@@ -17,9 +17,9 @@ export default function AboutPage() {
             description: "Committed to eco friendly practices by using natural fabrics, natural dyes and reducing wastage of resources at the root level",
         },
         {
-            icon: Sparkles,
-            title: "Handmade",
-            description: "Supporting and collaborating with artisans who work with handicrafts while promoting traditional Indian techniques of textile development",
+            icon: Users,
+            title: "Community",
+            description: "supporting artisans and local clusters of traditional parts of India",
         },
         {
             icon: Globe,
@@ -42,7 +42,7 @@ export default function AboutPage() {
                             <h1 className="text-5xl md:text-7xl font-bold font-sans mb-6">
                                 For Culture, Of Culture
                             </h1>
-                            <p className="text-xl md:text-2xl font-mono text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                            <p className="text-xl md:text-2xl font-mono text-muted-foreground max-w-3xl mx-auto">
                                 A journey through heritage and craft.
                             </p>
                         </motion.div>
@@ -58,13 +58,13 @@ export default function AboutPage() {
                             <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans uppercase">
                                 ABOUT THE BRAND
                             </h2>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground max-w-3xl mx-auto mb-6">
                                 Brahmi takes its name from one of India’s earliest scripts, the origin point of many written traditions, symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
                             </p>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-6">
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground max-w-3xl mx-auto mb-6">
                                 We work at the grassroots level of Indian craft, collaborating with artisan communities across the country and engaging deeply with techniques such as hand embroidery, weaving, and block printing. Our focus is on honouring the integrity and skill embedded in these traditions, while reimagining them through contemporary silhouettes that feel relevant and wearable today.
                             </p>
-                            <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                            <p className="text-lg md:text-xl font-mono text-muted-foreground max-w-3xl mx-auto">
                                 Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders, creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
                             </p>
                         </div>
@@ -91,7 +91,7 @@ export default function AboutPage() {
                                     <h3 className="text-2xl font-bold mb-3 font-sans">
                                         {value.title}
                                     </h3>
-                                    <p className="text-muted-foreground font-mono leading-relaxed">
+                                    <p className="text-muted-foreground font-mono">
                                         {value.description}
                                     </p>
                                 </motion.div>
@@ -121,7 +121,7 @@ export default function AboutPage() {
                                 className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
                             >
                                 <h3 className="text-2xl font-bold mb-4 font-sans">PAVNI</h3>
-                                <p className="text-muted-foreground font-mono leading-relaxed">
+                                <p className="text-muted-foreground font-mono">
                                     Pavni, a textile design graduate from NIFT, approaches design with a deep respect for textiles and the cultures they emerge from. She believes in learning directly from artisans, immersing herself in their processes, materials, and stories. At Brahmi, she works closely with craft communities, ensuring that traditional techniques shape contemporary design while keeping the craft and its makers at the heart of every piece.
                                 </p>
                             </motion.div>
@@ -135,7 +135,7 @@ export default function AboutPage() {
                                 className="p-8 rounded-2xl border border-border bg-card/30 backdrop-blur-sm"
                             >
                                 <h3 className="text-2xl font-bold mb-4 font-sans">SHREYA</h3>
-                                <p className="text-muted-foreground font-mono leading-relaxed">
+                                <p className="text-muted-foreground font-mono">
                                     Shreya, also a textile design graduate from NIFT, brings a sharp sensitivity to form, proportion, and detail. Her design process is grounded in construction and the dialogue between material and silhouette. At Brahmi, she translates traditional craft practices into refined, contemporary garments, defining the brand’s aesthetic while ensuring each piece feels thoughtful, wearable, and enduring.
                                 </p>
                             </motion.div>
@@ -156,10 +156,10 @@ export default function AboutPage() {
                                 FOUNDERS NOTE
                             </h2>
                             <div className="space-y-6">
-                                <p className="text-xl md:text-2xl font-mono leading-relaxed italic">
+                                <p className="text-xl md:text-2xl font-mono italic">
                                     &ldquo;Hi there! This is Pavni&hellip; and this is Shreya.&rdquo;
                                 </p>
-                                <p className="text-lg md:text-xl font-mono text-muted-foreground leading-relaxed">
+                                <p className="text-lg md:text-xl font-mono text-muted-foreground">
                                     We&rsquo;re batchmates from NIFT Shillong, turned co-founders. From late-night college projects to building Brahmi, we&rsquo;ve brought our individual strengths together. One of us works closely with craft and artisans, the other shapes form, detail, and design language. Different interests, one shared vision. Held together by threads, trust and too many fabric swatches.
                                 </p>
                             </div>
