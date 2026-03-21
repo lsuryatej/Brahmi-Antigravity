@@ -30,25 +30,7 @@ export default function AboutPage() {
 
     return (
         <div className="min-h-screen">
-            {/* Hero Section */}
-            <section className="relative py-32 px-4 md:px-8 bg-gradient-to-b from-transparent via-transparent to-transparent">
-                <div className="max-w-4xl mx-auto text-center">
-                    <FadeIn>
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                            <h1 className="text-5xl md:text-7xl font-bold font-sans mb-6">
-                                For Culture, Of Culture
-                            </h1>
-                            <p className="text-xl md:text-2xl font-mono text-muted-foreground max-w-3xl mx-auto">
-                                A journey through heritage and craft.
-                            </p>
-                        </motion.div>
-                    </FadeIn>
-                </div>
-            </section>
+
 
             {/* Mission Section */}
             <section className="py-24 px-4 md:px-8">
