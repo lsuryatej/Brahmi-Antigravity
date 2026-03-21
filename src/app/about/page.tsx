@@ -19,7 +19,7 @@ export default function AboutPage() {
         {
             icon: Users,
             title: "Community",
-            description: "supporting artisans and local clusters of traditional parts of India",
+            description: "Supporting local clusters of traditional parts of India",
         },
         {
             icon: Globe,
