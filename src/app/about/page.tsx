@@ -24,7 +24,7 @@ export default function AboutPage() {
         {
             icon: Globe,
             title: "Made in India",
-            description: "Proudly designed and made in India",
+            description: "Proudly designed in-house and mindfully made by artisans in India.",
         },
     ];
 
