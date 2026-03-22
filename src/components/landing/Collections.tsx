@@ -13,7 +13,7 @@ export const Collections = () => {
             <div className="grid grid-cols-2 gap-4 md:gap-8">
                 <div className="relative w-full aspect-[3/4] md:h-[80vh] md:aspect-auto">
                     <Image
-                        src="/images/collections/group_photo.avif"
+                        src="/images/collections/group-photo.AVIF"
                         alt="Brahmi Sutr Collection"
                         fill
                         className="object-cover"
@@ -52,13 +52,14 @@ export const Collections = () => {
                 </div>
                 <div className="relative w-full aspect-[4/3] md:h-[70vh] md:aspect-auto">
                     <video
-                        src="/videos/artisan_video.mp4"
                         autoPlay
                         muted
                         loop
                         playsInline
                         className="w-full h-full object-cover"
-                    />
+                    >
+                        <source src="/videos/artisan_video.mp4" type="video/mp4" />
+                    </video>
                 </div>
             </div>
 

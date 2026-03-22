@@ -42,7 +42,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 onMouseLeave={handleMouseLeave}
             >
                 {/* Product Image / Video */}
-                <div className="relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl bg-muted mb-2 md:mb-4">
+                <div className="relative aspect-[3/4] overflow-hidden bg-muted mb-2 md:mb-4">
                     <Image
                         src={imageUrl}
                         alt={product.title}
@@ -60,27 +60,19 @@ export function ProductCard({ product }: ProductCardProps) {
                             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
                         />
                     )}
-
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4 z-10 text-left">
-                        <span className="px-2 py-0.5 md:px-3 md:py-1 bg-background/80 backdrop-blur-sm rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider">
-                            {product.category}
-                        </span>
-                    </div>
                 </div>
 
                 {/* Product Info */}
                 <div className="space-y-1 md:space-y-2 text-left">
-                    <h3 className="text-[10px] md:text-xl font-sans font-semibold group-hover:text-accent transition-colors">
-                        {product.title}
-                    </h3>
+                    <div className="inline-block border-b-[1px] border-black pb-0.5">
+                        <h3 className="text-xs md:text-sm font-sans font-medium transition-colors">
+                            {product.title}
+                        </h3>
+                    </div>
 
-                    <div className="flex items-center justify-between pt-1 md:pt-2">
-                        <span className="text-[10px] md:text-lg font-bold font-mono">
-                            ₹{product.price.toLocaleString()}
-                        </span>
-                        <span className="text-[8px] md:text-sm font-mono text-muted-foreground group-hover:text-accent transition-colors hidden md:inline">
-                            View Details →
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs md:text-sm text-muted-foreground font-mono">
+                            {product.price.toLocaleString()}
                         </span>
                     </div>
                 </div>
