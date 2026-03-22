@@ -19,6 +19,8 @@ interface ProductImageGalleryProps {
 export const ProductImageGallery = ({ images, productTitle }: ProductImageGalleryProps) => {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
+    const isVideo = (url: string) => url.toLowerCase().endsWith(".mp4");
+
     return (
         <div className="space-y-4">
             {/* Main Image Slider */}
@@ -29,16 +31,27 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                 className="rounded-2xl overflow-hidden aspect-[3/4] bg-muted"
             >
-                {images.map((image, index) => (
+                {images.map((media, index) => (
                     <SwiperSlide key={index}>
                         <div className="relative w-full h-full">
-                            <Image
-                                src={image}
-                                alt={`${productTitle} - Image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                                priority={index === 0}
-                            />
+                            {isVideo(media) ? (
+                                <video
+                                    src={media}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    className="object-cover w-full h-full"
+                                />
+                            ) : (
+                                <Image
+                                    src={media}
+                                    alt={`${productTitle} - Image ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                    priority={index === 0}
+                                />
+                            )}
                         </div>
                     </SwiperSlide>
                 ))}
@@ -49,19 +62,28 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 onSwiper={setThumbsSwiper}
                 modules={[Thumbs]}
                 spaceBetween={12}
-                slidesPerView={3}
+                slidesPerView={4}
                 watchSlidesProgress
                 className="!cursor-pointer"
             >
-                {images.map((image, index) => (
+                {images.map((media, index) => (
                     <SwiperSlide key={index} className="!h-24 rounded-lg overflow-hidden">
-                        <div className="relative w-full h-full">
-                            <Image
-                                src={image}
-                                alt={`${productTitle} - Thumbnail ${index + 1}`}
-                                fill
-                                className="object-cover hover:opacity-75 transition-opacity"
-                            />
+                        <div className="relative w-full h-full bg-muted">
+                            {isVideo(media) ? (
+                                <video
+                                    src={media}
+                                    muted
+                                    playsInline
+                                    className="object-cover w-full h-full hover:opacity-75 transition-opacity"
+                                />
+                            ) : (
+                                <Image
+                                    src={media}
+                                    alt={`${productTitle} - Thumbnail ${index + 1}`}
+                                    fill
+                                    className="object-cover hover:opacity-75 transition-opacity"
+                                />
+                            )}
                         </div>
                     </SwiperSlide>
                 ))}
