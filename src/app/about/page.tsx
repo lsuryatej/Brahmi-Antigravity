@@ -84,7 +84,7 @@ export default function AboutPage() {
             </section>
 
             {/* About the Founders */}
-            <section className="py-24 px-4 md:px-8 bg-muted/20">
+            <section id="about-founders" className="py-24 px-4 md:px-8 bg-muted/20">
                 <div className="max-w-5xl mx-auto">
                     <FadeIn delay={0.4}>
                         <div className="text-center mb-16">

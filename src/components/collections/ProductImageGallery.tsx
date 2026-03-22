@@ -29,7 +29,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 navigation
                 pagination={{ clickable: true }}
                 thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-                className="rounded-2xl overflow-hidden aspect-[3/4] bg-muted"
+                className="overflow-hidden aspect-[3/4] bg-muted"
             >
                 {images.map((media, index) => (
                     <SwiperSlide key={index}>
@@ -67,7 +67,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                 className="!cursor-pointer"
             >
                 {images.map((media, index) => (
-                    <SwiperSlide key={index} className="!h-24 rounded-lg overflow-hidden">
+                    <SwiperSlide key={index} className="!h-24 overflow-hidden">
                         <div className="relative w-full h-full bg-muted">
                             {isVideo(media) ? (
                                 <video
