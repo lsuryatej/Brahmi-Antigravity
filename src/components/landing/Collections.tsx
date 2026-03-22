@@ -78,7 +78,7 @@ export const Collections = () => {
             {/* Bottom Section */}
             <div className="grid grid-cols-2 gap-4 md:gap-8">
                 <div className="flex flex-col items-center justify-center h-full">
-                    <Link href="/journey" className="group flex flex-col items-center text-center">
+                    <Link href="/about#about-founders" className="group flex flex-col items-center text-center">
                         <span className="text-xs md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
                             Our journey
                         </span>
