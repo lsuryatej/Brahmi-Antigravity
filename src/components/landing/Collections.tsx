@@ -8,12 +8,12 @@ export const Collections = () => {
 
     return (
         <section className="relative w-full bg-background py-8 md:py-24 max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12 md:space-y-24">
-            
+
             {/* Top Section */}
             <div className="grid grid-cols-2 gap-4 md:gap-8">
                 <div className="relative w-full aspect-[3/4] md:h-[80vh] md:aspect-auto">
                     <Image
-                        src="/images/collections/group_photo.jpeg"
+                        src="/images/collections/group_photo.avif"
                         alt="Brahmi Sutr Collection"
                         fill
                         className="object-cover"
@@ -35,10 +35,10 @@ export const Collections = () => {
                 {sutrProducts
                     .filter(p => ["kanthi-skirt", "nilaaya-dress", "kaldhaara-pants", "charkha-vest"].includes(p.handle))
                     .map((product) => (
-                    <div key={product.id} className="w-full">
-                        <ProductCard product={product} />
-                    </div>
-                ))}
+                        <div key={product.id} className="w-full">
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
             </div>
 
             {/* Bottom Section */}
@@ -51,11 +51,11 @@ export const Collections = () => {
                     </Link>
                 </div>
                 <div className="relative w-full aspect-[4/3] md:h-[70vh] md:aspect-auto">
-                    <video 
-                        src="/videos/artisan_video.mp4" 
-                        autoPlay 
-                        muted 
-                        loop 
+                    <video
+                        src="/videos/artisan_video.mp4"
+                        autoPlay
+                        muted
+                        loop
                         playsInline
                         className="w-full h-full object-cover"
                     />
