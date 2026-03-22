@@ -18,8 +18,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Brahmi | For Culture, Of Culture",
-  description: "A high-performance, aesthetic web experience.",
+  title: "Brahmi",
+  description: "For Culture, Of Culture",
 };
 
 export default function RootLayout({

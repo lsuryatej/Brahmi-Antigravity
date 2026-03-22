@@ -3,7 +3,7 @@
 import { FadeIn, StaggerChildren } from "@/lib/motion/primitives";
 import { motion } from "framer-motion";
 import { Heart, Users, Sparkles, Globe } from "lucide-react";
-
+// slay
 export default function AboutPage() {
     const values = [
         {
