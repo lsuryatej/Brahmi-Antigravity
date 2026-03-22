@@ -1,10 +1,44 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { sutrProducts } from "@/lib/mockData/products";
 import { ProductCard } from "@/components/ui/ProductCard";
 export const Collections = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const observerOptions: IntersectionObserverInit = {
+            threshold: [0, 0.1],
+            rootMargin: "0px",
+        };
+
+        const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach((entry) => {
+                const visibleRatio = entry.intersectionRatio;
+                if (visibleRatio > 0) {
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch((error) => {
+                            console.log("Video autoplay prevented:", error.name);
+                        });
+                    }
+                }
+                if (visibleRatio < 0.1 && !video.paused) {
+                    video.pause();
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, observerOptions);
+        observer.observe(video);
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <section className="relative w-full bg-background py-8 md:py-24 max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12 md:space-y-24">
@@ -52,14 +86,14 @@ export const Collections = () => {
                 </div>
                 <div className="relative w-full aspect-[4/3] md:h-[70vh] md:aspect-auto">
                     <video
-                        autoPlay
+                        ref={videoRef}
                         muted
-                        loop
                         playsInline
+                        preload="auto"
+                        loop
                         className="w-full h-full object-cover"
-                    >
-                        <source src="/videos/artisan_video.mp4" type="video/mp4" />
-                    </video>
+                        src="/videos/artisan_video.mp4"
+                    />
                 </div>
             </div>
 
