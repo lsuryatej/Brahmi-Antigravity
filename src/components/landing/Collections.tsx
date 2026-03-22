@@ -87,6 +87,7 @@ export const Collections = () => {
                 <div className="relative w-full aspect-[4/3] md:h-[70vh] md:aspect-auto">
                     <video
                         ref={videoRef}
+                        autoPlay
                         muted
                         playsInline
                         preload="auto"
