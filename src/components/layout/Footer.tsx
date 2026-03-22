@@ -43,7 +43,7 @@ export function Footer() {
                         </address>
                     </div>
                     <div className="relative">
-                        <h3 className="mb-4 text-lg font-semibold font-sans">Follow Us</h3>
+                        <h3 className="mb-4 text-lg font-semibold font-sans">Connect with Us</h3>
                         <div className="mb-6 flex space-x-4">
                             <TooltipProvider>
                                 <Tooltip>
