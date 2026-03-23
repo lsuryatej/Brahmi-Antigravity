@@ -43,9 +43,9 @@ export const Collections = () => {
     return (
         <section className="relative w-full bg-background py-8 md:py-24 max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12 md:space-y-24">
 
-            {/* Top Section */}
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
-                <div className="relative w-full aspect-[3/4] md:h-[80vh] md:aspect-auto">
+            {/* Top Section — 2-col grid for both mobile and desktop */}
+            <div className="grid grid-cols-2 gap-4 md:gap-8 items-center">
+                <div className="relative w-full aspect-[4/5] md:h-[80vh] md:aspect-auto">
                     <Image
                         src="/images/collections/group-photo.AVIF"
                         alt="Brahmi Sutr Collection"
@@ -55,11 +55,15 @@ export const Collections = () => {
                         priority
                     />
                 </div>
-                <div className="flex flex-col items-center justify-center h-full">
-                    <Link href="/collections/sutr" className="group flex flex-col items-center">
-                        <span className="text-xs md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
-                            Shop now
-                        </span>
+                {/* Text Column - Visible on both mobile and laptop */}
+                <div className="flex flex-col justify-center h-full">
+                    <Link href="/collections/sutr" className="group block">
+                        <p className="text-[7px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
+                            Sutr, our first capsule, is a study in beginnings. Meaning “thread,” it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
+                            <span className="hidden md:inline">
+                                {" "}The collection centres on kantha hand embroidery by artisans in Gujarat. Built from a simple running stitch, kantha carries a natural rhythm, creating fluid, organic patterns across each garment. Inspired by the charkha and its symbolism of cycles and steady labour, the motifs move freely, never rigid. Rendered in earth-led tones, clay, rust, indigo, sand, and muted blues, Sutr remains grounded and tactile, shaped by process and intention, meant to be carried forward, one stitch at a time.
+                            </span>
+                        </p>
                     </Link>
                 </div>
             </div>
@@ -75,16 +79,16 @@ export const Collections = () => {
                     ))}
             </div>
 
-            {/* Bottom Section */}
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
+            {/* Bottom Section — 2-col grid for both mobile and desktop */}
+            <div className="grid grid-cols-2 gap-4 md:gap-8 items-center">
                 <div className="flex flex-col items-center justify-center h-full">
-                    <Link href="/about#about-founders" className="group flex flex-col items-center text-center">
-                        <span className="text-xs md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
+                    <Link href="/about" className="group flex flex-col items-center text-center">
+                        <span className="text-[10px] md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
                             Our journey
                         </span>
                     </Link>
                 </div>
-                <div className="relative w-full aspect-[4/3] md:h-[70vh] md:aspect-auto">
+                <div className="relative w-full aspect-[4/5] md:h-[70vh] md:aspect-auto">
                     <video
                         ref={videoRef}
                         autoPlay

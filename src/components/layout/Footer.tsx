@@ -16,9 +16,9 @@ export function Footer() {
 
     return (
         <footer className="relative bg-[#f8f6f0] text-foreground transition-colors duration-300">
-            <div className="container mx-auto px-4 pt-8 pb-12 md:px-6 lg:px-8">
-                <div className="border-t mb-12" />
-                <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+            <div className="container mx-auto px-4 pt-6 pb-8 md:pt-8 md:pb-12 md:px-6 lg:px-8">
+                <div className="border-t mb-6 md:mb-12" />
+                <div className="grid gap-6 md:gap-12 md:grid-cols-2 lg:grid-cols-3">
                     <div>
                         <h3 className="mb-4 text-lg font-semibold font-sans">Quick Links</h3>
                         <nav className="space-y-2 text-sm font-mono">
@@ -94,7 +94,7 @@ export function Footer() {
 
                     </div>
                 </div>
-                <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row font-mono text-muted-foreground">
+                <div className="mt-6 md:mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 md:pt-8 text-center md:flex-row font-mono text-muted-foreground">
                     <p className="text-sm">
                         © {currentYear} Brahmi. All rights reserved.
                     </p>

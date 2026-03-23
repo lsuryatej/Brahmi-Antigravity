@@ -9,7 +9,7 @@ export default function ContactPage() {
                 <div className="max-w-4xl mx-auto text-center">
                     <FadeIn>
                         <h1 className="text-4xl md:text-6xl font-bold font-sans mb-6">
-                            Get in Touch
+                            GET IN TOUCH
                         </h1>
                         <p className="text-lg md:text-xl font-mono text-muted-foreground max-w-2xl mx-auto">
                             Have a question or want to collaborate? We&apos;d love to hear from you.
