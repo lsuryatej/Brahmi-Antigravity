@@ -65,13 +65,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 {/* Product Info */}
                 <div className="space-y-1 md:space-y-2 text-left">
                     <div className="inline-block border-b-[1px] border-black pb-0.5">
-                        <h3 className="text-xs md:text-sm font-sans font-medium transition-colors">
+                        <h3 className="text-[8px] md:text-[10px] font-sans font-medium transition-colors">
                             {product.title}
                         </h3>
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <span className="text-xs md:text-sm text-muted-foreground font-mono">
+                        <span className="text-[8px] md:text-[10px] text-muted-foreground font-mono">
                             {product.price.toLocaleString()}
                         </span>
                     </div>

@@ -64,25 +64,25 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
     return (
         <div className="flex flex-col h-full">
             {/* Product Title */}
-            <h1 className="text-2xl md:text-5xl font-bold font-sans mb-2">
+            <h1 className="text-lg md:text-2xl font-bold font-sans mb-2">
                 {product.title}
             </h1>
 
             {/* Price */}
-            <p className="text-xl md:text-4xl font-bold font-mono mb-4 md:mb-6">
+            <p className="text-sm md:text-xl font-bold font-mono mb-4 md:mb-6">
                 ₹{product.price.toLocaleString()}
             </p>
 
             {/* Product Description */}
             <div className="mb-6 md:mb-8">
-                <div className="text-sm md:text-base font-mono text-muted-foreground whitespace-pre-line">
+                <div className="text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground whitespace-pre-line">
                     {(() => {
                         const parts = product.description.split(/\n\n(?=(?:Note|Notes|NOTE|NOTES))/i);
                         if (parts.length > 1) {
                             return (
                                 <>
                                     {parts[0]}
-                                    <div className="mt-4 text-[0.45rem] md:text-[0.5rem] uppercase opacity-70 tracking-tight leading-normal">
+                                    <div className="mt-4 text-[7px] md:text-xs leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono italic opacity-80">
                                         {parts.slice(1).join("\n\n")}
                                     </div>
                                 </>

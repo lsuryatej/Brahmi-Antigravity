@@ -33,10 +33,28 @@ export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [isCartAnimating, setIsCartAnimating] = useState(false);
     const { cartCount } = useCart();
+    const prevCartCount = useRef(cartCount);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+
+    // Trigger cart animation on add
+    useEffect(() => {
+        if (cartCount > prevCartCount.current) {
+            setIsCartAnimating(true);
+            if (typeof window !== "undefined" && window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(200);
+            }
+            const timer = setTimeout(() => {
+                setIsCartAnimating(false);
+            }, 400);
+            prevCartCount.current = cartCount;
+            return () => clearTimeout(timer);
+        }
+        prevCartCount.current = cartCount;
+    }, [cartCount]);
 
     // Handle scroll behavior
     useEffect(() => {
@@ -84,15 +102,25 @@ export const Navbar = () => {
         <>
             <motion.nav
                 className={cn(
-                    "fixed top-0 right-0 z-50 flex items-center justify-end p-6 transition-all duration-500 pointer-events-none",
-                    isScrolled ? "w-auto" : "w-full"
+                    "fixed top-0 left-0 right-0 z-50 flex items-start justify-between p-4 md:p-6 transition-all duration-500 pointer-events-none w-full"
                 )}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
+                {/* Logo Area */}
+                <div className="pointer-events-auto flex items-center h-10">
+                    <Link href="/" className="hover:opacity-80 transition-opacity flex items-center h-full">
+                        <img 
+                            src="/images/logo.svg" 
+                            alt="Brahmi Logo" 
+                            className="h-6 md:h-8 w-auto object-contain"
+                        />
+                    </Link>
+                </div>
+
                 {!isScrolled ? (
-                    <div className="hidden md:flex gap-8 items-center pointer-events-auto">
+                    <div className="hidden md:flex gap-8 items-center justify-end pointer-events-auto">
                         {navItems.map((item) => (
                             <div
                                 key={item.name}
@@ -135,33 +163,57 @@ export const Navbar = () => {
                         ))}
 
                         {/* Cart Icon */}
-                        <button className="relative group" onClick={() => router.push('/cart')}>
+                        <motion.button 
+                            className="relative group flex items-center justify-center p-2 rounded-full hover:bg-accent/10 transition-colors" 
+                            onClick={() => router.push('/cart')}
+                            animate={isCartAnimating ? { rotate: [-15, 15, -15, 15, 0], scale: [1, 1.2, 1] } : {}}
+                            transition={{ duration: 0.4 }}
+                        >
                             <ShoppingBag className="h-5 w-5 hover:text-accent transition-colors" />
                             {cartCount > 0 && (
                                 <motion.span
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-[10px] font-mono font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                                    className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-mono font-bold rounded-full h-4 w-4 flex items-center justify-center outline outline-2 outline-background"
                                 >
                                     {cartCount}
                                 </motion.span>
                             )}
-                        </button>
+                        </motion.button>
                     </div>
                 ) : (
-                    <div
-                        ref={desktopMenuRef}
-                        className="relative hidden md:block pointer-events-auto"
-                        onMouseEnter={() => setIsMenuOpen(true)}
-                        onMouseLeave={() => setIsMenuOpen(false)}
-                    >
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-full bg-background/80 backdrop-blur-md border-border shadow-sm"
+                    <div className="hidden md:flex items-center gap-4 pointer-events-auto">
+                        <motion.button 
+                            onClick={() => router.push('/cart')}
+                            className="relative flex items-center justify-center p-2 rounded-full hover:bg-accent/10 h-10 w-10 text-foreground transition-colors"
+                            animate={isCartAnimating ? { rotate: [-15, 15, -15, 15, 0], scale: [1, 1.2, 1] } : {}}
+                            transition={{ duration: 0.4 }}
                         >
-                            <Menu className="h-5 w-5" />
-                        </Button>
+                            <ShoppingBag className="h-5 w-5 hover:text-accent transition-colors" />
+                            {cartCount > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-mono font-bold rounded-full h-4 w-4 flex items-center justify-center outline outline-2 outline-background"
+                                >
+                                    {cartCount}
+                                </motion.span>
+                            )}
+                        </motion.button>
+
+                        <div
+                            ref={desktopMenuRef}
+                            className="relative"
+                            onMouseEnter={() => setIsMenuOpen(true)}
+                            onMouseLeave={() => setIsMenuOpen(false)}
+                        >
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="rounded-full"
+                            >
+                                <Menu className="h-5 w-5" />
+                            </Button>
 
                         <AnimatePresence>
                             {isMenuOpen && (
@@ -195,30 +247,38 @@ export const Navbar = () => {
                                             )}
                                         </div>
                                     ))}
-                                    <div className="h-px bg-border my-1" />
-                                    <button onClick={() => router.push('/cart')} className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
-                                        <ShoppingBag className="h-4 w-4" />
-                                        Cart
-                                        {cartCount > 0 && (
-                                            <span className="ml-auto bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                                {cartCount}
-                                            </span>
-                                        )}
-                                    </button>
                                 </motion.div>
                             )}
                         </AnimatePresence>
+                        </div>
                     </div>
                 )}
             </motion.nav>
 
             {/* Mobile Menu Button (Always visible on mobile) */}
-            <div className="md:hidden fixed top-4 right-4 z-50 pointer-events-auto" ref={mobileMenuRef}>
+            <div className="md:hidden fixed top-4 right-4 z-50 pointer-events-auto flex items-center gap-2" ref={mobileMenuRef}>
+                <motion.button 
+                    onClick={() => router.push('/cart')}
+                    className="relative flex items-center justify-center p-2 rounded-full hover:bg-accent/10 h-10 w-10 text-foreground transition-colors"
+                    animate={isCartAnimating ? { rotate: [-15, 15, -15, 15, 0], scale: [1, 1.2, 1] } : {}}
+                    transition={{ duration: 0.4 }}
+                >
+                    <ShoppingBag className="h-5 w-5" />
+                    {cartCount > 0 && (
+                        <motion.span
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute top-0 right-0 bg-accent text-accent-foreground text-[10px] font-mono font-bold rounded-full h-4 w-4 flex items-center justify-center outline outline-2 outline-background"
+                        >
+                            {cartCount}
+                        </motion.span>
+                    )}
+                </motion.button>
                 <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="rounded-full bg-background/80 backdrop-blur-md border-border shadow-sm"
+                    className="rounded-full"
                 >
                     {isMobileMenuOpen ? (
                         <X className="h-5 w-5" />
@@ -261,19 +321,6 @@ export const Navbar = () => {
                                     )}
                                 </div>
                             ))}
-                            <div className="h-px bg-border my-1" />
-                            <button
-                                onClick={() => { handleLinkClick(); router.push('/cart'); }}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-mono hover:bg-accent hover:text-accent-foreground rounded-md transition-colors"
-                            >
-                                <ShoppingBag className="h-4 w-4" />
-                                Cart
-                                {cartCount > 0 && (
-                                    <span className="ml-auto bg-accent text-accent-foreground text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </button>
                         </motion.div>
                     )}
                 </AnimatePresence>
