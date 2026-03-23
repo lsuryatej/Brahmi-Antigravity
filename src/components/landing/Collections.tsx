@@ -54,17 +54,23 @@ export const Collections = () => {
                         sizes="(max-width: 768px) 50vw, 50vw"
                         priority
                     />
+                    {/* White text overlay on the photo — bottom positioned */}
+                    <div className="absolute inset-x-0 bottom-8 flex items-center justify-center">
+                        <Link href="/collections/sutr" className="group flex flex-col items-center">
+                            <span className="text-[10px] md:text-sm font-medium tracking-widest border-b-[1px] border-white pb-1 text-white hover:opacity-70 transition-opacity drop-shadow-md">
+                                Shop now
+                            </span>
+                        </Link>
+                    </div>
                 </div>
                 {/* Text Column - Visible on both mobile and laptop */}
-                <div className="flex flex-col justify-center h-full">
-                    <Link href="/collections/sutr" className="group block">
-                        <p className="text-[7px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
-                            Sutr, our first capsule, is a study in beginnings. Meaning “thread,” it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
-                            <span className="hidden md:inline">
-                                {" "}The collection centres on kantha hand embroidery by artisans in Gujarat. Built from a simple running stitch, kantha carries a natural rhythm, creating fluid, organic patterns across each garment. Inspired by the charkha and its symbolism of cycles and steady labour, the motifs move freely, never rigid. Rendered in earth-led tones, clay, rust, indigo, sand, and muted blues, Sutr remains grounded and tactile, shaped by process and intention, meant to be carried forward, one stitch at a time.
-                            </span>
-                        </p>
-                    </Link>
+                <div className="flex flex-col justify-center h-full px-2">
+                    <p className="text-[8px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
+                        Sutr, our first capsule, is a study in beginnings. Meaning “thread,” it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
+                        <span className="hidden md:inline">
+                            {" "}The collection centres on kantha hand embroidery by artisans in Gujarat. Built from a simple running stitch, kantha carries a natural rhythm, creating fluid, organic patterns across each garment. Inspired by the charkha and its symbolism of cycles and steady labour, the motifs move freely, never rigid. Rendered in earth-led tones, clay, rust, indigo, sand, and muted blues, Sutr remains grounded and tactile, shaped by process and intention, meant to be carried forward, one stitch at a time.
+                        </span>
+                    </p>
                 </div>
             </div>
 

@@ -1,20 +1,42 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
+/**
+ * CartContext — client-side cart state management.
+ *
+ * The Shopify Storefront Access Token (NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN)
+ * is intentionally public: Shopify's Storefront API is designed for client-side use.
+ * It is scoped to read-only storefront operations (products, cart, checkout).
+ * It cannot access customer PII, orders, or admin data.
+ *
+ * Cart ↔ Customer linking:
+ * When a logged-in session is detected, CartProvider calls POST /api/cart/link.
+ * That route handler reads the customer access token from the HTTP-only session
+ * cookie server-side and calls cartBuyerIdentityUpdate — the token never touches
+ * client JavaScript.
+ */
+
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  ReactNode,
+} from "react";
 import { SHOPIFY_CONFIG } from "@/lib/shopify/productMapping";
 
 interface CartContextType {
-    cartCount: number;
-    refreshCart: () => Promise<void>;
-    addToCart: (variantId: string, quantity?: number) => Promise<boolean>;
+  cartCount: number;
+  refreshCart: () => Promise<void>;
+  addToCart: (variantId: string, quantity?: number) => Promise<boolean>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const useCart = (): CartContextType => {
-    const ctx = useContext(CartContext);
-    if (!ctx) throw new Error("useCart must be used within a CartProvider");
-    return ctx;
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used within a CartProvider");
+  return ctx;
 };
 
 // localStorage key for the cart ID
@@ -23,190 +45,235 @@ const CART_STORAGE_KEY = `${SHOPIFY_CONFIG.storefrontAccessToken}.${SHOPIFY_CONF
 const SHOPIFY_GQL_URL = `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`;
 
 const SHOPIFY_HEADERS: Record<string, string> = {
-    "Content-Type": "application/json",
-    "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
+  "Content-Type": "application/json",
+  "X-Shopify-Storefront-Access-Token": SHOPIFY_CONFIG.storefrontAccessToken,
 };
 
-/**
- * Format-only check: valid Shopify Cart GIDs start with gid://shopify/Cart/
- * No network call — purely structural validation.
- */
+// 10s timeout for Indian mobile networks
+const TIMEOUT_MS = 10_000;
+
 function isValidCartId(cartId: string): boolean {
-    return cartId.startsWith("gid://shopify/Cart/");
+  return cartId.startsWith("gid://shopify/Cart/");
 }
 
-/** Returns the Cart GID saved by this app, validated by format. Returns null if absent or invalid. */
 function findCartId(): string | null {
-    try {
-        const stored = localStorage.getItem(CART_STORAGE_KEY);
-        if (stored && isValidCartId(stored)) return stored;
-        return null;
-    } catch {
-        return null;
-    }
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    if (stored && isValidCartId(stored)) return stored;
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 function saveCartId(cartId: string): void {
-    try {
-        localStorage.setItem(CART_STORAGE_KEY, cartId);
-    } catch {
-        // localStorage not available
-    }
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, cartId);
+  } catch {
+    // localStorage not available (SSR, private browsing)
+  }
 }
 
-/**
- * Shared Shopify Storefront GraphQL helper.
- * Throws if the HTTP response is not ok, or if the response contains GraphQL errors.
- * Returns the `data` field of the response body.
- */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit
+): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return response;
+  } catch (err) {
+    clearTimeout(id);
+    throw err;
+  }
+}
+
 async function fetchShopifyGraphQL<T = Record<string, unknown>>(
-    query: string,
-    variables?: Record<string, unknown>
+  query: string,
+  variables?: Record<string, unknown>
 ): Promise<T> {
-    const response = await fetch(SHOPIFY_GQL_URL, {
+  let lastError: Error | null = null;
+
+  // 1 retry for Indian network resilience
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const response = await fetchWithTimeout(SHOPIFY_GQL_URL, {
         method: "POST",
         headers: SHOPIFY_HEADERS,
         body: JSON.stringify({ query, variables }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Shopify HTTP ${response.status}`);
+      }
+
+      const body = await response.json();
+
+      if (body.errors?.length) {
+        throw new Error(body.errors[0].message);
+      }
+
+      return body.data as T;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error("Network error");
+      if (attempt === 0) {
+        await new Promise((r) => setTimeout(r, 500));
+      }
+    }
+  }
+
+  throw lastError;
+}
+
+async function fetchCartCount(cartId: string): Promise<number> {
+  const query = `
+    query getCart($id: ID!) {
+      cart(id: $id) {
+        totalQuantity
+      }
+    }
+  `;
+  try {
+    const data = await fetchShopifyGraphQL<{
+      cart: { totalQuantity: number } | null;
+    }>(query, { id: cartId });
+    return data.cart?.totalQuantity ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+async function createCart(
+  variantId: string,
+  quantity: number
+): Promise<string | null> {
+  const mutation = `
+    mutation cartCreate($input: CartInput!) {
+      cartCreate(input: $input) {
+        cart { id }
+        userErrors { message }
+      }
+    }
+  `;
+  try {
+    const data = await fetchShopifyGraphQL<{
+      cartCreate: {
+        cart: { id: string } | null;
+        userErrors: { message: string }[];
+      };
+    }>(mutation, {
+      input: { lines: [{ merchandiseId: variantId, quantity }] },
     });
 
-    if (!response.ok) {
-        throw new Error(`Shopify GraphQL HTTP error: ${response.status} ${response.statusText}`);
+    if (data.cartCreate?.userErrors?.length) return null;
+    const cartId = data.cartCreate?.cart?.id;
+    if (cartId) {
+      saveCartId(cartId);
+      return cartId;
     }
-
-    const body = await response.json();
-
-    if (body.errors?.length) {
-        throw new Error(`Shopify GraphQL errors: ${body.errors.map((e: { message: string }) => e.message).join(", ")}`);
-    }
-
-    return body.data as T;
+    return null;
+  } catch {
+    return null;
+  }
 }
 
-// Fetch total quantity from Shopify Cart API
-async function fetchCartCount(cartId: string): Promise<number> {
-    const query = `
-        query getCart($id: ID!) {
-            cart(id: $id) {
-                totalQuantity
-            }
-        }
-    `;
-
-    try {
-        const data = await fetchShopifyGraphQL<{ cart: { totalQuantity: number } | null }>(query, { id: cartId });
-        return data.cart?.totalQuantity ?? 0;
-    } catch (err) {
-        console.error("fetchCartCount failed:", err);
-        return 0;
+async function addLineToCart(
+  cartId: string,
+  variantId: string,
+  quantity: number
+): Promise<boolean> {
+  const mutation = `
+    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
+        cart { id }
+        userErrors { message }
+      }
     }
+  `;
+  try {
+    const data = await fetchShopifyGraphQL<{
+      cartLinesAdd: {
+        cart: { id: string } | null;
+        userErrors: { message: string }[];
+      };
+    }>(mutation, { cartId, lines: [{ merchandiseId: variantId, quantity }] });
+
+    return !data.cartLinesAdd?.userErrors?.length;
+  } catch {
+    return false;
+  }
 }
 
-// Create a new cart with a line item; returns the new cart GID or null on failure
-async function createCart(variantId: string, quantity: number): Promise<string | null> {
-    const mutation = `
-        mutation cartCreate($input: CartInput!) {
-            cartCreate(input: $input) {
-                cart { id }
-                userErrors { message }
-            }
-        }
-    `;
-
-    try {
-        const data = await fetchShopifyGraphQL<{
-            cartCreate: { cart: { id: string } | null; userErrors: { message: string }[] };
-        }>(mutation, { input: { lines: [{ merchandiseId: variantId, quantity }] } });
-
-        const userErrors = data.cartCreate?.userErrors;
-        if (userErrors?.length) {
-            console.error("Cart creation userErrors:", userErrors);
-            return null;
-        }
-
-        const cartId = data.cartCreate?.cart?.id;
-        if (cartId) {
-            saveCartId(cartId);
-            return cartId;
-        }
-        return null;
-    } catch (err) {
-        console.error("createCart failed:", err);
-        return null;
-    }
-}
-
-// Add a line item to an existing cart; returns true on success
-async function addLineToCart(cartId: string, variantId: string, quantity: number): Promise<boolean> {
-    const mutation = `
-        mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
-            cartLinesAdd(cartId: $cartId, lines: $lines) {
-                cart { id }
-                userErrors { message }
-            }
-        }
-    `;
-
-    try {
-        const data = await fetchShopifyGraphQL<{
-            cartLinesAdd: { cart: { id: string } | null; userErrors: { message: string }[] };
-        }>(mutation, { cartId, lines: [{ merchandiseId: variantId, quantity }] });
-
-        const userErrors = data.cartLinesAdd?.userErrors;
-        if (userErrors?.length) {
-            console.error("Cart add userErrors:", userErrors);
-            return false;
-        }
-        return true;
-    } catch (err) {
-        console.error("addLineToCart failed:", err);
-        return false;
-    }
+/**
+ * Link the current cart to the authenticated customer.
+ * Calls the /api/cart/link route handler which reads the session cookie
+ * server-side — the customer token never leaves the server.
+ */
+async function linkCartToCustomer(cartId: string): Promise<void> {
+  try {
+    await fetch("/api/cart/link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cartId }),
+    });
+  } catch {
+    // Non-fatal — cart continues to work anonymously
+  }
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
 
-    const refreshCart = useCallback(async () => {
-        const cartId = findCartId();
-        if (!cartId) {
-            setCartCount(0);
-            return;
+  const refreshCart = useCallback(async () => {
+    const cartId = findCartId();
+    if (!cartId) {
+      setCartCount(0);
+      return;
+    }
+    const count = await fetchCartCount(cartId);
+    setCartCount(count);
+  }, []);
+
+  const addToCart = useCallback(
+    async (variantId: string, quantity = 1): Promise<boolean> => {
+      const existingCartId = findCartId();
+
+      let success = false;
+      if (existingCartId) {
+        success = await addLineToCart(existingCartId, variantId, quantity);
+        if (!success) {
+          // Stale/expired cart — create fresh
+          const newCartId = await createCart(variantId, quantity);
+          success = !!newCartId;
+          if (newCartId) await linkCartToCustomer(newCartId);
         }
-        const count = await fetchCartCount(cartId);
-        setCartCount(count);
-    }, []);
+      } else {
+        const newCartId = await createCart(variantId, quantity);
+        success = !!newCartId;
+        if (newCartId) await linkCartToCustomer(newCartId);
+      }
 
-    const addToCart = useCallback(async (variantId: string, quantity: number = 1): Promise<boolean> => {
-        const existingCartId = findCartId();
+      if (success) await refreshCart();
+      return success;
+    },
+    [refreshCart]
+  );
 
-        let success = false;
-        if (existingCartId) {
-            success = await addLineToCart(existingCartId, variantId, quantity);
-            // If the stored cartId is stale/expired, recover by creating a fresh cart
-            if (!success) {
-                const newCartId = await createCart(variantId, quantity);
-                success = !!newCartId;
-            }
-        } else {
-            const newCartId = await createCart(variantId, quantity);
-            success = !!newCartId;
-        }
+  // On mount: load cart count + link existing cart to customer if logged in
+  useEffect(() => {
+    const init = async () => {
+      await refreshCart();
+      const cartId = findCartId();
+      if (cartId) await linkCartToCustomer(cartId);
+    };
+    void init();
+  }, [refreshCart]);
 
-        if (success) {
-            await refreshCart();
-        }
-        return success;
-    }, [refreshCart]);
-
-    // Fetch cart count on initial mount
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        void refreshCart();
-    }, [refreshCart]);
-
-    return (
-        <CartContext.Provider value={{ cartCount, refreshCart, addToCart }}>
-            {children}
-        </CartContext.Provider>
-    );
+  return (
+    <CartContext.Provider value={{ cartCount, refreshCart, addToCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 }
