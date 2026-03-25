@@ -49,6 +49,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                                     alt={`${productTitle} - Image ${index + 1}`}
                                     fill
                                     className="object-cover"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                     priority={index === 0}
                                 />
                             )}
@@ -82,6 +83,7 @@ export const ProductImageGallery = ({ images, productTitle }: ProductImageGaller
                                     alt={`${productTitle} - Thumbnail ${index + 1}`}
                                     fill
                                     className="object-cover hover:opacity-75 transition-opacity"
+                                    sizes="25vw"
                                 />
                             )}
                         </div>

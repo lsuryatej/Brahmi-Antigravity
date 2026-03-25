@@ -23,7 +23,7 @@ export default function SutrCollectionPage() {
                             <h1 className="text-3xl md:text-7xl font-bold font-sans mb-4 md:mb-8 uppercase">
                                 ABOUT THE COLLECTION
                             </h1>
-                            <div className="max-w-4xl mx-auto space-y-4 md:space-y-5 text-[10px] md:text-base tracking-tighter [word-spacing:-0.21rem] text-justify leading-relaxed font-mono text-muted-foreground">
+                            <div className="max-w-4xl mx-auto space-y-4 md:space-y-5 text-[10px] sm:text-xs md:text-base tracking-tighter [word-spacing:-0.21rem] text-justify leading-relaxed font-mono text-muted-foreground">
                                 <p>
                                     Sutr, our first capsule, is a study in beginnings. Meaning &ldquo;thread,&rdquo; it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
                                 </p>
@@ -38,7 +38,7 @@ export default function SutrCollectionPage() {
                     </FadeIn>
 
                     {/* Product Grid */}
-                    <StaggerChildren className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mt-10 md:mt-20">
+                    <StaggerChildren className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 mt-10 md:mt-20">
                         {sutrProducts.map((product, index) => (
                             <FadeIn key={product.id} delay={index * 0.1}>
                                 <ProductCard product={product} />

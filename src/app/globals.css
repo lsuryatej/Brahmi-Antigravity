@@ -80,6 +80,17 @@
 
 
 
+@layer components {
+  /*
+   * Apply tracking-tighter to all font-mono elements globally.
+   * Lives in @layer components so Tailwind utility classes (e.g. tracking-widest
+   * on navbar items) automatically override it — no per-element exceptions needed.
+   */
+  .font-mono {
+    letter-spacing: -0.05em;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

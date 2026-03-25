@@ -1,9 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { DURATION, EASE } from "@/lib/motion/tokens";
+import { EASE } from "@/lib/motion/tokens";
+
+/**
+ * useLayoutEffect runs synchronously before the browser paints, so GSAP
+ * can position elements before the first frame is drawn — eliminating the
+ * flash where the video container briefly appears at its default position.
+ * SSR guard: Next.js runs this file on the server too, where useLayoutEffect
+ * would warn; useEffect is used as a fallback so the server render is clean.
+ */
+const useIsomorphicLayoutEffect =
+    typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export const HeroSequence = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -15,24 +26,11 @@ export const HeroSequence = () => {
     const layer3Ref = useRef<HTMLDivElement>(null);
     const logoRef = useRef<HTMLDivElement>(null);
 
-    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-    useEffect(() => {
-        // Check for reduced motion preference
-        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-        setPrefersReducedMotion(mediaQuery.matches);
-
-        const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
-        mediaQuery.addEventListener("change", handleChange);
-
-        return () => mediaQuery.removeEventListener("change", handleChange);
-    }, []);
-
+    // Video playback via IntersectionObserver — unchanged
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
 
-        // IntersectionObserver for video playback control
         const observerOptions: IntersectionObserverInit = {
             threshold: [0, 0.01, 0.1],
             rootMargin: "0px",
@@ -43,7 +41,6 @@ export const HeroSequence = () => {
                 const visibleRatio = entry.intersectionRatio;
 
                 if (visibleRatio > 0) {
-                    // ANY visibility - start playing
                     const playPromise = video.play();
                     if (playPromise !== undefined) {
                         playPromise.catch((error) => {
@@ -52,7 +49,6 @@ export const HeroSequence = () => {
                     }
                 }
 
-                // Pause if visibility drops below 10%
                 if (visibleRatio < 0.1 && !video.paused) {
                     video.pause();
                 }
@@ -65,93 +61,59 @@ export const HeroSequence = () => {
         return () => observer.disconnect();
     }, []);
 
-    useEffect(() => {
-        if (prefersReducedMotion || typeof window === "undefined") return;
+    /*
+     * GSAP scroll animation.
+     *
+     * useIsomorphicLayoutEffect fires before the first browser paint, so GSAP
+     * applies the initial `yPercent: 100` (off-screen) state to the video
+     * container before any pixels are drawn. This eliminates the ~100ms flash
+     * where the video was visible at its default position while the old async
+     * import resolved.
+     *
+     * prefers-reduced-motion is checked synchronously via matchMedia so we
+     * never need a state variable for it — GSAP either runs or doesn't,
+     * decided before the first paint.
+     */
+    useIsomorphicLayoutEffect(() => {
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) return;
 
-        let gsapContext: { revert: () => void } | null = null;
+        gsap.registerPlugin(ScrollTrigger);
 
-        const initGSAP = async () => {
-            const { gsap } = await import("gsap");
-            const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-            gsap.registerPlugin(ScrollTrigger);
+        const gsapContext = gsap.context(() => {
+            const mainTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top top",
+                    end: "+=150%",
+                    pin: true,
+                    pinSpacing: true,
+                    anticipatePin: 1,
+                    scrub: 1,
+                },
+            });
 
-            gsapContext = gsap.context(() => {
-                // Single unified pin for smooth scroll experience
-                const mainTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: containerRef.current,
-                        start: "top top",
-                        end: "+=150%", // Extended from 100% to 150% for smoother, longer experience
-                        pin: true,
-                        pinSpacing: true,
-                        anticipatePin: 1,
-                        scrub: 1,
-                    },
-                });
+            mainTimeline.fromTo(
+                logoRef.current,
+                { scale: 1, opacity: 1 },
+                { scale: 1.06, opacity: 0, ease: "none" },
+                0
+            );
 
-                // Logo scale and fade out animation
-                mainTimeline.fromTo(
-                    logoRef.current,
-                    { scale: 1, opacity: 1 },
-                    { scale: 1.06, opacity: 0, ease: "none" },
-                    0
-                );
+            mainTimeline.fromTo(
+                videoContainerRef.current,
+                { yPercent: 100, opacity: 1 },
+                { yPercent: 0, opacity: 1, ease: "none" },
+                0
+            );
 
-                // Video scrub upward from off-screen (Solid opacity from start)
-                mainTimeline.fromTo(
-                    videoContainerRef.current,
-                    {
-                        yPercent: 100,
-                        opacity: 1,
-                    },
-                    {
-                        yPercent: 0,
-                        opacity: 1,
-                        ease: "none",
-                    },
-                    0
-                );
+            mainTimeline.to(layer1Ref.current, { y: "10%", ease: "none" }, 0);
+            mainTimeline.to(layer2Ref.current, { y: "20%", ease: "none" }, 0);
+            mainTimeline.to(layer3Ref.current, { y: "30%", ease: "none" }, 0);
+        }, containerRef);
 
-                // Background parallax layers
-                mainTimeline.to(
-                    layer1Ref.current,
-                    {
-                        y: "10%",
-                        ease: "none",
-                    },
-                    0
-                );
-
-                mainTimeline.to(
-                    layer2Ref.current,
-                    {
-                        y: "20%",
-                        ease: "none",
-                    },
-                    0
-                );
-
-                mainTimeline.to(
-                    layer3Ref.current,
-                    {
-                        y: "30%",
-                        ease: "none",
-                    },
-                    0
-                );
-
-                // No second pin - video scrolls away naturally for smooth experience
-            }, containerRef);
-        };
-
-        initGSAP();
-
-        return () => {
-            if (gsapContext) {
-                gsapContext.revert();
-            }
-        };
-    }, [prefersReducedMotion]);
+        return () => gsapContext.revert();
+    }, []);
 
     return (
         <section
@@ -183,7 +145,7 @@ export const HeroSequence = () => {
             >
                 <div
                     ref={videoWrapRef}
-                    className="w-[70%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[28%] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl"
+                    className="w-[70%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[28%] aspect-[9/16] rounded-2xl overflow-hidden"
                 >
                     <video
                         ref={videoRef}
@@ -215,7 +177,7 @@ export const HeroSequence = () => {
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 1.5, ease: EASE.ENTRANCE }}
-                    className="relative w-[80%] md:w-[600px] lg:w-[800px] aspect-[3/1]"
+                    className="relative w-[80%] sm:w-[65%] md:w-[55%] lg:w-[50%] max-w-[900px] aspect-[3/1]"
                 >
                     <img
                         src="/images/logo.svg"

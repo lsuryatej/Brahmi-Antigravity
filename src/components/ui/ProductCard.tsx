@@ -47,6 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
                         src={imageUrl}
                         alt={product.title}
                         fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className={`object-cover transition-transform duration-500 ${isHovered ? 'scale-105' : ''} ${isHovered && videoUrl ? 'opacity-0' : 'opacity-100'}`}
                     />
                     

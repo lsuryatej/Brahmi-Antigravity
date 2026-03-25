@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </Link>
 
                 {/* Product Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                     {/* Left: Image Gallery */}
                     <div>
                         <ProductImageGallery images={product.images} productTitle={product.title} />
