@@ -38,11 +38,13 @@ const AddressSchema = z.object({
   country: z.string().default("India"),
   phone: z
     .string()
+    .nullable()
     .optional()
     .refine(
       (val) => !val || /^\+?[\d\s\-()]{10,15}$/.test(val),
       "Please enter a valid phone number."
-    ),
+    )
+    .transform((val) => val ?? null),
 });
 
 export interface AddressState {
@@ -75,7 +77,7 @@ export async function createAddressAction(
     province: formData.get("province"),
     zip: formData.get("zip"),
     country: "India",
-    phone: formData.get("phone") || undefined,
+    phone: formData.get("phone") || null,
   });
 
   if (!parsed.success) {
@@ -126,7 +128,7 @@ export async function updateAddressAction(
     province: formData.get("province"),
     zip: formData.get("zip"),
     country: "India",
-    phone: formData.get("phone") || undefined,
+    phone: formData.get("phone") || null,
   });
 
   if (!parsed.success) {
