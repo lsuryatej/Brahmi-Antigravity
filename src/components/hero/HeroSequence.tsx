@@ -159,12 +159,6 @@ export const HeroSequence = () => {
                 </div>
             </div>
 
-            {/* Bottom fade — masks the overflow-clip edge where the video is cut */}
-            <div
-                aria-hidden
-                className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 z-[30] bg-gradient-to-b from-transparent to-[#f8f6f0]"
-            />
-
             {/* Grain Overlay - Above content but below text/logo */}
             <div
                 aria-hidden
