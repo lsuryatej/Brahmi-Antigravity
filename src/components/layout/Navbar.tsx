@@ -18,6 +18,14 @@ interface NavItem {
 const navItems: NavItem[] = [
     { name: "Home", href: "/" },
     {
+        name: "Shop",
+        href: "#",
+        submenu: [
+            { name: "Women", href: "/shop/women" },
+            { name: "Men", href: "/shop/men" },
+        ]
+    },
+    {
         name: "Collections",
         href: "#",
         submenu: [

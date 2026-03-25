@@ -9,6 +9,7 @@ export interface Product {
     handle: string;
     title: string;
     category: "jacket" | "vest" | "top" | "shirt" | "dress" | "skirt" | "pants";
+    gender: "men" | "women";
     price: number;
     description: string;
     images: string[];
@@ -30,6 +31,7 @@ export const sutrProducts: Product[] = [
         handle: "kanthi-jacket",
         title: "KANTHI JACKET",
         category: "jacket",
+        gender: "women",
         price: 6499,
         description: "The Kanthi Jacket is a handcrafted piece made in Gujarat from hand-spun, hand-woven cotton, dyed in an azo-free sky blue. Designed with an oversized fit and relaxed structure, it balances comfort with a clean silhouette. Charkha-inspired Kantha embroidery highlights the pockets and collar, adding subtle detail through skilled handwork. Requiring around 18 hours to complete, each jacket reflects careful craftsmanship and a considered approach to design.\n\nNote: This garment is handcrafted using traditional slow-craft techniques and produced in limited quantities. Slight variations in embroidery and fabric are natural, celebrating the uniqueness of handmade processes. Each piece is made to order and reflects the time, skill, and care of the artisans involved.",
         images: [
@@ -60,6 +62,7 @@ export const sutrProducts: Product[] = [
         handle: "charkha-vest",
         title: "CHARKHA VEST",
         category: "vest",
+        gender: "women",
         price: 4299,
         description: "The Charkha Vest is a sleeveless, front-open piece crafted from hand-spun, hand-woven cotton in a natural beige. Rooted in slow craft, it features flowing Kantha embroidery along the collar, stitched in red thread for subtle contrast. Finished with fabric-covered potli buttons, a notched lapel, and an adjustable lace-up back, the vest balances clean construction with artisanal detail. Each piece takes approximately 15 hours to complete.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -91,6 +94,7 @@ export const sutrProducts: Product[] = [
         handle: "avanti-top",
         title: "AVANTI TOP",
         category: "top",
+        gender: "women",
         price: 3799,
         description: "The Avanti Top is a cropped silhouette crafted from hand-spun, hand-woven cotton in a deep rust maroon, dyed with azo-free colours. Light and breathable, it’s designed for ease and warm-weather wear. A clean boat neckline defines the front, while the back falls into a soft, open cowl that adds fluid movement. With balanced proportions and refined construction, it’s a versatile piece that blends simplicity with subtle statement.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, drape, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -119,6 +123,7 @@ export const sutrProducts: Product[] = [
         handle: "eka-rekha-shirt",
         title: "EKA REKHA SHIRT",
         category: "shirt",
+        gender: "men",
         price: 4499,
         description: "The Eka Rekha Shirt is a relaxed, slightly oversized piece in hand-spun, hand-woven cotton, finished in a warm camel-brown. A soft notched collar and handcrafted buttons keep the silhouette easy yet considered. Maroon Kantha embroidery subtly defines the collar, sleeves, and seam lines, adding quiet structure and depth. Dyed with azo-free colours and completed in about 12 hours, it’s a thoughtful blend of comfort, craft, and conscious making.\n\nNote: Each piece is handcrafted, so slight variations in weave, colour, and embroidery are natural and part of its unique character.",
         images: [
@@ -148,6 +153,7 @@ export const sutrProducts: Product[] = [
         handle: "neel-dhaara-shirt",
         title: "NEEL DHAARA SHIRT",
         category: "shirt",
+        gender: "men",
         price: 4899,
         description: "The Neel Dhaara Shirt is a relaxed silhouette crafted from hand-spun, hand-woven cotton in soft sky blue and beige. True to its name, it carries a sense of calm, fluid movement. A soft V-neck with a contrast band collar flows into a button placket finished with handcrafted buttons. Subtle Kantha embroidery along the placket and sleeves adds gentle rhythm and texture. Dyed with azo-free colours and taking around 16 hours to complete, each piece reflects thoughtful handcraft by artisans in Gujarat.\n\nNotes: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -179,6 +185,7 @@ export const sutrProducts: Product[] = [
         handle: "nilaaya-dress",
         title: "NILAAYA DRESS",
         category: "dress",
+        gender: "women",
         price: 5999,
         description: "The Nilaya Dress is a short, softly structured silhouette crafted from hand-spun, hand-woven cotton from Gujarat, dyed in an azo-free sky blue. It features a fitted bodice with a defined waist that flows into a relaxed skirt, balancing shape and ease. Hand-stitched Kantha embroidery adds subtle detail, complemented by fabric-covered buttons at the front and an adjustable lace-up back for a custom fit. Taking around 20 hours to complete, each piece reflects careful craftsmanship and considered design.\n\nNote: This garment is handcrafted using traditional slow-craft techniques and produced in limited quantities. Slight variations in embroidery, fabric texture, and colour are inherent to the handmade process and celebrate the uniqueness of each piece.",
         images: [
@@ -211,6 +218,7 @@ export const sutrProducts: Product[] = [
         handle: "kanthi-skirt",
         title: "KANTHI SKIRT",
         category: "skirt",
+        gender: "women",
         price: 4799,
         description: "The Kanthi Skirt highlights the rhythm of traditional Kantha embroidery, handcrafted in Gujarat. Made from hand-spun, hand-woven cotton and dyed in an azo-free sky blue, it offers a soft, breathable feel with natural texture. Designed in a relaxed, short silhouette, it features fine running stitches flowing across the front and back, creating subtle yet distinctive surface detail. Taking around 14 hours to complete, each piece reflects careful handwork and a mindful approach to craft.\n\nNote : This garment is handcrafted using traditional slow-craft techniques and produced in limited quantities. Minor variations in stitch and fabric texture are inherent to the handmade process and enhance the uniqueness of each piece. Made to order with care and intention.",
         images: [
@@ -239,6 +247,7 @@ export const sutrProducts: Product[] = [
         handle: "dhaara-skirt",
         title: "DHAARA SKIRT",
         category: "skirt",
+        gender: "women",
         price: 4299,
         description: "The Dhaara Skirt is a soft A-line silhouette crafted from hand-spun, hand-woven cotton in natural beige. Designed to move with ease, it pairs a clean, timeless shape with subtle hand detailing. Kantha embroidery flows across the surface in fine running stitches of red, blue, brown, and beige, creating gentle texture and rhythm. Taking around 24 hours to complete, each piece reflects patience, balance, and the beauty of slow craft.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -270,6 +279,7 @@ export const sutrProducts: Product[] = [
         handle: "charkha-pants",
         title: "CHARKHA PANTS",
         category: "pants",
+        gender: "women",
         price: 3999,
         description: "The Charkha Pants are relaxed straight-leg trousers crafted from hand-spun, hand-woven cotton in a warm earthy brown. Designed for everyday ease, they balance fluid drape with clean construction. Kantha embroidery adds quiet character, horizontal stitches detail the folded hem panels, while circular charkha-inspired motifs accent the knee area on the front and back. Taking around 20 hours to complete, each pair reflects thoughtful craftsmanship and subtle, handcrafted depth.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -299,6 +309,7 @@ export const sutrProducts: Product[] = [
         handle: "eka-rekha-pants",
         title: "EKA REKHA PANTS",
         category: "pants",
+        gender: "men",
         price: 4199,
         description: "The Eka Rekha Pants are straight-fit trousers crafted from hand-spun, hand-woven cotton in natural beige, highlighted by a rust-maroon vertical panel down each leg. Inspired by the idea of a single line, Kantha embroidery flows along this panel in subtle beige thread. Dyed with azo-free colours and taking around 15 hours to complete, each pair balances clean structure with artisanal detail and everyday ease.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
@@ -327,6 +338,7 @@ export const sutrProducts: Product[] = [
         handle: "kaldhaara-pants",
         title: "KALDHAARA PANTS",
         category: "pants",
+        gender: "men",
         price: 4599,
         description: "The Kaldhaara Pants are relaxed straight-fit trousers crafted from hand-spun, hand-woven cotton in deep black, contrasted with an earthy brown front panel. Designed with a slightly oversized ease, they balance structure and comfort.Kantha embroidery in linear motifs adds subtle texture and movement across the front panel. Dyed with azo-free colours and taking around 19 hours to complete, each pair reflects skilled craftsmanship by artisans in Gujarat.\n\nNOTE: This garment is handcrafted using traditional techniques. Minor variations in fabric texture, embroidery, and colour are inherent to the process and enhance the individuality of each piece.",
         images: [
@@ -359,4 +371,8 @@ export const getProductByHandle = (handle: string): Product | undefined => {
 
 export const getProductsByCategory = (category: Product["category"]): Product[] => {
     return sutrProducts.filter(p => p.category === category);
+};
+
+export const getProductsByGender = (gender: Product["gender"]): Product[] => {
+    return sutrProducts.filter(p => p.gender === gender);
 };
