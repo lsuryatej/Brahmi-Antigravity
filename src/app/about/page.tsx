@@ -40,13 +40,13 @@ export default function AboutPage() {
                             <h2 className="text-3xl md:text-5xl font-bold mb-6 font-sans uppercase">
                                 ABOUT THE BRAND
                             </h2>
-                            <p className="text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
+                            <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
                                 Brahmi takes its name from one of India’s earliest scripts, the origin point of many written traditions, symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
                             </p>
-                            <p className="text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
+                            <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
                                 We work at the grassroots level of Indian craft, collaborating with artisan communities across the country and engaging deeply with techniques such as hand embroidery, weaving, and block printing. Our focus is on honouring the integrity and skill embedded in these traditions, while reimagining them through contemporary silhouettes that feel relevant and wearable today.
                             </p>
-                            <p className="text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto">
+                            <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto">
                                 Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders, creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
                             </p>
                         </div>
@@ -73,7 +73,7 @@ export default function AboutPage() {
                                     <h3 className="text-sm md:text-2xl font-bold mb-1 md:mb-3 font-sans leading-tight">
                                         {value.title}
                                     </h3>
-                                    <p className="text-[7px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
+                                    <p className="text-[7px] sm:text-[9px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
                                         {value.description}
                                     </p>
                                 </motion.div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
                                 className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-card/30 backdrop-blur-sm h-full"
                             >
                                 <h3 className="text-sm md:text-2xl font-bold mb-2 md:mb-4 font-sans leading-tight">PAVNI</h3>
-                                <p className="text-[7px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
+                                <p className="text-[7px] sm:text-[9px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
                                     Pavni, a textile design graduate from NIFT, approaches design with a deep respect for textiles and the cultures they emerge from. She believes in learning directly from artisans, immersing herself in their processes, materials, and stories. At Brahmi, she works closely with craft communities, ensuring that traditional techniques shape contemporary design while keeping the craft and its makers at the heart of every piece.
                                 </p>
                             </motion.div>
@@ -118,7 +118,7 @@ export default function AboutPage() {
                                 className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-card/30 backdrop-blur-sm h-full"
                             >
                                 <h3 className="text-sm md:text-2xl font-bold mb-2 md:mb-4 font-sans leading-tight">SHREYA</h3>
-                                <p className="text-[7px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
+                                <p className="text-[7px] sm:text-[9px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
                                     Shreya, also a textile design graduate from NIFT, brings a sharp sensitivity to form, proportion, and detail. Her design process is grounded in construction and the dialogue between material and silhouette. At Brahmi, she translates traditional craft practices into refined, contemporary garments, defining the brand's aesthetic while ensuring each piece feels thoughtful, wearable, and enduring.
                                 </p>
                             </motion.div>

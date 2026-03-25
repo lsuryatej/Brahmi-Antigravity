@@ -51,13 +51,13 @@ export const Collections = () => {
                         alt="Brahmi Sutr Collection"
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 50vw, 50vw"
+                        sizes="(max-width: 1536px) 50vw, 768px"
                         priority
                     />
                     {/* White text overlay on the photo — bottom positioned */}
                     <div className="absolute inset-x-0 bottom-8 flex items-center justify-center">
                         <Link href="/collections/sutr" className="group flex flex-col items-center">
-                            <span className="text-[10px] md:text-sm font-medium tracking-widest border-b-[1px] border-white pb-1 text-white hover:opacity-70 transition-opacity drop-shadow-md">
+                            <span className="text-[10px] sm:text-xs md:text-sm font-medium tracking-widest border-b-[1px] border-white pb-1 text-white hover:opacity-70 transition-opacity drop-shadow-md">
                                 Shop now
                             </span>
                         </Link>
@@ -65,7 +65,7 @@ export const Collections = () => {
                 </div>
                 {/* Text Column - Visible on both mobile and laptop */}
                 <div className="flex flex-col justify-center h-full px-2">
-                    <p className="text-[8px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
+                    <p className="text-[8px] sm:text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
                         Sutr, our first capsule, is a study in beginnings. Meaning “thread,” it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
                         <span className="hidden md:inline">
                             {" "}The collection centres on kantha hand embroidery by artisans in Gujarat. Built from a simple running stitch, kantha carries a natural rhythm, creating fluid, organic patterns across each garment. Inspired by the charkha and its symbolism of cycles and steady labour, the motifs move freely, never rigid. Rendered in earth-led tones, clay, rust, indigo, sand, and muted blues, Sutr remains grounded and tactile, shaped by process and intention, meant to be carried forward, one stitch at a time.
@@ -75,7 +75,7 @@ export const Collections = () => {
             </div>
 
             {/* Middle Section (4-column Grid) */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 pb-12 md:pb-24">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 pb-12 md:pb-24">
                 {sutrProducts
                     .filter(p => ["kanthi-skirt", "nilaaya-dress", "kaldhaara-pants", "charkha-vest"].includes(p.handle))
                     .map((product) => (
@@ -89,7 +89,7 @@ export const Collections = () => {
             <div className="grid grid-cols-2 gap-4 md:gap-8 items-center">
                 <div className="flex flex-col items-center justify-center h-full">
                     <Link href="/about" className="group flex flex-col items-center text-center">
-                        <span className="text-[10px] md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
+                        <span className="text-[10px] sm:text-xs md:text-[15px] font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
                             Our journey
                         </span>
                     </Link>
@@ -100,7 +100,7 @@ export const Collections = () => {
                         autoPlay
                         muted
                         playsInline
-                        preload="auto"
+                        preload="none"
                         loop
                         className="w-full h-full object-cover"
                         src="/videos/artisan_video.mp4"
