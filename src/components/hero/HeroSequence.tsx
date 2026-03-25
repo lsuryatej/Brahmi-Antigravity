@@ -179,8 +179,7 @@ export const HeroSequence = () => {
             {/* Video Container - Slides up from below */}
             <div
                 ref={videoContainerRef}
-                className="absolute inset-0 z-25 flex items-center justify-center"
-                style={{ transform: "translateY(100%)" }}
+                className="absolute inset-0 z-[25] flex items-center justify-center"
             >
                 <div
                     ref={videoWrapRef}
