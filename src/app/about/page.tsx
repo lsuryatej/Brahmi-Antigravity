@@ -132,9 +132,7 @@ export default function AboutPage() {
                 <div className="max-w-4xl mx-auto">
                     <FadeIn delay={0.7}>
                         <div className="p-6 md:p-12 rounded-2xl border-l-4 border-accent/40 bg-accent/5 backdrop-blur-sm relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-8 opacity-10">
-                                <Sparkles className="w-24 h-24 text-accent" />
-                            </div>
+
                             <h2 className="text-2xl md:text-3xl font-bold mb-8 font-sans uppercase tracking-wider text-accent">
                                 FOUNDERS NOTE
                             </h2>
