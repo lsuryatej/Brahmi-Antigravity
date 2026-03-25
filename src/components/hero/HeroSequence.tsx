@@ -179,7 +179,7 @@ export const HeroSequence = () => {
             {/* Video Container - Slides up from below */}
             <div
                 ref={videoContainerRef}
-                className="absolute inset-0 z-25 flex items-center justify-center"
+                className="absolute inset-0 z-25 flex items-center justify-center opacity-0 translate-y-full"
             >
                 <div
                     ref={videoWrapRef}
@@ -191,7 +191,7 @@ export const HeroSequence = () => {
                         playsInline
                         preload="auto"
                         loop
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover outline-none border-none"
                         src="/videos/hero-video.mp4"
                     />
                 </div>
@@ -215,7 +215,7 @@ export const HeroSequence = () => {
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 1.5, ease: EASE.ENTRANCE }}
-                    className="relative w-[80%] md:w-[600px] lg:w-[800px] aspect-[3/1]"
+                    className="relative w-[80%] md:w-[600px] lg:w-[800px] aspect-[3/1] opacity-0"
                 >
                     <img
                         src="/images/logo.svg"
