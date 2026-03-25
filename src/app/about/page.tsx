@@ -33,11 +33,11 @@ export default function AboutPage() {
 
 
             {/* Mission Section */}
-            <section className="py-10 md:py-24 px-4 md:px-8">
+            <section className="py-6 md:py-14 px-4 md:px-8">
                 <div className="max-w-4xl mx-auto">
                     <FadeIn delay={0.2}>
-                        <div className="text-center mb-8 md:mb-16">
-                            <h2 className="text-xl md:text-2xl font-bold mb-6 font-sans uppercase">
+                        <div className="text-center mb-4 md:mb-10">
+                            <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-5 font-sans uppercase">
                                 ABOUT THE BRAND
                             </h2>
                             <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
@@ -53,7 +53,7 @@ export default function AboutPage() {
                     </FadeIn>
 
                     <FadeIn delay={0.3}>
-                        <div className="text-center mt-10 md:mt-20 -mb-4 md:-mb-12">
+                        <div className="text-center mt-4 md:mt-10 -mb-2 md:-mb-6">
                             <h2 className="text-base md:text-xl font-bold font-sans uppercase">
                                 our foundations
                             </h2>
@@ -61,7 +61,7 @@ export default function AboutPage() {
                     </FadeIn>
 
                     {/* Values Grid */}
-                    <StaggerChildren className="grid grid-cols-2 gap-3 md:gap-8 mt-8 md:mt-20">
+                    <StaggerChildren className="grid grid-cols-2 gap-3 md:gap-8 mt-4 md:mt-10">
                         {values.map((value, index) => (
                             <FadeIn key={value.title} delay={index * 0.1}>
                                 <motion.div
@@ -85,11 +85,11 @@ export default function AboutPage() {
             </section>
 
             {/* About the Founders */}
-            <section id="about-founders" className="py-10 md:py-24 px-4 md:px-8 bg-muted/20">
+            <section id="about-founders" className="py-6 md:py-14 px-4 md:px-8 bg-muted/20">
                 <div className="max-w-5xl mx-auto">
                     <FadeIn delay={0.4}>
-                        <div className="text-center mb-8 md:mb-16">
-                            <h2 className="text-xl md:text-2xl font-bold mb-6 font-sans uppercase">
+                        <div className="text-center mb-4 md:mb-10">
+                            <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-5 font-sans uppercase">
                                 ABOUT THE FOUNDERS
                             </h2>
                         </div>
@@ -128,12 +128,12 @@ export default function AboutPage() {
             </section>
 
             {/* Founders Note */}
-            <section className="py-10 md:py-24 px-4 md:px-8 mb-8 md:mb-24">
+            <section className="py-6 md:py-14 px-4 md:px-8 mb-4 md:mb-12">
                 <div className="max-w-4xl mx-auto">
                     <FadeIn delay={0.7}>
-                        <div className="p-6 md:p-12 rounded-2xl border-l-4 border-accent/40 bg-accent/5 backdrop-blur-sm relative overflow-hidden">
+                        <div className="p-5 md:p-8 rounded-2xl border-l-4 border-accent/40 bg-accent/5 backdrop-blur-sm relative overflow-hidden">
 
-                            <h2 className="text-base md:text-xl font-bold mb-8 font-sans uppercase tracking-wider text-accent">
+                            <h2 className="text-base md:text-xl font-bold mb-4 md:mb-8 font-sans uppercase tracking-wider text-accent">
                                 FOUNDERS NOTE
                             </h2>
                             <div className="space-y-4">
