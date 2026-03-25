@@ -62,7 +62,7 @@ export default async function OrdersPage() {
 
         <div className="flex items-center gap-4 mb-8">
           <Package className="h-8 w-8 text-accent" />
-          <h1 className="text-3xl md:text-4xl font-bold font-sans">My Orders</h1>
+          <h1 className="text-xl md:text-2xl font-bold font-sans">My Orders</h1>
         </div>
 
         {orders.length === 0 ? (

@@ -20,7 +20,7 @@ export default function SutrCollectionPage() {
                             transition={{ duration: 0.8 }}
                             className="text-center mb-8 md:mb-16"
                         >
-                            <h1 className="text-3xl md:text-7xl font-bold font-sans mb-4 md:mb-8 uppercase">
+                            <h1 className="text-xl md:text-2xl font-bold font-sans mb-4 md:mb-8 uppercase">
                                 ABOUT THE COLLECTION
                             </h1>
                             <div className="max-w-4xl mx-auto space-y-4 md:space-y-5 text-[10px] sm:text-xs md:text-base tracking-tighter [word-spacing:-0.21rem] text-justify leading-relaxed font-mono text-muted-foreground">

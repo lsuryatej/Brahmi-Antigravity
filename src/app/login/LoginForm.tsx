@@ -35,7 +35,7 @@ export default function LoginForm({ redirectTo, sessionExpired }: Props) {
     <div className="bg-background border border-border/60 rounded-2xl shadow-sm p-8 md:p-10">
       {/* Logo / Brand */}
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold font-sans tracking-tight">
+        <h1 className="text-xl font-bold font-sans tracking-tight">
           Welcome back
         </h1>
         <p className="text-sm text-muted-foreground font-mono mt-2">

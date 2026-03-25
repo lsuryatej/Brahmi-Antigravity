@@ -34,7 +34,7 @@ export default async function AddressesPage() {
         <div className="flex items-center gap-4 mb-8">
           <MapPin className="h-8 w-8 text-accent" />
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold font-sans">
+            <h1 className="text-xl md:text-2xl font-bold font-sans">
               Saved Addresses
             </h1>
             <p className="text-sm font-mono text-muted-foreground mt-1">

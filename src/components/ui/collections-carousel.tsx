@@ -146,7 +146,7 @@ export const CollectionsCarousel = React.forwardRef<
                         <div>
                             <h2
                                 id="collections-heading"
-                                className="text-3xl md:text-4xl font-bold tracking-tight text-foreground font-sans"
+                                className="text-xl md:text-2xl font-bold tracking-tight text-foreground font-sans"
                             >
                                 {title}
                             </h2>
@@ -200,7 +200,7 @@ export const CollectionsCarousel = React.forwardRef<
                                             className="w-full h-[400px] sm:h-[460px] object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 flex flex-col justify-end">
-                                            <h3 className="text-2xl font-bold text-white mb-2 font-sans">
+                                            <h3 className="text-base font-bold text-white mb-2 font-sans">
                                                 {collection.title}
                                             </h3>
                                             {collection.description && (

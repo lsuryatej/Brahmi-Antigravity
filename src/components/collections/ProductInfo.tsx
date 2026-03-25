@@ -70,30 +70,30 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
         {
             title: "Details",
             content: (
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                     <div>
-                        <p className="font-semibold mb-1">Material</p>
-                        <p className="text-muted-foreground">{product.details.material}</p>
+                        <p className="font-semibold mb-0.5">Material</p>
+                        <p>{product.details.material}</p>
                     </div>
                     <div>
-                        <p className="font-semibold mb-1">Fit</p>
-                        <p className="text-muted-foreground">{product.details.fit}</p>
+                        <p className="font-semibold mb-0.5">Fit</p>
+                        <p>{product.details.fit}</p>
                     </div>
                     {product.details.color && (
                         <div>
-                            <p className="font-semibold mb-1">Color/Dye</p>
-                            <p className="text-muted-foreground">{product.details.color}</p>
+                            <p className="font-semibold mb-0.5">Color/Dye</p>
+                            <p>{product.details.color}</p>
                         </div>
                     )}
                     {product.details.technique && (
                         <div>
-                            <p className="font-semibold mb-1">Technique</p>
-                            <p className="text-muted-foreground">{product.details.technique}</p>
+                            <p className="font-semibold mb-0.5">Technique</p>
+                            <p>{product.details.technique}</p>
                         </div>
                     )}
                     <div>
-                        <p className="font-semibold mb-1">Category</p>
-                        <p className="text-muted-foreground capitalize">{product.category}</p>
+                        <p className="font-semibold mb-0.5">Category</p>
+                        <p className="capitalize">{product.category}</p>
                     </div>
                 </div>
             )
@@ -115,12 +115,12 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
     return (
         <div className="flex flex-col h-full">
             {/* Product Title */}
-            <h1 className="text-lg md:text-2xl font-bold font-sans mb-2">
+            <h1 className="text-base md:text-xl font-bold font-sans mb-2">
                 {product.title}
             </h1>
 
             {/* Price */}
-            <p className="text-sm md:text-xl font-bold font-mono mb-4 md:mb-6">
+            <p className="text-sm md:text-base font-bold font-mono mb-4 md:mb-6">
                 ₹{product.price.toLocaleString()}
             </p>
 

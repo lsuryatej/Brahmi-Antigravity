@@ -16,14 +16,14 @@ const AccordionItem = ({ title, content, isOpen, onToggle }: AccordionItemProps)
             {/* Accordion Header */}
             <button
                 onClick={onToggle}
-                className="w-full px-5 py-4 flex items-center justify-between group hover:bg-accent/5 transition-colors"
+                className="w-full px-4 py-3 md:px-5 md:py-4 flex items-center justify-between group hover:bg-accent/5 transition-colors"
                 aria-expanded={isOpen}
             >
-                <span className="font-sans font-semibold text-left">{title}</span>
+                <span className="font-sans font-semibold text-xs md:text-sm text-left">{title}</span>
                 {isOpen ? (
-                    <Minus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+                    <Minus className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-accent transition-colors" />
                 ) : (
-                    <Plus className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors" />
+                    <Plus className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground group-hover:text-accent transition-colors" />
                 )}
             </button>
 
@@ -32,7 +32,7 @@ const AccordionItem = ({ title, content, isOpen, onToggle }: AccordionItemProps)
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
-                <div className="px-5 py-4 font-mono text-sm text-muted-foreground whitespace-pre-line">
+                <div className="px-4 py-3 md:px-5 md:py-4 font-mono text-[10px] md:text-sm text-muted-foreground whitespace-pre-line">
                     {content}
                 </div>
             </div>

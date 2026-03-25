@@ -309,7 +309,7 @@ export default function CartPage() {
                 >
                     <div className="flex items-center gap-4 mb-2">
                         <ShoppingBag className="h-8 w-8 text-accent" />
-                        <h1 className="text-3xl md:text-5xl font-bold font-sans">Your Cart</h1>
+                        <h1 className="text-xl md:text-2xl font-bold font-sans">Your Cart</h1>
                     </div>
                     {!isEmpty && (
                         <p className="text-sm font-mono text-muted-foreground ml-12">
@@ -329,7 +329,7 @@ export default function CartPage() {
                         <div className="w-24 h-24 rounded-full bg-muted/50 flex items-center justify-center mb-6">
                             <ShoppingBag className="h-10 w-10 text-muted-foreground" />
                         </div>
-                        <h2 className="text-2xl font-sans font-semibold mb-3">
+                        <h2 className="text-base md:text-xl font-sans font-semibold mb-3">
                             Your cart is empty
                         </h2>
                         <p className="text-muted-foreground font-mono text-sm mb-8 max-w-md">
