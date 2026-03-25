@@ -25,6 +25,7 @@ import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rateLimit";
 const AddressSchema = z.object({
   firstName: z.string().min(1, "Please enter a first name.").max(50),
   lastName: z.string().min(1, "Please enter a last name.").max(50),
+  company: z.string().optional().default(""),
   address1: z.string().min(1, "Please enter your street address.").max(200),
   address2: z.string().optional().default(""),
   city: z.string().min(1, "Please enter your city.").max(100),
