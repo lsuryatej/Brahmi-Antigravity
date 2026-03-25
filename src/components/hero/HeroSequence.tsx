@@ -179,7 +179,7 @@ export const HeroSequence = () => {
             {/* Video Container - Slides up from below */}
             <div
                 ref={videoContainerRef}
-                className="absolute inset-0 z-[25] flex items-center justify-center"
+                className="hero-video-container absolute inset-0 z-[25] flex items-center justify-center"
             >
                 <div
                     ref={videoWrapRef}

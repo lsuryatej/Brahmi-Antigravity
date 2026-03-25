@@ -82,7 +82,12 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+
+  /* Only show focus ring on keyboard navigation, not on every element by default */
+  *:focus-visible {
+    @apply outline-ring/50;
   }
 
   body {
@@ -110,5 +115,18 @@
   .pin-spacer {
     border: none !important;
     outline: none !important;
+  }
+
+  /*
+   * Pre-position the hero video container off-screen BEFORE JavaScript loads.
+   * GSAP animates it from yPercent: 100 → 0, but is loaded via async dynamic
+   * import, causing a ~100ms flash where the container sits at its default
+   * (visible) position. This CSS rule eliminates that flash entirely.
+   * Scoped to no-preference so reduced-motion users still see the video statically.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-video-container {
+      transform: translateY(100%);
+    }
   }
 }
