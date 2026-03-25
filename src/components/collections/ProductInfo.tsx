@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "@/lib/mockData/products";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { AddToCartButton } from "./ShopifyBuyButton";
+import { AddToCartButton, AddToCartByVariantId, fetchProductVariants, ShopifyVariant } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
 
@@ -14,6 +14,57 @@ interface ProductInfoProps {
 
 export const ProductInfo = ({ product }: ProductInfoProps) => {
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const shopifyProductId = getShopifyProductId(product.id);
+    const isShopifyProduct = hasShopifyIntegration(product.id);
+
+    // Live variant availability from Shopify — drives size button states
+    const [shopifyVariants, setShopifyVariants] = useState<ShopifyVariant[]>([]);
+    const [variantsLoading, setVariantsLoading] = useState(isShopifyProduct);
+
+    useEffect(() => {
+        if (!isShopifyProduct || !shopifyProductId) return;
+        setVariantsLoading(true);
+        void fetchProductVariants(shopifyProductId)
+            .then((v) => {
+                setShopifyVariants(v);
+                setVariantsLoading(false);
+            })
+            .catch(() => setVariantsLoading(false));
+    }, [isShopifyProduct, shopifyProductId]);
+
+    /**
+     * Returns true if a size is available for sale.
+     * Uses live Shopify data when available, falls back to mock data.
+     */
+    const isSizeAvailable = (size: string): boolean => {
+        if (isShopifyProduct && !variantsLoading && shopifyVariants.length > 0) {
+            const match = shopifyVariants.find((v) => {
+                const sizeOpt = v.selectedOptions.find(
+                    (opt) => opt.name.toLowerCase() === "size"
+                );
+                return sizeOpt
+                    ? sizeOpt.value.toLowerCase() === size.toLowerCase()
+                    : v.title.toLowerCase() === size.toLowerCase();
+            });
+            return match?.availableForSale ?? false;
+        }
+        // Fallback: use mock data inStock flag
+        return product.variants.find((v) => v.size === size)?.inStock ?? false;
+    };
+
+    /** Get the matched Shopify variant for the currently selected size */
+    const getSelectedVariant = (): ShopifyVariant | undefined => {
+        if (!selectedSize || shopifyVariants.length === 0) return undefined;
+        if (shopifyVariants.length === 1) return shopifyVariants[0];
+        return shopifyVariants.find((v) => {
+            const sizeOpt = v.selectedOptions.find(
+                (opt) => opt.name.toLowerCase() === "size"
+            );
+            return sizeOpt
+                ? sizeOpt.value.toLowerCase() === selectedSize.toLowerCase()
+                : v.title.toLowerCase() === selectedSize.toLowerCase();
+        });
+    };
 
     const accordionItems = [
         {
@@ -105,30 +156,34 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                     </Link>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    {product.variants.map((variant) => (
-                        <button
-                            key={variant.id}
-                            onClick={() => variant.inStock && setSelectedSize(variant.size)}
-                            disabled={!variant.inStock}
-                            className={`
-                                min-w-[3rem] md:min-w-[4rem] px-3 py-2 md:px-5 md:py-3 rounded-lg border-2 font-mono text-sm md:text-base font-semibold transition-all
-                                ${selectedSize === variant.size
-                                    ? "border-accent bg-accent text-accent-foreground shadow-md"
-                                    : variant.inStock
-                                        ? "border-border hover:border-accent hover:bg-accent/5"
-                                        : "border-border opacity-30 cursor-not-allowed line-through"
-                                }
-                            `}
-                        >
-                            {variant.size}
-                        </button>
-                    ))}
+                    {product.variants.map((variant) => {
+                        const available = isSizeAvailable(variant.size);
+                        return (
+                            <button
+                                key={variant.id}
+                                onClick={() => available && setSelectedSize(variant.size)}
+                                disabled={!available || variantsLoading}
+                                className={`
+                                    min-w-[3rem] md:min-w-[4rem] px-3 py-2 md:px-5 md:py-3 rounded-lg border-2 font-mono text-sm md:text-base font-semibold transition-all
+                                    ${variantsLoading
+                                        ? "border-border opacity-50 animate-pulse cursor-wait"
+                                        : selectedSize === variant.size
+                                            ? "border-accent bg-accent text-accent-foreground shadow-md"
+                                            : available
+                                                ? "border-border hover:border-accent hover:bg-accent/5"
+                                                : "border-border opacity-30 cursor-not-allowed line-through"
+                                    }
+                                `}
+                            >
+                                {variant.size}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
             {/* Add to Cart / Select a Size Button */}
             {!selectedSize ? (
-                // Show disabled "Select a Size" prompt when no size picked
                 <Button
                     size="lg"
                     disabled
@@ -136,16 +191,25 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                 >
                     Select a Size
                 </Button>
-            ) : hasShopifyIntegration(product.id) ? (
-                // Shopify Buy Button for products with Shopify integration
+            ) : isShopifyProduct ? (
+                // Use pre-resolved variant ID — no second Shopify fetch needed
                 <div className="mb-8">
-                    <AddToCartButton
-                        shopifyProductId={getShopifyProductId(product.id)!}
-                        selectedSize={selectedSize}
-                    />
+                    {(() => {
+                        const variant = getSelectedVariant();
+                        return variant ? (
+                            <AddToCartByVariantId
+                                variantId={variant.id}
+                                availableForSale={variant.availableForSale}
+                            />
+                        ) : (
+                            <AddToCartButton
+                                shopifyProductId={shopifyProductId!}
+                                selectedSize={selectedSize}
+                            />
+                        );
+                    })()}
                 </div>
             ) : (
-                // Default Add to Cart for other products
                 <Button
                     size="lg"
                     className="w-full mb-6 md:mb-8 bg-accent hover:bg-accent/90 text-accent-foreground text-base md:text-lg font-sans py-4 md:py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
