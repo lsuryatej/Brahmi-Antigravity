@@ -67,6 +67,7 @@ export async function createAddressAction(
   const parsed = AddressSchema.safeParse({
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
+    company: formData.get("company") || "",
     address1: formData.get("address1"),
     address2: formData.get("address2") || "",
     city: formData.get("city"),
@@ -117,6 +118,7 @@ export async function updateAddressAction(
   const parsed = AddressSchema.safeParse({
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
+    company: formData.get("company") || "",
     address1: formData.get("address1"),
     address2: formData.get("address2") || "",
     city: formData.get("city"),
