@@ -171,18 +171,20 @@ export const HeroSequence = () => {
             />
 
             {/* Content (Logo) - Stays pinned with subtle zoom */}
-            <div className="relative z-[15] flex flex-col items-center justify-center p-4">
+            <div className="relative z-[15] flex flex-col items-center justify-center p-4 w-full">
                 <motion.div
                     ref={logoRef}
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 1.5, ease: EASE.ENTRANCE }}
-                    className="relative w-[80%] sm:w-[65%] md:w-[55%] lg:w-[50%] max-w-[900px] aspect-[3/1]"
+                    className="relative w-[80%] sm:w-[65%] md:w-[60%] lg:w-[55%] max-w-[960px]"
                 >
                     <img
                         src="/images/logo.svg"
                         alt="Brahmi Logo"
-                        className="w-full h-full object-contain mix-blend-multiply"
+                        width={885}
+                        height={389}
+                        className="w-full h-auto mix-blend-multiply"
                     />
                 </motion.div>
             </div>
