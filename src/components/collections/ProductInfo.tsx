@@ -115,12 +115,12 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
     return (
         <div className="flex flex-col h-full">
             {/* Product Title */}
-            <h1 className="text-lg md:text-2xl font-bold font-sans mb-2">
+            <h1 className="text-base md:text-xl font-bold font-sans mb-2">
                 {product.title}
             </h1>
 
             {/* Price */}
-            <p className="text-sm md:text-xl font-bold font-mono mb-4 md:mb-6">
+            <p className="text-sm md:text-base font-bold font-mono mb-4 md:mb-6">
                 ₹{product.price.toLocaleString()}
             </p>
 

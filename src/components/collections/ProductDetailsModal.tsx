@@ -42,7 +42,7 @@ export const ProductDetailsModal = ({
                         <div className="bg-card border border-border rounded-2xl shadow-2xl p-8">
                             {/* Header */}
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-2xl font-bold font-sans">{title}</h2>
+                                <h2 className="text-base md:text-xl font-bold font-sans">{title}</h2>
                                 <Button
                                     variant="ghost"
                                     size="icon"

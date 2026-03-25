@@ -8,10 +8,10 @@ export default function ContactPage() {
             <section className="relative py-24 px-4 md:px-8 bg-gradient-to-b from-transparent via-transparent to-transparent">
                 <div className="max-w-4xl mx-auto text-center">
                     <FadeIn>
-                        <h1 className="text-4xl md:text-6xl font-bold font-sans mb-6">
+                        <h1 className="text-xl md:text-2xl font-bold font-sans mb-6">
                             GET IN TOUCH
                         </h1>
-                        <p className="text-lg md:text-xl font-mono text-muted-foreground max-w-2xl mx-auto">
+                        <p className="text-xs md:text-sm font-mono text-muted-foreground max-w-2xl mx-auto">
                             Have a question or want to collaborate? We&apos;d love to hear from you.
                             Fill out the form below and we&apos;ll get back to you shortly.
                         </p>
@@ -31,7 +31,7 @@ export default function ContactPage() {
                 <div className="max-w-4xl mx-auto">
                     <FadeIn delay={0.2}>
                         <div className="text-center mb-12">
-                            <h2 className="text-2xl md:text-4xl font-bold font-sans uppercase mb-4">
+                            <h2 className="text-base md:text-xl font-bold font-sans uppercase mb-4">
                                 CONTACT INFO
                             </h2>
                         </div>

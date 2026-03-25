@@ -51,7 +51,7 @@ export default async function AccountPage() {
         {/* Header */}
         <div className="flex items-start justify-between mb-10">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold font-sans">
+            <h1 className="text-xl md:text-2xl font-bold font-sans">
               Hello, {customer.firstName ?? customer.displayName} 👋
             </h1>
             <p className="text-sm font-mono text-muted-foreground mt-2">
