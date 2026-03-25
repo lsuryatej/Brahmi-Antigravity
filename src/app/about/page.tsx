@@ -55,7 +55,7 @@ export default function AboutPage() {
                     <FadeIn delay={0.3}>
                         <div className="text-center mt-10 md:mt-20 -mb-4 md:-mb-12">
                             <h2 className="text-2xl md:text-4xl font-bold font-sans uppercase">
-                                THE FOUR POINTS
+                                our foundations
                             </h2>
                         </div>
                     </FadeIn>
