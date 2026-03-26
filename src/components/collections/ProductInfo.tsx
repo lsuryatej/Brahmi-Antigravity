@@ -7,6 +7,7 @@ import Link from "next/link";
 import { AddToCartButton, AddToCartByVariantId, fetchProductVariants, ShopifyVariant } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
+import { SizeChartIsland } from "./SizeChartIsland";
 
 interface ProductInfoProps {
     product: Product;
@@ -159,12 +160,13 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base md:text-lg font-semibold font-sans">Size</h3>
-                    <Link
-                        href="/size-chart"
-                        className="text-sm font-mono text-muted-foreground hover:text-accent transition-colors underline underline-offset-2"
-                    >
-                        Size Chart
-                    </Link>
+                    {product.sizeChart ? (
+                        <SizeChartIsland sizeChart={product.sizeChart} />
+                    ) : (
+                        <span className="text-sm font-mono text-muted-foreground/40">
+                            Size Chart
+                        </span>
+                    )}
                 </div>
                 <div className="flex flex-wrap gap-3">
                     {product.variants.map((variant) => {

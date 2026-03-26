@@ -22,6 +22,7 @@ export interface Product {
     };
     care: string;
     shipping: string;
+    sizeChart?: string; // path relative to /public
 }
 
 export const sutrProducts: Product[] = [
@@ -55,7 +56,8 @@ export const sutrProducts: Product[] = [
             technique: "Hand Embroidered Kantha Technique"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/women-oversized-jacket.png"
     },
     {
         id: "4",
@@ -116,7 +118,8 @@ export const sutrProducts: Product[] = [
             color: "Rust maroon (Azo-free Dye)"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/women-corset-top.png"
     },
     {
         id: "8",
@@ -176,7 +179,8 @@ export const sutrProducts: Product[] = [
             technique: "Kantha hand embroidery technique, Decorative handmade buttons on front placket, Handcrafted by artisans in Gujarat"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/men-half-shirt.png"
     },
 
     // Dresses
@@ -209,7 +213,8 @@ export const sutrProducts: Product[] = [
             technique: "Hand Embroidered Kantha Technique (Semi-circular Motifs)"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/women-corset-dress.png"
     },
 
     // Skirts
@@ -240,7 +245,8 @@ export const sutrProducts: Product[] = [
             technique: "Traditional Kantha Hand Embroidery"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/women-short-skirt.png"
     },
     {
         id: "6",
@@ -270,7 +276,8 @@ export const sutrProducts: Product[] = [
             technique: "Kantha hand embroidery throughout, Vertical and horizontal running stitch detailing"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        sizeChart: "/images/size-charts/women-long-skirt.png"
     },
 
     // Pants
