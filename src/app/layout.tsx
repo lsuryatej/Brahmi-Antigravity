@@ -5,6 +5,7 @@ import { SmoothScroll } from "@/lib/motion/lenis";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const hostGrotesk = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -33,11 +34,13 @@ export default function RootLayout({
         className={`${hostGrotesk.variable} ${spaceMono.variable} antialiased font-sans`}
       >
         <CartProvider>
-          <SmoothScroll>
-            <Navbar />
-            <main className="min-h-screen pt-16 md:pt-20">{children}</main>
-            <Footer />
-          </SmoothScroll>
+          <TooltipProvider delayDuration={200}>
+            <SmoothScroll>
+              <Navbar />
+              <main className="min-h-screen pt-16 md:pt-20">{children}</main>
+              <Footer />
+            </SmoothScroll>
+          </TooltipProvider>
         </CartProvider>
       </body>
     </html>

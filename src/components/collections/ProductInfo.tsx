@@ -7,6 +7,7 @@ import Link from "next/link";
 import { AddToCartButton, AddToCartByVariantId, fetchProductVariants, ShopifyVariant } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
+import { PolicyIsland } from "./PolicyIsland";
 
 interface ProductInfoProps {
     product: Product;
@@ -105,8 +106,14 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
         {
             title: "Shipping",
             content: (
-                <div className="whitespace-pre-line text-muted-foreground">
-                    {product.shipping}
+                <div className="text-muted-foreground">
+                    <div className="whitespace-pre-line">
+                        {product.shipping
+                            .split("\n")
+                            .filter((line) => !line.includes("(link of shipping and return page)"))
+                            .join("\n")}
+                    </div>
+                    <PolicyIsland />
                 </div>
             )
         }
