@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -46,6 +46,7 @@ export const Navbar = () => {
     const prevCartCount = useRef(cartCount);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
+    const desktopNavRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
     // Trigger cart animation on add
@@ -100,8 +101,34 @@ export const Navbar = () => {
         };
     }, [isMobileMenuOpen]);
 
+    // Close desktop dropdown when clicking/tapping outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (
+                activeDropdown &&
+                desktopNavRef.current &&
+                !desktopNavRef.current.contains(event.target as Node)
+            ) {
+                setActiveDropdown(null);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside as EventListener);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside as EventListener);
+        };
+    }, [activeDropdown]);
+
     // Close menu when link is clicked
     const handleLinkClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
+    const handleDropdownLinkClick = () => {
+        setActiveDropdown(null);
         setIsMobileMenuOpen(false);
     };
 
@@ -128,17 +155,23 @@ export const Navbar = () => {
                 </div>
 
                 {!isScrolled ? (
-                    <div className="hidden md:flex gap-8 items-center justify-end pointer-events-auto">
+                    <div ref={desktopNavRef} className="hidden md:flex gap-8 items-center justify-end pointer-events-auto">
                         {navItems.map((item) => (
                             <div
                                 key={item.name}
                                 className="relative"
                                 onMouseEnter={() => item.submenu && setActiveDropdown(item.name)}
-                                onMouseLeave={() => setActiveDropdown(null)}
+                                onMouseLeave={() => item.submenu && setActiveDropdown(null)}
                             >
                                 <Link
                                     href={item.href}
                                     className="text-sm font-mono uppercase tracking-widest hover:text-accent transition-colors"
+                                    onClick={(e) => {
+                                        if (item.submenu) {
+                                            e.preventDefault();
+                                            setActiveDropdown(activeDropdown === item.name ? null : item.name);
+                                        }
+                                    }}
                                 >
                                     {item.name}
                                 </Link>
@@ -158,6 +191,7 @@ export const Navbar = () => {
                                                     <Link
                                                         key={subItem.name}
                                                         href={subItem.href}
+                                                        onClick={handleDropdownLinkClick}
                                                         className="block px-4 py-3 text-sm font-mono hover:bg-accent hover:text-accent-foreground transition-colors"
                                                     >
                                                         {subItem.name}
