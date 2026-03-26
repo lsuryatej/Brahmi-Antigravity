@@ -21,6 +21,31 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "Brahmi",
   description: "For Culture, Of Culture",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
+  openGraph: {
+    title: "Brahmi",
+    description: "For Culture, Of Culture",
+    url: "https://wearbrahmi.com",
+    siteName: "Brahmi",
+    images: [
+      {
+        url: "https://wearbrahmi.com/images/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "Brahmi — For Culture, Of Culture",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brahmi",
+    description: "For Culture, Of Culture",
+    images: ["https://wearbrahmi.com/images/logo.svg"],
+  },
 };
 
 export default function RootLayout({
