@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { headers } from "next/headers";
 
 interface ContactFormData {
     name: string;
@@ -10,7 +11,44 @@ interface ContactFormData {
     message: string;
 }
 
+// In-memory rate limit store: IP → { count, resetAt }
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 3;          // max submissions per window
+const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
+    const now = Date.now();
+    const record = rateLimitStore.get(ip);
+
+    if (!record || now > record.resetAt) {
+        rateLimitStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+        return { allowed: true };
+    }
+
+    if (record.count >= RATE_LIMIT) {
+        const retryAfter = Math.ceil((record.resetAt - now) / 60000);
+        return { allowed: false, retryAfter };
+    }
+
+    record.count++;
+    return { allowed: true };
+}
+
 export async function sendContactEmail(data: ContactFormData) {
+    // Rate limiting — 3 submissions per IP per 10 minutes
+    const headersList = await headers();
+    const ip =
+        headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+        headersList.get("x-real-ip") ||
+        "unknown";
+
+    const { allowed, retryAfter } = checkRateLimit(ip);
+    if (!allowed) {
+        return {
+            error: `Too many submissions. Please try again in ${retryAfter} minute${retryAfter === 1 ? "" : "s"}.`,
+        };
+    }
+
     const apiKey = process.env.RESEND_API_KEY;
 
     if (!apiKey || apiKey.trim() === "") {
