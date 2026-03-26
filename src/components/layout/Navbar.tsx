@@ -137,7 +137,8 @@ export const Navbar = () => {
         <>
             <motion.nav
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-50 flex items-start justify-between p-4 md:p-6 transition-all duration-500 pointer-events-none w-full"
+                    "fixed top-0 left-0 right-0 z-50 flex items-start justify-between p-4 md:p-6 transition-all duration-500 pointer-events-none w-full",
+                    isScrolled && "bg-background/80 backdrop-blur-md"
                 )}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
