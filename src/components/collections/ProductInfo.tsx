@@ -7,7 +7,7 @@ import Link from "next/link";
 import { AddToCartButton, AddToCartByVariantId, fetchProductVariants, ShopifyVariant } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
-import { PolicyIsland } from "./PolicyIsland";
+import Link from "next/link";
 
 interface ProductInfoProps {
     product: Product;
@@ -113,7 +113,12 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                             .filter((line) => !line.includes("(link of shipping and return page)"))
                             .join("\n")}
                     </div>
-                    <PolicyIsland />
+                    <Link
+                        href="/shipping-returns"
+                        className="inline-flex items-center gap-1 font-mono text-[10px] md:text-sm underline underline-offset-2 text-foreground/70 hover:text-foreground transition-colors mt-1"
+                    >
+                        Shipping &amp; Returns Policy ↗
+                    </Link>
                 </div>
             )
         }

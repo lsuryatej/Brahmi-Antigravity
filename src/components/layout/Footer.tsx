@@ -30,6 +30,7 @@ export function Footer() {
                             <Link href="/collections/sutr" className="block transition-colors hover:text-accent text-muted-foreground">Collections</Link>
                             <Link href="/about" className="block transition-colors hover:text-accent text-muted-foreground">About</Link>
                             <Link href="/contact" className="block transition-colors hover:text-accent text-muted-foreground">Contact</Link>
+                            <Link href="/shipping-returns" className="block transition-colors hover:text-accent text-muted-foreground">Shipping &amp; Returns</Link>
                         </nav>
                     </div>
 
