@@ -68,9 +68,9 @@ export const sutrProducts: Product[] = [
         price: 4299,
         description: "The Charkha Vest is a sleeveless, front-open piece crafted from hand-spun, hand-woven cotton in a natural beige. Rooted in slow craft, it features flowing Kantha embroidery along the collar, stitched in red thread for subtle contrast. Finished with fabric-covered potli buttons, a notched lapel, and an adjustable lace-up back, the vest balances clean construction with artisanal detail. Each piece takes approximately 15 hours to complete.\n\nNote: This garment is handcrafted using traditional techniques. Slight variations in fabric texture, embroidery, and colour are inherent to the process and add to the uniqueness of each piece.",
         images: [
+            "/products/sutr/charkha-vest/IMG_8399.AVIF",
             "/products/sutr/charkha-vest/IMG_8306.AVIF",
             "/products/sutr/charkha-vest/IMG_8307.AVIF",
-            "/products/sutr/charkha-vest/IMG_8308.AVIF",
             "/products/sutr/charkha-vest/PB__3011.mp4"
         ],
         variants: [
