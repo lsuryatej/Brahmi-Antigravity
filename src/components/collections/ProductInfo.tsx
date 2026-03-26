@@ -7,7 +7,6 @@ import Link from "next/link";
 import { AddToCartButton, AddToCartByVariantId, fetchProductVariants, ShopifyVariant } from "./ShopifyBuyButton";
 import { hasShopifyIntegration, getShopifyProductId } from "@/lib/shopify/productMapping";
 import { Accordion } from "@/components/ui/accordion";
-import Link from "next/link";
 
 interface ProductInfoProps {
     product: Product;
