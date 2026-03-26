@@ -35,7 +35,7 @@ export const SizeChartIsland = ({ sizeChart }: SizeChartIslandProps) => {
             >
                 <div className="px-3 py-2 border-b border-border">
                     <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-                        Size Guide
+                        Size Chart
                     </p>
                 </div>
                 <div className="p-2">
