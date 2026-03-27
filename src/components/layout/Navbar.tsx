@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
     { name: "Home", href: "/" },
     {
         name: "Shop",
-        href: "#",
+        href: "/collections/sutr",
         submenu: [
             { name: "Women", href: "/shop/women" },
             { name: "Men", href: "/shop/men" },
@@ -27,7 +27,7 @@ const navItems: NavItem[] = [
     },
     {
         name: "Collections",
-        href: "#",
+        href: "/collections/sutr",
         submenu: [
             { name: "Sutr", href: "/collections/sutr" }
         ]
@@ -167,11 +167,8 @@ export const Navbar = () => {
                                 <Link
                                     href={item.href}
                                     className="text-sm font-mono uppercase tracking-widest hover:text-accent transition-colors"
-                                    onClick={(e) => {
-                                        if (item.submenu) {
-                                            e.preventDefault();
-                                            setActiveDropdown(activeDropdown === item.name ? null : item.name);
-                                        }
+                                    onClick={() => {
+                                        setActiveDropdown(null);
                                     }}
                                 >
                                     {item.name}
