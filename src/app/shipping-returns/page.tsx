@@ -87,9 +87,8 @@ export default function ShippingReturnsPage() {
                         <h1 className="text-xl md:text-2xl font-bold font-sans mb-6 uppercase">
                             Shipping &amp; Returns
                         </h1>
-                        <p className="text-xs md:text-sm font-mono text-muted-foreground max-w-xl mx-auto tracking-tighter [word-spacing:-0.21rem] text-justify">
-                            Brahmi — Shipping, Returns &amp; Exchanges Policy. Every piece is
-                            made to order. Please read the policies below before placing your order.
+                        <p className="text-xs md:text-sm font-mono text-muted-foreground max-w-xl mx-auto tracking-tighter [word-spacing:-0.21rem] text-center">
+                            Every piece is custom-made. Please read the policies below before placing your order.
                         </p>
                     </FadeIn>
                 </div>
