@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Brahmi",
   description: "For Culture, Of Culture",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon.png",
     apple: "/apple-icon.png",
   },
   openGraph: {
