@@ -74,8 +74,8 @@ export const Collections = () => {
                         </span>
                     </p>
                     {/* Shop now — desktop only, below text */}
-                    <div className="hidden md:flex">
-                        <Link href="/collections/sutr" className="group flex flex-col items-start">
+                    <div className="hidden md:flex justify-center">
+                        <Link href="/collections/sutr" className="group flex flex-col items-center">
                             <span className="text-sm font-medium tracking-widest border-b-[1px] border-black pb-1 hover:opacity-70 transition-opacity">
                                 Shop now
                             </span>
