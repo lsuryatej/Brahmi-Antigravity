@@ -3,10 +3,74 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Minus, Plus, Trash2, ArrowLeft, Package } from "lucide-react";
+import { ShoppingBag, Minus, Plus, Trash2, ArrowLeft, Package, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SHOPIFY_CONFIG } from "@/lib/shopify/productMapping";
 import { useCart } from "@/lib/CartContext";
+
+const DISCOUNT_CODE = "BRAHMI10";
+
+function DiscountBanner() {
+    const [isNewUser, setIsNewUser] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+        // Always show in cart — Shopify enforces 1-use-per-customer at checkout
+        // so no risk of double-use even if code is shared
+        setIsNewUser(true);
+    }, []);
+
+    const copyCode = async () => {
+        try {
+            await navigator.clipboard.writeText(DISCOUNT_CODE);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch {
+            const el = document.createElement("textarea");
+            el.value = DISCOUNT_CODE;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    if (!isNewUser) return null;
+
+    return (
+        <div className="mb-5 p-3 rounded-xl border border-dashed border-accent/50 bg-accent/5">
+            <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
+                First order discount
+            </p>
+            <button
+                onClick={copyCode}
+                className="w-full flex items-center justify-between px-3 py-2 bg-muted/60 border border-dashed border-border rounded-lg group hover:border-accent/50 transition-colors"
+            >
+                <span className="font-mono text-sm font-bold tracking-widest">
+                    {DISCOUNT_CODE}
+                </span>
+                <span className="flex items-center gap-1 text-[10px] font-mono text-muted-foreground group-hover:text-accent transition-colors">
+                    {copied ? (
+                        <>
+                            <Check className="h-3 w-3 text-green-600" />
+                            <span className="text-green-600">Copied</span>
+                        </>
+                    ) : (
+                        <>
+                            <Copy className="h-3 w-3" />
+                            Copy
+                        </>
+                    )}
+                </span>
+            </button>
+            <p className="text-[8px] font-mono text-muted-foreground mt-1.5 tracking-tighter">
+                Apply at checkout · 10% off · first order only
+            </p>
+        </div>
+    );
+}
 
 interface CartLineItem {
     id: string;
@@ -452,6 +516,8 @@ export default function CartPage() {
                                         <span className="text-lg font-bold">{cart.subtotal}</span>
                                     </div>
                                 </div>
+
+                                <DiscountBanner />
 
                                 <Button
                                     size="lg"
