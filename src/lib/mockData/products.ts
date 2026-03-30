@@ -148,6 +148,7 @@ export const sutrProducts: Product[] = [
             color: "Camel-brown (Azo-free Dye)",
             technique: "Maroon Kantha hand embroidery"
         },
+        sizeChart: "/images/size-charts/men-full-shirt.png",
         care: "Dry clean only",
         shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
@@ -337,6 +338,7 @@ export const sutrProducts: Product[] = [
             color: "Natural beige base with rust-maroon centre panels (Azo-free Dye)",
             technique: "Kantha hand embroidery in beige anchor thread"
         },
+        sizeChart: "/images/size-charts/men-trouser.png",
         care: "Dry clean only",
         shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
@@ -367,6 +369,7 @@ export const sutrProducts: Product[] = [
             color: "Deep black with earthy brown panel (Azo-free Dye)",
             technique: "Kantha hand embroidery on front panel"
         },
+        sizeChart: "/images/size-charts/men-trouser.png",
         care: "Dry clean only",
         shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     }
