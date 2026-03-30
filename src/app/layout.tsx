@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { WelcomePopup } from "@/components/ui/WelcomePopup";
 
 const hostGrotesk = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -62,6 +63,7 @@ export default function RootLayout({
           <TooltipProvider delayDuration={200}>
             <SmoothScroll>
               <Navbar />
+              <WelcomePopup />
               <main className="min-h-screen pt-16 md:pt-20">{children}</main>
               <Footer />
             </SmoothScroll>

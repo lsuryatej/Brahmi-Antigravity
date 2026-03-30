@@ -56,7 +56,7 @@ export const sutrProducts: Product[] = [
             technique: "Hand Embroidered Kantha Technique"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/women-oversized-jacket.png"
     },
     {
@@ -87,7 +87,7 @@ export const sutrProducts: Product[] = [
             technique: "Kantha Hand Embroidery, Fabric-bound Potli Buttons"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
 
     // Tops & Shirts
@@ -118,7 +118,7 @@ export const sutrProducts: Product[] = [
             color: "Rust maroon (Azo-free Dye)"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/women-corset-top.png"
     },
     {
@@ -148,8 +148,9 @@ export const sutrProducts: Product[] = [
             color: "Camel-brown (Azo-free Dye)",
             technique: "Maroon Kantha hand embroidery"
         },
+        sizeChart: "/images/size-charts/men-full-shirt.png",
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
     {
         id: "10",
@@ -179,7 +180,7 @@ export const sutrProducts: Product[] = [
             technique: "Kantha hand embroidery technique, Decorative handmade buttons on front placket, Handcrafted by artisans in Gujarat"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/men-half-shirt.png"
     },
 
@@ -213,7 +214,7 @@ export const sutrProducts: Product[] = [
             technique: "Hand Embroidered Kantha Technique (Semi-circular Motifs)"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/women-corset-dress.png"
     },
 
@@ -245,7 +246,7 @@ export const sutrProducts: Product[] = [
             technique: "Traditional Kantha Hand Embroidery"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/women-short-skirt.png"
     },
     {
@@ -276,7 +277,7 @@ export const sutrProducts: Product[] = [
             technique: "Kantha hand embroidery throughout, Vertical and horizontal running stitch detailing"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)",
         sizeChart: "/images/size-charts/women-long-skirt.png"
     },
 
@@ -309,7 +310,7 @@ export const sutrProducts: Product[] = [
             technique: "Concentric charkha-inspired Kantha motifs at the knee"
         },
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
     {
         id: "9",
@@ -337,8 +338,9 @@ export const sutrProducts: Product[] = [
             color: "Natural beige base with rust-maroon centre panels (Azo-free Dye)",
             technique: "Kantha hand embroidery in beige anchor thread"
         },
+        sizeChart: "/images/size-charts/men-trouser.png",
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     },
     {
         id: "11",
@@ -367,8 +369,9 @@ export const sutrProducts: Product[] = [
             color: "Deep black with earthy brown panel (Azo-free Dye)",
             technique: "Kantha hand embroidery on front panel"
         },
+        sizeChart: "/images/size-charts/men-trouser.png",
         care: "Dry clean only",
-        shipping: "• Domestic delivery - approximately 15 - 20 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
+        shipping: "• Domestic delivery - approximately 10 - 15 days\n• Shipping charges will be shown at the checkout\n• Find out more - (link of shipping and return page)"
     }
 ];
 
