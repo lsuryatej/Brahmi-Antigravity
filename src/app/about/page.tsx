@@ -3,6 +3,7 @@
 import { FadeIn, StaggerChildren } from "@/lib/motion/primitives";
 import { motion } from "framer-motion";
 import { Heart, Users, Sparkles, Globe } from "lucide-react";
+import Image from "next/image";
 // slay
 export default function AboutPage() {
     const values = [
@@ -52,8 +53,32 @@ export default function AboutPage() {
                         </div>
                     </FadeIn>
 
+                    {/* Side-by-side images */}
                     <FadeIn delay={0.3}>
-                        <div className="text-center mt-4 md:mt-10 -mb-2 md:-mb-6">
+                        <div className="grid grid-cols-2 gap-3 md:gap-6 mt-6 md:mt-10">
+                            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl">
+                                <Image
+                                    src="/images/about/IMG_7952.jpg"
+                                    alt="Brahmi — Behind the scenes"
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
+                            </div>
+                            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl">
+                                <Image
+                                    src="/images/about/IMG_8412.png"
+                                    alt="Brahmi — Craft process"
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                />
+                            </div>
+                        </div>
+                    </FadeIn>
+
+                    <FadeIn delay={0.4}>
+                        <div className="text-center mt-6 md:mt-10 -mb-2 md:-mb-6">
                             <h2 className="text-base md:text-xl font-bold font-sans uppercase">
                                 our foundations
                             </h2>
