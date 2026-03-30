@@ -42,7 +42,12 @@ export const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [isCartAnimating, setIsCartAnimating] = useState(false);
+    const [isHoverDevice, setIsHoverDevice] = useState(false);
     const { cartCount } = useCart();
+
+    useEffect(() => {
+        setIsHoverDevice(window.matchMedia("(hover: hover)").matches);
+    }, []);
     const prevCartCount = useRef(cartCount);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
@@ -178,8 +183,8 @@ export const Navbar = () => {
                             <div
                                 key={item.name}
                                 className="relative"
-                                onMouseEnter={() => item.submenu && setActiveDropdown(item.name)}
-                                onMouseLeave={() => item.submenu && setActiveDropdown(null)}
+                                onMouseEnter={isHoverDevice ? () => item.submenu && setActiveDropdown(item.name) : undefined}
+                                onMouseLeave={isHoverDevice ? () => item.submenu && setActiveDropdown(null) : undefined}
                             >
                                 <Link
                                     href={item.href}
