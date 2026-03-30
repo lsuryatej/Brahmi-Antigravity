@@ -45,7 +45,7 @@ const sections = [
         body: "All Brahmi products are Made-to-Order (MTO) and crafted using slow, artisan-led processes.",
         points: [],
         footer: [
-            "Estimated delivery time: 15–20 business days.",
+            "Estimated delivery time: 10–15 business days.",
             "This timeline includes artisan production, stitching, finishing, and quality checks — ensuring each piece is made with care and intention.",
         ],
     },
