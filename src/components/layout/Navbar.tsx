@@ -42,7 +42,12 @@ export const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [isCartAnimating, setIsCartAnimating] = useState(false);
+    const [isHoverDevice, setIsHoverDevice] = useState(false);
     const { cartCount } = useCart();
+
+    useEffect(() => {
+        setIsHoverDevice(window.matchMedia("(hover: hover)").matches);
+    }, []);
     const prevCartCount = useRef(cartCount);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
     const desktopMenuRef = useRef<HTMLDivElement>(null);
@@ -69,16 +74,33 @@ export const Navbar = () => {
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 100);
-
-            // Close mobile menu on scroll
-            if (isMobileMenuOpen) {
-                setIsMobileMenuOpen(false);
-            }
+            setIsMobileMenuOpen(false);
+            setIsMenuOpen(false);
+            setActiveDropdown(null);
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [isMobileMenuOpen]);
+    }, []);
+
+    // Close desktop scrolled menu when tapping outside
+    useEffect(() => {
+        if (!isMenuOpen) return;
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (
+                desktopMenuRef.current &&
+                !desktopMenuRef.current.contains(event.target as Node)
+            ) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside as EventListener);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside as EventListener);
+        };
+    }, [isMenuOpen]);
 
     // Handle click outside for mobile menu
     useEffect(() => {
@@ -161,8 +183,8 @@ export const Navbar = () => {
                             <div
                                 key={item.name}
                                 className="relative"
-                                onMouseEnter={() => item.submenu && setActiveDropdown(item.name)}
-                                onMouseLeave={() => item.submenu && setActiveDropdown(null)}
+                                onMouseEnter={isHoverDevice ? () => item.submenu && setActiveDropdown(item.name) : undefined}
+                                onMouseLeave={isHoverDevice ? () => item.submenu && setActiveDropdown(null) : undefined}
                             >
                                 <Link
                                     href={item.href}
@@ -244,13 +266,12 @@ export const Navbar = () => {
                         <div
                             ref={desktopMenuRef}
                             className="relative"
-                            onMouseEnter={() => setIsMenuOpen(true)}
-                            onMouseLeave={() => setIsMenuOpen(false)}
                         >
                             <Button
                                 variant="ghost"
                                 size="icon"
                                 className="rounded-full"
+                                onClick={() => setIsMenuOpen(prev => !prev)}
                             >
                                 <Menu className="h-5 w-5" />
                             </Button>
