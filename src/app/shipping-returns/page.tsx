@@ -36,8 +36,7 @@ const sections = [
         body: null,
         points: [],
         footer: [
-            "Shipping charges are calculated and displayed at checkout.",
-            "Free shipping is applicable on all orders above ₹10,000.",
+            "Delivery charges are included in the product price. No additional shipping fee will be charged at checkout.",
         ],
     },
     {
