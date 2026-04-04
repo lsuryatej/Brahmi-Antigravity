@@ -71,6 +71,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/charkha-vest/IMG_8399.AVIF",
             "/products/sutr/charkha-vest/IMG_8306.AVIF",
             "/products/sutr/charkha-vest/IMG_8307.AVIF",
+            "/products/sutr/charkha-vest/IMG_8443.AVIF",
             "/products/sutr/charkha-vest/PB__3011.mp4"
         ],
         variants: [
@@ -294,7 +295,6 @@ export const sutrProducts: Product[] = [
             "/products/sutr/charkha-pants/IMG_8440.AVIF",
             "/products/sutr/charkha-pants/IMG_8441.AVIF",
             "/products/sutr/charkha-pants/IMG_8442.AVIF",
-            "/products/sutr/charkha-pants/IMG_8443.AVIF",
             "/products/sutr/charkha-pants/PB__3011.mp4"
         ],
         variants: [
