@@ -528,7 +528,7 @@ export default function CartPage() {
                                 </Button>
 
                                 <p className="text-[10px] font-mono text-muted-foreground text-center mt-4">
-                                    Shipping & taxes calculated at checkout
+                                    Taxes calculated at checkout
                                 </p>
 
                                 <div className="h-px bg-border my-6" />
