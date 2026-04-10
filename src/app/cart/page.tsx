@@ -115,12 +115,6 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
                 id
                 checkoutUrl
                 totalQuantity
-                cost {
-                    subtotalAmount {
-                        amount
-                        currencyCode
-                    }
-                }
                 lines(first: 50) {
                     edges {
                         node {
@@ -187,10 +181,16 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
             }
         );
 
+        const subtotalAmount = cart.lines.edges.reduce(
+            (sum: number, edge: { node: { quantity: number; merchandise: { price?: { amount: string } } } }) =>
+                sum + parseFloat(edge.node.merchandise?.price?.amount || "0") * edge.node.quantity,
+            0
+        );
+
         return {
             id: cart.id,
             lineItems,
-            subtotal: `₹${parseFloat(cart.cost.subtotalAmount.amount).toLocaleString("en-IN")}`,
+            subtotal: `₹${subtotalAmount.toLocaleString("en-IN")}`,
             checkoutUrl: cart.checkoutUrl,
             lineItemCount: cart.totalQuantity || lineItems.reduce((sum, item) => sum + item.quantity, 0),
         };
