@@ -164,27 +164,24 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
 
         if (!cart) return null;
 
+        let subtotalAmount = 0;
         const lineItems: CartLineItem[] = cart.lines.edges.map(
             (edge: { node: { id: string; quantity: number; merchandise: { id: string; title: string; price: { amount: string; currencyCode: string }; image?: { url: string }; product: { title: string } } } }) => {
                 const line = edge.node;
                 const merchandise = line.merchandise;
+                const unitPrice = parseFloat(merchandise?.price?.amount || "0");
+                subtotalAmount += unitPrice * line.quantity;
                 return {
                     id: line.id,
                     title: merchandise?.product?.title || "",
                     variantTitle: merchandise?.title || "",
                     quantity: line.quantity,
-                    price: `₹${parseFloat(merchandise?.price?.amount || "0").toLocaleString("en-IN")}`,
+                    price: `₹${unitPrice.toLocaleString("en-IN")}`,
                     currencyCode: merchandise?.price?.currencyCode || "INR",
                     imageUrl: merchandise?.image?.url || "",
                     variantId: merchandise?.id || "",
                 };
             }
-        );
-
-        const subtotalAmount = cart.lines.edges.reduce(
-            (sum: number, edge: { node: { quantity: number; merchandise: { price?: { amount: string } } } }) =>
-                sum + parseFloat(edge.node.merchandise?.price?.amount || "0") * edge.node.quantity,
-            0
         );
 
         return {
