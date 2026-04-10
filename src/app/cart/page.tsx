@@ -78,6 +78,7 @@ interface CartLineItem {
     variantTitle: string;
     quantity: number;
     price: string;
+    priceAmount: number;
     currencyCode: string;
     imageUrl: string;
     variantId: string;
@@ -164,24 +165,28 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
 
         if (!cart) return null;
 
-        let subtotalAmount = 0;
         const lineItems: CartLineItem[] = cart.lines.edges.map(
             (edge: { node: { id: string; quantity: number; merchandise: { id: string; title: string; price: { amount: string; currencyCode: string }; image?: { url: string }; product: { title: string } } } }) => {
                 const line = edge.node;
                 const merchandise = line.merchandise;
-                const unitPrice = parseFloat(merchandise?.price?.amount || "0");
-                subtotalAmount += unitPrice * line.quantity;
+                const priceAmount = parseFloat(merchandise?.price?.amount || "0");
                 return {
                     id: line.id,
                     title: merchandise?.product?.title || "",
                     variantTitle: merchandise?.title || "",
                     quantity: line.quantity,
-                    price: `₹${unitPrice.toLocaleString("en-IN")}`,
+                    price: `₹${priceAmount.toLocaleString("en-IN")}`,
+                    priceAmount,
                     currencyCode: merchandise?.price?.currencyCode || "INR",
                     imageUrl: merchandise?.image?.url || "",
                     variantId: merchandise?.id || "",
                 };
             }
+        );
+
+        const subtotalAmount = lineItems.reduce(
+            (sum, item) => sum + item.priceAmount * item.quantity,
+            0
         );
 
         return {
