@@ -187,10 +187,18 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
             }
         );
 
+        // Calculate subtotal from line items directly to avoid Shopify returning
+        // a post-discount subtotalAmount when a discount code is attached to the cart
+        const subtotalRaw = cart.lines.edges.reduce(
+            (sum: number, edge: { node: { quantity: number; merchandise: { price: { amount: string } } } }) =>
+                sum + parseFloat(edge.node.merchandise?.price?.amount || "0") * edge.node.quantity,
+            0
+        );
+
         return {
             id: cart.id,
             lineItems,
-            subtotal: `₹${parseFloat(cart.cost.subtotalAmount.amount).toLocaleString("en-IN")}`,
+            subtotal: `₹${subtotalRaw.toLocaleString("en-IN")}`,
             checkoutUrl: cart.checkoutUrl,
             lineItemCount: cart.totalQuantity || lineItems.reduce((sum, item) => sum + item.quantity, 0),
         };
