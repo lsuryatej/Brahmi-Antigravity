@@ -43,6 +43,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/kanthi-jacket/IMG_8343.AVIF"
         ],
         variants: [
+            { id: "1-xs", size: "XS", inStock: true },
             { id: "1-s", size: "S", inStock: false },
             { id: "1-m", size: "M", inStock: false },
             { id: "1-l", size: "L", inStock: true },
@@ -75,6 +76,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/charkha-vest/PB__3011.mp4"
         ],
         variants: [
+            { id: "4-xs", size: "XS", inStock: true },
             { id: "4-s", size: "S", inStock: true },
             { id: "4-m", size: "M", inStock: true },
             { id: "4-l", size: "L", inStock: true },
@@ -87,6 +89,7 @@ export const sutrProducts: Product[] = [
             color: "Natural Beige (Azo-free Dye)",
             technique: "Kantha Hand Embroidery, Fabric-bound Potli Buttons"
         },
+        sizeChart: "/images/size-charts/charkha-vest-sizechart.avif",
         care: "Dry clean only",
         shipping: "• Domestic delivery - approximately 10 - 15 days\n• Delivery charges are included in the product price\n• Find out more - (link of shipping and return page)"
     },
@@ -107,6 +110,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/avanti-top/PB__3188.mp4"
         ],
         variants: [
+            { id: "7-xs", size: "XS", inStock: true },
             { id: "7-s", size: "S", inStock: true },
             { id: "7-m", size: "M", inStock: true },
             { id: "7-l", size: "L", inStock: false },
@@ -202,6 +206,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/nilaaya-dress/IMG_8366.AVIF"
         ],
         variants: [
+            { id: "3-xs", size: "XS", inStock: true },
             { id: "3-s", size: "S", inStock: true },
             { id: "3-m", size: "M", inStock: true },
             { id: "3-l", size: "L", inStock: true },
@@ -234,6 +239,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/kanthi-skirt/PB__3008.mp4"
         ],
         variants: [
+            { id: "2-xs", size: "XS", inStock: true },
             { id: "2-s", size: "S", inStock: true },
             { id: "2-m", size: "M", inStock: true },
             { id: "2-l", size: "L", inStock: true },
@@ -265,6 +271,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/dhaara-skirt/IMG_8314.AVIF"
         ],
         variants: [
+            { id: "6-xs", size: "XS", inStock: true },
             { id: "6-s", size: "S", inStock: true },
             { id: "6-m", size: "M", inStock: false },
             { id: "6-l", size: "L", inStock: true },
@@ -298,6 +305,7 @@ export const sutrProducts: Product[] = [
             "/products/sutr/charkha-pants/PB__3011.mp4"
         ],
         variants: [
+            { id: "5-xs", size: "XS", inStock: true },
             { id: "5-s", size: "S", inStock: true },
             { id: "5-m", size: "M", inStock: true },
             { id: "5-l", size: "L", inStock: true },
