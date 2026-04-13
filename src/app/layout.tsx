@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { WelcomePopup } from "@/components/ui/WelcomePopup";
+import { Analytics } from "@vercel/analytics/next";
 
 const hostGrotesk = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -69,6 +70,7 @@ export default function RootLayout({
             </SmoothScroll>
           </TooltipProvider>
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );
