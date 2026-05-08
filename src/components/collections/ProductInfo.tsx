@@ -110,7 +110,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                     <div className="whitespace-pre-line">
                         {product.shipping
                             .split("\n")
-                            .filter((line) => !line.includes("(link of shipping and return page)"))
+                            .filter((line) => !line.includes("(link of shipping and return page)") && !line.includes("Delivery charges"))
                             .join("\n")}
                     </div>
                     <Link
@@ -145,7 +145,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                             return (
                                 <>
                                     {parts[0]}
-                                    <div className="mt-4 text-[7px] md:text-xs leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono italic opacity-80">
+                                    <div className="mt-4 text-[7px] md:text-xs leading-relaxed tracking-tighter text-left [word-spacing:normal] font-mono italic opacity-80">
                                         {parts.slice(1).join("\n\n")}
                                     </div>
                                 </>
