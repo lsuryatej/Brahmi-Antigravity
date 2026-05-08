@@ -216,8 +216,13 @@ export const Navbar = () => {
                                 <Link
                                     href={item.href}
                                     className="text-[11px] font-mono uppercase tracking-[0.22em] text-foreground/88 hover:text-accent transition-colors"
-                                    onClick={() => {
-                                        setActiveDropdown(null);
+                                    onClick={(e) => {
+                                        if (!isHoverDevice && item.submenu) {
+                                            e.preventDefault();
+                                            setActiveDropdown((prev) => prev === item.name ? null : item.name);
+                                        } else {
+                                            setActiveDropdown(null);
+                                        }
                                     }}
                                 >
                                     {item.name}
