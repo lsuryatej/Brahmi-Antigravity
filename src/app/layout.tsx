@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { WelcomePopup } from "@/components/ui/WelcomePopup";
+import { Analytics } from "@vercel/analytics/next";
+import { getSiteUrl } from "@/lib/site";
 
 const hostGrotesk = Host_Grotesk({
   variable: "--font-host-grotesk",
@@ -19,9 +21,13 @@ const spaceMono = Space_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Brahmi",
   description: "For Culture, Of Culture",
+  alternates: { canonical: "/" },
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",
@@ -29,11 +35,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Brahmi",
     description: "For Culture, Of Culture",
-    url: "https://wearbrahmi.com",
+    url: "/",
     siteName: "Brahmi",
     images: [
       {
-        url: "https://wearbrahmi.com/images/logo.svg",
+        url: "/images/logo.svg",
         width: 1200,
         height: 630,
         alt: "Brahmi — For Culture, Of Culture",
@@ -45,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Brahmi",
     description: "For Culture, Of Culture",
-    images: ["https://wearbrahmi.com/images/logo.svg"],
+    images: ["/images/logo.svg"],
   },
 };
 
@@ -57,6 +63,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${hostGrotesk.variable} ${spaceMono.variable} antialiased font-sans`}
       >
         <CartProvider>
@@ -69,6 +76,7 @@ export default function RootLayout({
             </SmoothScroll>
           </TooltipProvider>
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );

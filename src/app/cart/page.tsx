@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { ShoppingBag, Minus, Plus, Trash2, ArrowLeft, Package, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SHOPIFY_CONFIG } from "@/lib/shopify/productMapping";
@@ -10,15 +11,16 @@ import { useCart } from "@/lib/CartContext";
 
 const DISCOUNT_CODE = "BRAHMI10";
 
-function DiscountBanner() {
-    const [isNewUser, setIsNewUser] = useState(false);
-    const [copied, setCopied] = useState(false);
+function formatMoney(amount: number, currencyCode: string): string {
+    if (currencyCode === "INR") {
+        return `₹${amount.toLocaleString("en-IN")}`;
+    }
 
-    useEffect(() => {
-        // Always show in cart — Shopify enforces 1-use-per-customer at checkout
-        // so no risk of double-use even if code is shared
-        setIsNewUser(true);
-    }, []);
+    return `${currencyCode} ${amount.toLocaleString()}`;
+}
+
+function DiscountBanner() {
+    const [copied, setCopied] = useState(false);
 
     const copyCode = async () => {
         try {
@@ -37,14 +39,13 @@ function DiscountBanner() {
         }
     };
 
-    if (!isNewUser) return null;
-
     return (
         <div className="mb-5 p-3 rounded-xl border border-dashed border-accent/50 bg-accent/5">
             <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
                 First order discount
             </p>
             <button
+                type="button"
                 onClick={copyCode}
                 className="w-full flex items-center justify-between px-3 py-2 bg-muted/60 border border-dashed border-border rounded-lg group hover:border-accent/50 transition-colors"
             >
@@ -78,6 +79,7 @@ interface CartLineItem {
     variantTitle: string;
     quantity: number;
     price: string;
+    unitAmount: number;
     currencyCode: string;
     imageUrl: string;
     variantId: string;
@@ -87,8 +89,28 @@ interface CartData {
     id: string;
     lineItems: CartLineItem[];
     subtotal: string;
+    subtotalAmount: number;
+    currencyCode: string;
     checkoutUrl: string;
     lineItemCount: number;
+}
+
+function recalculateCart(cart: CartData): CartData {
+    const subtotalAmount = cart.lineItems.reduce(
+        (sum, item) => sum + item.unitAmount * item.quantity,
+        0
+    );
+    const lineItemCount = cart.lineItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
+
+    return {
+        ...cart,
+        subtotalAmount,
+        subtotal: formatMoney(subtotalAmount, cart.currencyCode),
+        lineItemCount,
+    };
 }
 
 // Find the cart ID stored in localStorage (Cart API GID)
@@ -174,12 +196,17 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
             (edge: { node: { id: string; quantity: number; merchandise: { id: string; title: string; price: { amount: string; currencyCode: string }; image?: { url: string }; product: { title: string } } } }) => {
                 const line = edge.node;
                 const merchandise = line.merchandise;
+                const unitAmount = parseFloat(merchandise?.price?.amount || "0");
                 return {
                     id: line.id,
                     title: merchandise?.product?.title || "",
                     variantTitle: merchandise?.title || "",
                     quantity: line.quantity,
-                    price: `₹${parseFloat(merchandise?.price?.amount || "0").toLocaleString("en-IN")}`,
+                    price: formatMoney(
+                        unitAmount,
+                        merchandise?.price?.currencyCode || "INR"
+                    ),
+                    unitAmount,
                     currencyCode: merchandise?.price?.currencyCode || "INR",
                     imageUrl: merchandise?.image?.url || "",
                     variantId: merchandise?.id || "",
@@ -194,11 +221,17 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
                 sum + parseFloat(edge.node.merchandise?.price?.amount || "0") * edge.node.quantity,
             0
         );
+        const currencyCode =
+            cart.cost?.subtotalAmount?.currencyCode ||
+            lineItems[0]?.currencyCode ||
+            "INR";
 
         return {
             id: cart.id,
             lineItems,
-            subtotal: `₹${subtotalRaw.toLocaleString("en-IN")}`,
+            subtotal: formatMoney(subtotalRaw, currencyCode),
+            subtotalAmount: subtotalRaw,
+            currencyCode,
             checkoutUrl: cart.checkoutUrl,
             lineItemCount: cart.totalQuantity || lineItems.reduce((sum, item) => sum + item.quantity, 0),
         };
@@ -211,7 +244,28 @@ async function fetchCart(cartId: string): Promise<CartData | null> {
 export default function CartPage() {
     const [cart, setCart] = useState<CartData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [pendingLineIds, setPendingLineIds] = useState<string[]>([]);
     const { refreshCart } = useCart();
+
+    const updatePendingLine = useCallback((lineItemId: string, isPending: boolean) => {
+        setPendingLineIds((prev) => {
+            if (isPending) {
+                return prev.includes(lineItemId) ? prev : [...prev, lineItemId];
+            }
+
+            return prev.filter((id) => id !== lineItemId);
+        });
+    }, []);
+
+    const mutateCart = useCallback(
+        (updater: (current: CartData) => CartData | null) => {
+            setCart((prev) => {
+                if (!prev) return prev;
+                return updater(prev);
+            });
+        },
+        []
+    );
 
     const loadCart = useCallback(async () => {
         const checkoutId = findCartId();
@@ -229,13 +283,13 @@ export default function CartPage() {
     }, [refreshCart]);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         void loadCart();
     }, [loadCart]);
 
     // Update quantity via Cart API (or remove when qty reaches 0)
     const updateQuantity = async (lineItemId: string, currentQty: number, action: "increment" | "decrement") => {
-        if (!cart?.id) return;
+        if (!cart?.id || pendingLineIds.includes(lineItemId)) return;
+        const cartId = cart.id;
         const newQty = action === "increment" ? currentQty + 1 : Math.max(0, currentQty - 1);
 
         if (newQty === 0) {
@@ -243,6 +297,16 @@ export default function CartPage() {
             await removeItem(lineItemId);
             return;
         }
+
+        updatePendingLine(lineItemId, true);
+        mutateCart((currentCart) =>
+            recalculateCart({
+                ...currentCart,
+                lineItems: currentCart.lineItems.map((item) =>
+                    item.id === lineItemId ? { ...item, quantity: newQty } : item
+                ),
+            })
+        );
 
         const mutation = `
             mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
@@ -265,7 +329,7 @@ export default function CartPage() {
                     body: JSON.stringify({
                         query: mutation,
                         variables: {
-                            cartId: cart.id,
+                            cartId,
                             lines: [{ id: lineItemId, quantity: newQty }],
                         },
                     }),
@@ -275,17 +339,38 @@ export default function CartPage() {
             const errors = data?.data?.cartLinesUpdate?.userErrors;
             if (errors?.length > 0) {
                 console.error("Update quantity errors:", errors);
+                await loadCart();
                 return;
             }
             await loadCart();
         } catch (err) {
             console.error("Failed to update quantity:", err);
+            await loadCart();
+        } finally {
+            updatePendingLine(lineItemId, false);
         }
     };
 
     // Remove item via Cart API
     const removeItem = async (lineItemId: string) => {
-        if (!cart?.id) return;
+        if (!cart?.id || pendingLineIds.includes(lineItemId)) return;
+        const cartId = cart.id;
+
+        updatePendingLine(lineItemId, true);
+        mutateCart((currentCart) => {
+            const nextLineItems = currentCart.lineItems.filter(
+                (item) => item.id !== lineItemId
+            );
+
+            if (nextLineItems.length === 0) {
+                return null;
+            }
+
+            return recalculateCart({
+                ...currentCart,
+                lineItems: nextLineItems,
+            });
+        });
 
         const mutation = `
             mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -308,7 +393,7 @@ export default function CartPage() {
                     body: JSON.stringify({
                         query: mutation,
                         variables: {
-                            cartId: cart.id,
+                            cartId,
                             lineIds: [lineItemId],
                         },
                     }),
@@ -318,11 +403,15 @@ export default function CartPage() {
             const errors = data?.data?.cartLinesRemove?.userErrors;
             if (errors?.length > 0) {
                 console.error("Remove item errors:", errors);
+                await loadCart();
                 return;
             }
             await loadCart();
         } catch (err) {
             console.error("Failed to remove item:", err);
+            await loadCart();
+        } finally {
+            updatePendingLine(lineItemId, false);
         }
     };
 
@@ -423,7 +512,10 @@ export default function CartPage() {
                         {/* Line Items */}
                         <div className="lg:col-span-2 space-y-4">
                             <AnimatePresence mode="popLayout">
-                                {cart.lineItems.map((item, index) => (
+                                {cart.lineItems.map((item, index) => {
+                                    const isPending = pendingLineIds.includes(item.id);
+
+                                    return (
                                     <motion.div
                                         key={item.id}
                                         layout
@@ -431,15 +523,19 @@ export default function CartPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, x: -100 }}
                                         transition={{ duration: 0.4, delay: index * 0.1 }}
-                                        className="flex gap-4 md:gap-6 p-4 md:p-6 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/50 shadow-sm"
+                                        className={`flex gap-4 md:gap-6 p-4 md:p-6 bg-background/60 backdrop-blur-sm rounded-2xl border border-border/50 shadow-sm transition-opacity ${
+                                            isPending ? "opacity-70" : ""
+                                        }`}
                                     >
                                         {/* Product Image */}
                                         <div className="relative w-24 h-32 md:w-32 md:h-40 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                                             {item.imageUrl ? (
-                                                <img
+                                                <Image
                                                     src={item.imageUrl}
                                                     alt={item.title}
-                                                    className="w-full h-full object-cover"
+                                                    fill
+                                                    sizes="(max-width: 768px) 96px, 128px"
+                                                    className="object-cover"
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center">
@@ -468,8 +564,11 @@ export default function CartPage() {
                                             <div className="flex items-center justify-between mt-4">
                                                 <div className="flex items-center gap-2">
                                                     <button
+                                                        type="button"
                                                         onClick={() => updateQuantity(item.id, item.quantity, "decrement")}
-                                                        className="w-8 h-8 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                                                        disabled={isPending}
+                                                        aria-busy={isPending}
+                                                        className="w-8 h-8 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:cursor-wait disabled:opacity-50"
                                                     >
                                                         <Minus className="h-3 w-3" />
                                                     </button>
@@ -477,23 +576,30 @@ export default function CartPage() {
                                                         {item.quantity}
                                                     </span>
                                                     <button
+                                                        type="button"
                                                         onClick={() => updateQuantity(item.id, item.quantity, "increment")}
-                                                        className="w-8 h-8 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                                                        disabled={isPending}
+                                                        aria-busy={isPending}
+                                                        className="w-8 h-8 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:cursor-wait disabled:opacity-50"
                                                     >
                                                         <Plus className="h-3 w-3" />
                                                     </button>
                                                 </div>
 
                                                 <button
+                                                    type="button"
                                                     onClick={() => removeItem(item.id)}
-                                                    className="text-muted-foreground hover:text-red-500 transition-colors p-2"
+                                                    disabled={isPending}
+                                                    aria-busy={isPending}
+                                                    className="text-muted-foreground hover:text-red-500 transition-colors p-2 disabled:cursor-wait disabled:opacity-50"
                                                 >
                                                     <Trash2 className="h-4 w-4" />
                                                 </button>
                                             </div>
                                         </div>
                                     </motion.div>
-                                ))}
+                                    );
+                                })}
                             </AnimatePresence>
                         </div>
 
@@ -530,7 +636,8 @@ export default function CartPage() {
                                 <Button
                                     size="lg"
                                     onClick={handleCheckout}
-                                    className="w-full bg-[#63180c] hover:bg-[#a82914] text-[#f7f2e4] font-sans text-base py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                                    disabled={pendingLineIds.length > 0}
+                                    className="w-full bg-[#63180c] hover:bg-[#a82914] text-[#f7f2e4] font-sans text-base py-6 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:cursor-wait"
                                 >
                                     Proceed to Checkout
                                 </Button>

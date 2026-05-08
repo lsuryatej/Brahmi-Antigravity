@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
@@ -24,7 +25,7 @@ export const HeroSequence = () => {
     const layer1Ref = useRef<HTMLDivElement>(null);
     const layer2Ref = useRef<HTMLDivElement>(null);
     const layer3Ref = useRef<HTMLDivElement>(null);
-    const logoRef = useRef<HTMLDivElement>(null);
+    const logoInnerRef = useRef<HTMLDivElement>(null);
 
     // Video playback via IntersectionObserver — unchanged
     useEffect(() => {
@@ -89,27 +90,50 @@ export const HeroSequence = () => {
                     pin: true,
                     pinSpacing: true,
                     anticipatePin: 1,
-                    scrub: 1,
+                    scrub: true,
+                    fastScrollEnd: true,
+                    invalidateOnRefresh: true,
                 },
             });
 
             mainTimeline.fromTo(
-                logoRef.current,
-                { scale: 1, opacity: 1 },
-                { scale: 1.06, opacity: 0, ease: "none" },
-                0
+                logoInnerRef.current,
+                { scale: 1, opacity: 1, filter: "blur(0px)" },
+                {
+                    scale: 1.02,
+                    opacity: 0,
+                    filter: "blur(8px)",
+                    ease: "none",
+                    duration: 0.46,
+                },
+                0.08
+            );
+
+            mainTimeline.to(
+                [layer1Ref.current, layer2Ref.current, layer3Ref.current],
+                {
+                    opacity: 0,
+                    ease: "none",
+                    duration: 0.46,
+                },
+                0.08
             );
 
             mainTimeline.fromTo(
                 videoContainerRef.current,
                 { yPercent: 100, opacity: 1 },
-                { yPercent: 0, opacity: 1, ease: "none" },
+                {
+                    yPercent: 0,
+                    opacity: 1,
+                    ease: "none",
+                    duration: 0.65,
+                },
                 0
             );
 
-            mainTimeline.to(layer1Ref.current, { y: "10%", ease: "none" }, 0);
-            mainTimeline.to(layer2Ref.current, { y: "20%", ease: "none" }, 0);
-            mainTimeline.to(layer3Ref.current, { y: "30%", ease: "none" }, 0);
+            mainTimeline.to(layer1Ref.current, { y: "8%", ease: "none" }, 0);
+            mainTimeline.to(layer2Ref.current, { y: "14%", ease: "none" }, 0);
+            mainTimeline.to(layer3Ref.current, { y: "18%", ease: "none" }, 0);
         }, containerRef);
 
         return () => gsapContext.revert();
@@ -123,35 +147,47 @@ export const HeroSequence = () => {
             {/* Layer 1: Base Gradient Overlay */}
             <div
                 ref={layer1Ref}
-                className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-0 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 blur-3xl will-change-transform md:h-[34rem] md:w-[34rem]"
+                style={{
+                    background:
+                        "radial-gradient(circle, rgba(235,224,203,0.78) 0%, rgba(244,234,216,0.42) 38%, rgba(248,246,240,0) 74%)",
+                }}
             />
 
-            {/* Layer 2: Soft Ambient Glow */}
+            {/* Layer 2: Warm accent glow behind the logo */}
             <div
                 ref={layer2Ref}
-                className="absolute z-10 w-[90%] h-[90%] rounded-full bg-secondary/30 blur-3xl pointer-events-none"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-10 h-[16rem] w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-[90px] will-change-transform md:h-[20rem] md:w-[20rem]"
+                style={{
+                    background:
+                        "radial-gradient(circle, rgba(215,188,151,0.44) 0%, rgba(248,246,240,0) 72%)",
+                }}
             />
 
-            {/* Layer 3: Inner Glow Overlay */}
+            {/* Layer 3: subtle inner glow */}
             <div
                 ref={layer3Ref}
-                className="absolute z-20 w-[60%] h-[60%] rounded-full bg-primary/10 blur-2xl pointer-events-none"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-20 h-[9rem] w-[9rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[56px] will-change-transform md:h-[12rem] md:w-[12rem]"
+                style={{
+                    background:
+                        "radial-gradient(circle, rgba(99,24,12,0.18) 0%, rgba(248,246,240,0) 76%)",
+                }}
             />
 
             {/* Video Container - Slides up from below */}
             <div
                 ref={videoContainerRef}
-                className="absolute inset-0 z-[25] flex items-center justify-center"
+                className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center transform-gpu will-change-transform"
             >
                 <div
                     ref={videoWrapRef}
-                    className="w-[70%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[28%] aspect-[9/16] rounded-2xl overflow-hidden"
+                    className="w-[70%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[28%] aspect-[9/16] rounded-2xl overflow-hidden transform-gpu"
                 >
                     <video
                         ref={videoRef}
                         muted
                         playsInline
-                        preload="auto"
+                        preload="metadata"
                         loop
                         className="w-full h-full object-cover outline-none border-none"
                         src="/videos/hero-video.mp4"
@@ -159,33 +195,27 @@ export const HeroSequence = () => {
                 </div>
             </div>
 
-            {/* Grain Overlay - Above content but below text/logo */}
-            <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 z-40 opacity-[0.08] mix-blend-soft-light"
-                style={{
-                    backgroundImage:
-                        "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%221%22/%3E%3C/svg%3E')",
-                    backgroundRepeat: "repeat",
-                }}
-            />
-
             {/* Content (Logo) - Stays pinned with subtle zoom */}
             <div className="relative z-[15] flex flex-col items-center justify-center p-4 w-full">
                 <motion.div
-                    ref={logoRef}
                     initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                     animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 1.5, ease: EASE.ENTRANCE }}
-                    className="relative w-[80%] sm:w-[65%] md:w-[60%] lg:w-[55%] max-w-[960px]"
+                    className="relative w-[80%] sm:w-[65%] md:w-[60%] lg:w-[55%] max-w-[960px] will-change-transform"
                 >
-                    <img
-                        src="/images/logo.svg"
-                        alt="Brahmi Logo"
-                        width={885}
-                        height={389}
-                        className="w-full h-auto mix-blend-multiply"
-                    />
+                    <div
+                        ref={logoInnerRef}
+                        className="w-full"
+                        style={{ willChange: "transform, opacity, filter", filter: "blur(0px)" }}
+                    >
+                        <Image
+                            src="/images/logo.svg"
+                            alt="Brahmi Logo"
+                            width={885}
+                            height={389}
+                            className="w-full h-auto mix-blend-multiply"
+                        />
+                    </div>
                 </motion.div>
             </div>
         </section>
