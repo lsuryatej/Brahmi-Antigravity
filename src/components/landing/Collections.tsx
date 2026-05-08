@@ -41,10 +41,10 @@ export const Collections = () => {
     }, []);
 
     return (
-        <section className="relative w-full bg-background py-8 md:py-24 max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12 md:space-y-24">
+        <section className="relative w-full py-8 md:py-24 max-w-screen-2xl mx-auto px-4 md:px-8 space-y-12 md:space-y-24">
 
             {/* Top Section — full-width stack on mobile, 2-col on desktop */}
-            <div className="flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-center gap-4">
+            <div className="relative flex flex-col md:grid md:grid-cols-2 md:gap-8 md:items-center gap-4">
                 {/* Image — full width on mobile, half on desktop */}
                 <div className="relative w-full aspect-[4/5] md:h-[80vh] md:aspect-auto">
                     <Image
@@ -68,7 +68,7 @@ export const Collections = () => {
                 {/* Text + Shop now — desktop layout */}
                 <div className="flex flex-col justify-center h-full px-2 gap-6">
                     <p className="text-[8px] sm:text-[10px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground">
-                        Sutr, our first capsule, is a study in beginnings. Meaning "thread," it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
+                        Sutr, our first capsule, is a study in beginnings. Meaning &ldquo;thread,&rdquo; it reflects the foundation of cloth and the quiet continuity that binds craft, memory, and time.
                         <span className="hidden md:inline">
                             {" "}The collection centres on kantha hand embroidery by artisans in Gujarat. Built from a simple running stitch, kantha carries a natural rhythm, creating fluid, organic patterns across each garment. Inspired by the charkha and its symbolism of cycles and steady labour, the motifs move freely, never rigid. Rendered in earth-led tones, clay, rust, indigo, sand, and muted blues, Sutr remains grounded and tactile, shaped by process and intention, meant to be carried forward, one stitch at a time.
                         </span>

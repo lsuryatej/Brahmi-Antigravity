@@ -7,25 +7,54 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export const SmoothScroll = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+        const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+        // Touch devices already have momentum scrolling. Keep that native so taps
+        // and scroll gestures stay responsive instead of feeling hijacked.
+        if (prefersReducedMotion || isCoarsePointer) {
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
         const lenis = new Lenis({
-            duration: 1.2,
+            duration: 0.65,
             easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: "vertical",
             gestureOrientation: "vertical",
             smoothWheel: true,
+            wheelMultiplier: 1,
         });
 
-        lenis.on("scroll", ScrollTrigger.update);
+        const handleLenisScroll = () => {
+            ScrollTrigger.update();
+        };
 
-        gsap.ticker.add((time) => {
+        const handleLenisFrame = (time: number) => {
             lenis.raf(time * 1000);
-        });
+        };
+
+        const handleRefresh = () => {
+            lenis.resize();
+        };
+
+        lenis.on("scroll", handleLenisScroll);
+        ScrollTrigger.addEventListener("refresh", handleRefresh);
+
+        gsap.ticker.add(handleLenisFrame);
 
         gsap.ticker.lagSmoothing(0);
+        ScrollTrigger.refresh();
 
         return () => {
+            ScrollTrigger.removeEventListener("refresh", handleRefresh);
             lenis.destroy();
-            gsap.ticker.remove((time) => lenis.raf(time * 1000));
+            gsap.ticker.remove(handleLenisFrame);
         };
     }, []);
 

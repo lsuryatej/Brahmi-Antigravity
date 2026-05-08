@@ -42,13 +42,13 @@ export default function AboutPage() {
                                 ABOUT THE BRAND
                             </h2>
                             <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
-                                Brahmi takes its name from one of India’s earliest scripts, the origin point of many written traditions, symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
+                                Brahmi takes its name from one of India's earliest scripts, the origin point of many written traditions, symbolising foundation, structure, and the beginning of expression. That idea shapes our approach as a brand.
                             </p>
                             <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto mb-4">
                                 We work at the grassroots level of Indian craft, collaborating with artisan communities across the country and engaging deeply with techniques such as hand embroidery, weaving, and block printing. Our focus is on honouring the integrity and skill embedded in these traditions, while reimagining them through contemporary silhouettes that feel relevant and wearable today.
                             </p>
                             <p className="text-[10px] sm:text-xs md:text-base leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono text-muted-foreground max-w-3xl mx-auto">
-                                Our vision is to preserve and strengthen India’s handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders, creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
+                                Our vision is to preserve and strengthen India's handicraft legacy by allowing it to grow with time. Our mission is to carry these stories beyond borders, creating thoughtful garments that celebrate craftsmanship and position Indian craft confidently on a global stage.
                             </p>
                         </div>
                     </FadeIn>
@@ -90,8 +90,8 @@ export default function AboutPage() {
                         {values.map((value, index) => (
                             <FadeIn key={value.title} delay={index * 0.1}>
                                 <motion.div
-                                    whileHover={{ scale: 1.02, y: -4 }}
-                                    transition={{ type: "spring", stiffness: 300 }}
+                                    whileHover={{ scale: 1.02 }}
+                                    transition={{ duration: 0.24, ease: "easeOut" }}
                                     className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-card/30 backdrop-blur-sm group h-full"
                                 >
                                     <value.icon className="w-6 h-6 md:w-10 md:h-10 mb-2 md:mb-4 text-accent group-hover:scale-110 transition-transform" />
@@ -110,7 +110,7 @@ export default function AboutPage() {
             </section>
 
             {/* About the Founders */}
-            <section id="about-founders" className="py-6 md:py-14 px-4 md:px-8 bg-muted/20">
+            <section id="about-founders" className="py-6 md:py-14 px-4 md:px-8">
                 <div className="max-w-5xl mx-auto">
                     <FadeIn delay={0.4}>
                         <div className="text-center mb-4 md:mb-10">
@@ -124,9 +124,9 @@ export default function AboutPage() {
                         {/* Pavni */}
                         <FadeIn delay={0.5}>
                             <motion.div
-                                whileHover={{ scale: 1.02, y: -4 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                                className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-card/30 backdrop-blur-sm h-full"
+                                whileHover={{ scale: 1.02 }}
+                                transition={{ duration: 0.24, ease: "easeOut" }}
+                                className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-muted/60 backdrop-blur-sm h-full"
                             >
                                 <h3 className="text-sm md:text-base font-bold mb-2 md:mb-4 font-sans leading-tight">PAVNI</h3>
                                 <p className="text-[7px] sm:text-[9px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">
@@ -138,9 +138,9 @@ export default function AboutPage() {
                         {/* Shreya */}
                         <FadeIn delay={0.6}>
                             <motion.div
-                                whileHover={{ scale: 1.02, y: -4 }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                                className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-card/30 backdrop-blur-sm h-full"
+                                whileHover={{ scale: 1.02 }}
+                                transition={{ duration: 0.24, ease: "easeOut" }}
+                                className="p-4 md:p-8 rounded-xl md:rounded-2xl border border-border bg-muted/60 backdrop-blur-sm h-full"
                             >
                                 <h3 className="text-sm md:text-base font-bold mb-2 md:mb-4 font-sans leading-tight">SHREYA</h3>
                                 <p className="text-[7px] sm:text-[9px] md:text-base leading-relaxed tracking-tighter [word-spacing:-0.10rem] text-justify text-muted-foreground font-mono">

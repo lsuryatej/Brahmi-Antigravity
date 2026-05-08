@@ -20,17 +20,27 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
 
     // Live variant availability from Shopify — drives size button states
     const [shopifyVariants, setShopifyVariants] = useState<ShopifyVariant[]>([]);
-    const [variantsLoading, setVariantsLoading] = useState(isShopifyProduct);
+    const [variantsLoading, setVariantsLoading] = useState(() => isShopifyProduct);
 
     useEffect(() => {
         if (!isShopifyProduct || !shopifyProductId) return;
-        setVariantsLoading(true);
+
+        let isCancelled = false;
+
         void fetchProductVariants(shopifyProductId)
             .then((v) => {
+                if (isCancelled) return;
                 setShopifyVariants(v);
                 setVariantsLoading(false);
             })
-            .catch(() => setVariantsLoading(false));
+            .catch(() => {
+                if (isCancelled) return;
+                setVariantsLoading(false);
+            });
+
+        return () => {
+            isCancelled = true;
+        };
     }, [isShopifyProduct, shopifyProductId]);
 
     /**
@@ -110,7 +120,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                     <div className="whitespace-pre-line">
                         {product.shipping
                             .split("\n")
-                            .filter((line) => !line.includes("(link of shipping and return page)") && !line.includes("Delivery charges"))
+                            .filter((line) => !line.includes("(link of shipping and return page)"))
                             .join("\n")}
                     </div>
                     <Link
@@ -145,7 +155,7 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
                             return (
                                 <>
                                     {parts[0]}
-                                    <div className="mt-4 text-[7px] md:text-xs leading-relaxed tracking-tighter text-left [word-spacing:normal] font-mono italic opacity-80">
+                                    <div className="mt-4 text-[7px] md:text-xs leading-relaxed tracking-tighter [word-spacing:-0.21rem] text-justify font-mono italic opacity-80">
                                         {parts.slice(1).join("\n\n")}
                                     </div>
                                 </>
@@ -160,32 +170,38 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-base md:text-lg font-semibold font-sans">Size</h3>
-                    {product.sizeChart ? (
-                        <SizeChartIsland sizeChart={product.sizeChart} />
-                    ) : (
-                        <span className="text-sm font-mono text-muted-foreground/40">
-                            Size Chart
-                        </span>
-                    )}
+                    <div className="flex items-center gap-3">
+                        {variantsLoading && (
+                            <span className="text-[9px] md:text-xs font-mono text-muted-foreground">
+                                Checking live stock...
+                            </span>
+                        )}
+                        {product.sizeChart ? (
+                            <SizeChartIsland sizeChart={product.sizeChart} />
+                        ) : (
+                            <span className="text-sm font-mono text-muted-foreground/40">
+                                Size Chart
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
                     {product.variants.map((variant) => {
                         const available = isSizeAvailable(variant.size);
                         return (
                             <button
+                                type="button"
                                 key={variant.id}
                                 onClick={() => available && setSelectedSize(variant.size)}
-                                disabled={!available || variantsLoading}
+                                disabled={!available}
                                 className={`
                                     min-w-[3rem] md:min-w-[4rem] px-3 py-2 md:px-5 md:py-3 rounded-lg border-2 font-mono text-sm md:text-base font-semibold transition-all
-                                    ${variantsLoading
-                                        ? "border-border opacity-50 animate-pulse cursor-wait"
-                                        : selectedSize === variant.size
+                                    ${selectedSize === variant.size
                                             ? "border-accent bg-accent text-accent-foreground shadow-md"
                                             : available
                                                 ? "border-border hover:border-accent hover:bg-accent/5"
                                                 : "border-border opacity-30 cursor-not-allowed line-through"
-                                    }
+                                    } ${variantsLoading ? "opacity-80" : ""}
                                 `}
                             >
                                 {variant.size}
