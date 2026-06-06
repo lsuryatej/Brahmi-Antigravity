@@ -79,6 +79,13 @@ export const HeroSequence = () => {
         const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         if (prefersReduced) return;
 
+        // On touch/coarse-pointer devices (phones, tablets) the GPU cannot
+        // efficiently composite multiple large CSS-blurred layers simultaneously.
+        // The blur-layer parallax is a purely decorative effect — we skip it on
+        // those devices so the core animation (logo fade + video slide-up)
+        // doesn't compete with three simultaneously composited blur layers.
+        const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
         gsap.registerPlugin(ScrollTrigger);
 
         const gsapContext = gsap.context(() => {
@@ -131,9 +138,14 @@ export const HeroSequence = () => {
                 0
             );
 
-            mainTimeline.to(layer1Ref.current, { y: "8%", ease: "none" }, 0);
-            mainTimeline.to(layer2Ref.current, { y: "14%", ease: "none" }, 0);
-            mainTimeline.to(layer3Ref.current, { y: "18%", ease: "none" }, 0);
+            // Parallax on decorative blur layers — skip on touch devices.
+            // Each layer is a large CSS blur filter; animating all three
+            // simultaneously on a mobile GPU causes heavy compositing overhead.
+            if (!isCoarsePointer) {
+                mainTimeline.to(layer1Ref.current, { y: "8%", ease: "none" }, 0);
+                mainTimeline.to(layer2Ref.current, { y: "14%", ease: "none" }, 0);
+                mainTimeline.to(layer3Ref.current, { y: "18%", ease: "none" }, 0);
+            }
         }, containerRef);
 
         return () => gsapContext.revert();
@@ -147,7 +159,7 @@ export const HeroSequence = () => {
             {/* Layer 1: Base Gradient Overlay */}
             <div
                 ref={layer1Ref}
-                className="pointer-events-none absolute left-1/2 top-[42%] z-0 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 blur-3xl will-change-transform md:h-[34rem] md:w-[34rem]"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-0 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 blur-3xl md:h-[34rem] md:w-[34rem]"
                 style={{
                     background:
                         "radial-gradient(circle, rgba(235,224,203,0.78) 0%, rgba(244,234,216,0.42) 38%, rgba(248,246,240,0) 74%)",
@@ -157,7 +169,7 @@ export const HeroSequence = () => {
             {/* Layer 2: Warm accent glow behind the logo */}
             <div
                 ref={layer2Ref}
-                className="pointer-events-none absolute left-1/2 top-[42%] z-10 h-[16rem] w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-[90px] will-change-transform md:h-[20rem] md:w-[20rem]"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-10 h-[16rem] w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-[90px] md:h-[20rem] md:w-[20rem]"
                 style={{
                     background:
                         "radial-gradient(circle, rgba(215,188,151,0.44) 0%, rgba(248,246,240,0) 72%)",
@@ -167,7 +179,7 @@ export const HeroSequence = () => {
             {/* Layer 3: subtle inner glow */}
             <div
                 ref={layer3Ref}
-                className="pointer-events-none absolute left-1/2 top-[42%] z-20 h-[9rem] w-[9rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[56px] will-change-transform md:h-[12rem] md:w-[12rem]"
+                className="pointer-events-none absolute left-1/2 top-[42%] z-20 h-[9rem] w-[9rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[56px] md:h-[12rem] md:w-[12rem]"
                 style={{
                     background:
                         "radial-gradient(circle, rgba(99,24,12,0.18) 0%, rgba(248,246,240,0) 76%)",

@@ -23,6 +23,8 @@ export interface ShopifyVariant {
 }
 
 // Fetch product variants from the Shopify Storefront API (exported so ProductInfo can use it)
+// 10 s timeout matches the server-side shopify/client.ts — important on Indian 4G connections
+// where a stalled request would otherwise leave the size selector in a permanent loading state.
 export async function fetchProductVariants(productId: string): Promise<ShopifyVariant[]> {
     const query = `
         query getProduct($id: ID!) {
@@ -44,6 +46,9 @@ export async function fetchProductVariants(productId: string): Promise<ShopifyVa
         }
     `;
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
     try {
         const response = await fetch(
             `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`,
@@ -57,12 +62,15 @@ export async function fetchProductVariants(productId: string): Promise<ShopifyVa
                     query,
                     variables: { id: `gid://shopify/Product/${productId}` },
                 }),
+                signal: controller.signal,
             }
         );
 
+        clearTimeout(timeoutId);
         const data = await response.json();
         return data?.data?.product?.variants?.edges?.map((e: { node: ShopifyVariant }) => e.node) || [];
     } catch (err) {
+        clearTimeout(timeoutId);
         console.error("ShopifyBuyButton: Failed to fetch variants", err);
         return [];
     }
